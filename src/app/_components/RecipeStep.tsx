@@ -1,5 +1,4 @@
 import type { Prisma } from "@prisma/client";
-import DurationDisplay from "~/app/_components/DurationDisplay";
 
 type RecipeStep = Prisma.RecipeStepGetPayload<{
   include: { ingredients: true };
@@ -7,16 +6,22 @@ type RecipeStep = Prisma.RecipeStepGetPayload<{
 
 export default function RecipeStep({ step }: { step: RecipeStep }) {
   return (
-    <>
-      <div>
+    <tr>
+      <td className="py-2 pr-4 text-right align-top lg:w-48">
         <ul>
           {step.ingredients.map((ingredient) => (
-            <li key={ingredient.id}>{ingredient.name}</li>
+            <li key={ingredient.id}>
+              {ingredient.quantity} {ingredient.unit} {ingredient.name}
+            </li>
           ))}
         </ul>
-        <DurationDisplay duration={step.duration} />
-      </div>
-      <p>{step.description}</p>
-    </>
+      </td>
+      <td className="py-2 align-top">
+        <p className="font-medium">{step.description}</p>
+        <div className="pt-0.5 text-gray-500">
+          {step.duration} {step.duration === 1 ? "minute" : "minutes"}
+        </div>
+      </td>
+    </tr>
   );
 }

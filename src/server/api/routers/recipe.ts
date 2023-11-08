@@ -7,6 +7,73 @@ import {
 } from "~/server/api/trpc";
 
 export const recipeRouter = createTRPCRouter({
+  get: publicProcedure
+    .input(z.object({ id: z.string().cuid() }))
+    .query(({ input, ctx }) => {
+      return ctx.db.recipe.findFirst({
+        where: { id: input.id },
+        include: {
+          steps: {
+            include: {
+              ingredients: true,
+            },
+          },
+          reviews: {
+            include: {
+              author: true,
+            },
+          },
+          labels: true,
+          author: true,
+        },
+      });
+    }),
+
+  getRecipePreview: publicProcedure
+    .input(z.object({ id: z.string().cuid() }))
+    .query(({ input, ctx }) => {
+      return ctx.db.recipe.findFirst({
+        where: { id: input.id },
+        include: {
+          labels: true,
+          author: true,
+        },
+      });
+    }),
+
+  getFeaturedRecipes: publicProcedure
+    .input(z.object({ take: z.number().min(1).max(10) }))
+    .query(({ ctx, input }) => {
+      return ctx.db.recipe.findMany({
+        orderBy: { createdAt: "desc" },
+        where: {},
+        take: input.take,
+        select: {
+          id: true,
+        },
+      });
+    }),
+
+  getAll: publicProcedure.query(({ ctx }) => {
+    return ctx.db.recipe.findMany({
+      orderBy: { createdAt: "desc" },
+      where: {},
+      include: {
+        steps: {
+          include: {
+            ingredients: true,
+          },
+        },
+        reviews: {
+          include: {
+            author: true,
+          },
+        },
+        labels: true,
+      },
+    });
+  }),
+
   create: protectedProcedure
     .input(
       z.object({
@@ -56,70 +123,6 @@ export const recipeRouter = createTRPCRouter({
             },
           },
           author: { connect: { id: ctx.session.user.id } },
-        },
-      });
-    }),
-
-  getLatest: publicProcedure
-    .input(z.object({ take: z.number().min(1) }))
-    .query(({ ctx, input }) => {
-      return ctx.db.recipe.findMany({
-        orderBy: { createdAt: "desc" },
-        where: {},
-        take: input.take,
-        include: {
-          steps: {
-            include: {
-              ingredients: true,
-            },
-          },
-          reviews: {
-            include: {
-              author: true,
-            },
-          },
-          labels: true,
-        },
-      });
-    }),
-
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.db.recipe.findMany({
-      orderBy: { createdAt: "desc" },
-      where: {},
-      include: {
-        steps: {
-          include: {
-            ingredients: true,
-          },
-        },
-        reviews: {
-          include: {
-            author: true,
-          },
-        },
-        labels: true,
-      },
-    });
-  }),
-
-  get: publicProcedure
-    .input(z.object({ id: z.string().cuid() }))
-    .query(({ input, ctx }) => {
-      return ctx.db.recipe.findFirst({
-        where: { id: input.id },
-        include: {
-          steps: {
-            include: {
-              ingredients: true,
-            },
-          },
-          reviews: {
-            include: {
-              author: true,
-            },
-          },
-          labels: true,
         },
       });
     }),

@@ -4,10 +4,10 @@ import { Inter } from "next/font/google";
 import { headers } from "next/headers";
 
 import { TRPCReactProvider } from "~/trpc/react";
-import Link from "next/link";
 import React from "react";
-import LoginBar from "~/app/_components/LoginBar";
 import { Providers } from "~/app/providers";
+import { getServerAuthSession } from "~/server/auth";
+import MainNavbar from "~/app/_components/MainNavbar";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -20,22 +20,18 @@ export const metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerAuthSession();
+
   return (
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
         <Providers>
-          <nav className="flex items-center justify-between bg-green-600 px-8 py-5 lg:px-16">
-            <div className="flex gap-4">
-              <Link href="/">Home</Link>
-              <Link href="/about">About us</Link>
-            </div>
-            <LoginBar />
-          </nav>
+          <MainNavbar session={session} />
           <TRPCReactProvider headers={headers()}>{children}</TRPCReactProvider>
         </Providers>
       </body>
