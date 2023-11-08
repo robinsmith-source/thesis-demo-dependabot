@@ -1,7 +1,8 @@
 import { Duration } from "luxon";
 
 export default function DurationDisplay({ duration }: { duration: number }) {
-  const durationObj = Duration.fromMillis(duration);
+  // const durationObj = Duration.fromMillis(duration);
+  // TODO implement this
 
-  return <span>{durationObj.toHuman({ compactDisplay: "short" })}</span>;
+  return <span>{duration} minutes</span>;
 }

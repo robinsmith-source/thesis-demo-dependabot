@@ -1,5 +1,5 @@
 import { api } from "~/trpc/server";
-import Link from "next/link";
+import RecipeCard from "~/app/_components/RecipeCard";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const user = await api.user.get.query({ id: params.id });
@@ -9,8 +9,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   return (
     <main className="container mx-auto">
-      <div className="flex items-center justify-between pt-4">
-        <h1 className="text-lg font-bold">{user.name}</h1>
+      <div className="flex items-center gap-4 py-4">
         {user.image ? (
           <img
             src={user.image}
@@ -22,21 +21,17 @@ export default async function Page({ params }: { params: { id: string } }) {
         ) : (
           <p>no image</p>
         )}
+        <div>
+          <h1 className="text-lg font-bold">{user.name}</h1>
+          <p>Created {user.recipes.length} recipes</p>
+        </div>
       </div>
 
-      <ul className="pt-8">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {user.recipes.map((recipe) => (
-          <div
-            key={recipe.id}
-            className="flex flex-col gap-2 rounded-xl bg-blue-400 p-4 hover:bg-blue-300"
-          >
-            <Link href={`/recipe/${recipe.id}`}>
-              <h2 className="text-2xl font-bold">{recipe.name}</h2>
-              <p className="text-lg">{recipe.description}</p>
-            </Link>
-          </div>
+          <RecipeCard recipeId={recipe.id} key={recipe.id} />
         ))}
-      </ul>
+      </div>
     </main>
   );
 }
