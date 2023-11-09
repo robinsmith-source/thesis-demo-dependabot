@@ -4,12 +4,6 @@ import {
   Card,
   Image,
   Link,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
 } from "@nextui-org/react";
 import NextImage from "next/image";
 import { notFound } from "next/navigation";
