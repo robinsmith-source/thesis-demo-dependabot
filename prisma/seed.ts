@@ -3,6 +3,11 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
+  if (process.env.VERCEL_ENV === "production") {
+    console.log("Running in production mode, skipping seeding");
+    return;
+  }
+
   await prisma.user.upsert({
     where: { email: "testUser@example.com" },
     update: {},
