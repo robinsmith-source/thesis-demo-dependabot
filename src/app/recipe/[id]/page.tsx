@@ -1,10 +1,6 @@
 import { api } from "~/trpc/server";
 import React from "react";
-import {
-  Card,
-  Image,
-  Link,
-} from "@nextui-org/react";
+import { Card, Image, Link } from "@nextui-org/react";
 import NextImage from "next/image";
 import { notFound } from "next/navigation";
 import RecipeStep from "./RecipeStep";
@@ -29,7 +25,9 @@ export default async function Page({ params }: { params: { id: string } }) {
           </h1>
           <p>
             created by{" "}
-            <Link href={`/user/${recipe.author.id}`}>{recipe.author.name}</Link>
+            <Link color="secondary" href={`/user/${recipe.author.id}`}>
+              {recipe.author.name}
+            </Link>
           </p>
           <p>{recipe.description}</p>
         </div>

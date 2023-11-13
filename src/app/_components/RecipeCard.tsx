@@ -20,9 +20,9 @@ export default async function RecipeCard({ recipeId }: { recipeId: string }) {
         </CardHeader>
         <Image
           as={NextImage}
-          width={500}
-          height={200}
-          src="https://placekitten.com/500/200"
+          width={300}
+          height={300}
+          src="https://placekitten.com/500/300"
           alt="Card background"
           className="z-0 h-full w-full object-cover brightness-75"
         />
