@@ -57,7 +57,7 @@ export default function MainNavbar({ session }: { session: Session | null }) {
   const pathname = usePathname();
 
   return (
-    <Navbar maxWidth="xl" className="">
+    <Navbar maxWidth="xl" className="bg-white">
       <NavbarBrand>
         <Image
           as={NextImage}
