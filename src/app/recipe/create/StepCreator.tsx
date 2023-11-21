@@ -3,8 +3,10 @@ import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import { Button, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
 import { RecipeStepType } from "@prisma/client";
 
+import IngredientCreator from "./IngredientCreator";
+
 const StepCreator: React.FC = () => {
-  const { control, register } = useFormContext();
+  const { control } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -18,23 +20,16 @@ const StepCreator: React.FC = () => {
           <Controller
             control={control}
             name={`steps.${index}.description`}
-            render={({ fieldState }) => (
-              <Textarea
-                {...register(`steps.${index}.description`)}
-                label="Description"
-              />
+            render={({ field, fieldState }) => (
+              <Textarea {...field} label="Description" />
             )}
           />
 
           <Controller
             control={control}
             name={`steps.${index}.duration`}
-            render={({ fieldState }) => (
-              <Input
-                {...register(`steps.${index}.duration`)}
-                label="Duration"
-                type="number"
-              />
+            render={({ field, fieldState }) => (
+              <Input {...field} type="number" label="Duration" />
             )}
           />
 
@@ -43,13 +38,11 @@ const StepCreator: React.FC = () => {
             name={`steps.${index}.stepType`}
             render={({ field, fieldState }) => (
               <Select
+                {...field}
                 isRequired
                 label="StepType"
                 description="Select step type"
                 variant="bordered"
-                {...register(`steps.${index}.stepType`, { required: true })}
-                /* isInvalid={!!fieldState.error}
-                                                                                errorMessage={fieldState.error?.message} */
                 selectedKeys={[field.value]}
                 defaultSelectedKeys={["PREP"]}
               >
@@ -66,6 +59,7 @@ const StepCreator: React.FC = () => {
               </Select>
             )}
           />
+          <IngredientCreator stepIndex={index} />
           <Button type="button" onClick={() => remove(index)}>
             Remove Step
           </Button>

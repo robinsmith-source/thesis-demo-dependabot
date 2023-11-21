@@ -44,7 +44,19 @@ export default function Page() {
           z.object({
             name: z.string().min(1),
             quantity: z.number().min(1),
-            unit: z.string().optional(),
+            unit: z
+              .enum([
+                "GRAM",
+                "KILOGRAM",
+                "LITER",
+                "MILLILITER",
+                "TEASPOON",
+                "TABLESPOON",
+                "CUP",
+                "PINCH",
+                "PIECE",
+              ])
+              .nullable(),
           }),
         ),
       }),
@@ -94,6 +106,7 @@ export default function Page() {
     });
   };
   console.log(methods.watch());
+  console.log(methods.formState.errors);
   return (
     <>
       <FormProvider {...methods}>
@@ -102,14 +115,14 @@ export default function Page() {
             <Controller
               control={methods.control}
               name="name"
-              render={({ fieldState }) => (
+              render={({ field, fieldState }) => (
                 <Input
+                  {...field}
                   isRequired
                   autoFocus
                   label="Name"
                   description="Enter recipe name"
                   variant="bordered"
-                  {...methods.register("name", { required: true })}
                   isInvalid={!!fieldState.error}
                   errorMessage={fieldState.error?.message}
                 />
@@ -121,11 +134,11 @@ export default function Page() {
               name="difficulty"
               render={({ field, fieldState }) => (
                 <Select
+                  {...field}
                   isRequired
                   label="Difficulty"
                   description="Select recipe difficulty"
                   variant="bordered"
-                  {...methods.register("difficulty", { required: true })}
                   isInvalid={!!fieldState.error}
                   errorMessage={fieldState.error?.message}
                   selectedKeys={[field.value]}
@@ -159,11 +172,7 @@ export default function Page() {
             )}
           />
 
-          <Controller
-            control={methods.control}
-            name="tags"
-            render={() => <TagInput />}
-          />
+          <TagInput />
 
           <StepCreator />
 

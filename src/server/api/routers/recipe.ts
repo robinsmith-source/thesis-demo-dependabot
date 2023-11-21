@@ -107,7 +107,19 @@ export const recipeRouter = createTRPCRouter({
               z.object({
                 name: z.string().min(1),
                 quantity: z.number().min(1),
-                unit: z.string().nullable(),
+                unit: z
+                  .enum([
+                    "GRAM",
+                    "KILOGRAM",
+                    "LITER",
+                    "MILLILITER",
+                    "TEASPOON",
+                    "TABLESPOON",
+                    "CUP",
+                    "PINCH",
+                    "PIECE",
+                  ])
+                  .nullable(),
               }),
             ),
           }),
@@ -160,7 +172,19 @@ export const recipeRouter = createTRPCRouter({
               z.object({
                 name: z.string().min(1),
                 quantity: z.number().min(1),
-                unit: z.string().optional(),
+                unit: z
+                  .enum([
+                    "GRAM",
+                    "KILOGRAM",
+                    "LITER",
+                    "MILLILITER",
+                    "TEASPOON",
+                    "TABLESPOON",
+                    "CUP",
+                    "PINCH",
+                    "PIECE",
+                  ])
+                  .nullable(),
               }),
             ),
           }),
