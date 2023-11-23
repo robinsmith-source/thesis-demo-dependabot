@@ -2,15 +2,14 @@ import React from "react";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import { Button, Input, Select, SelectItem } from "@nextui-org/react";
 import { Unit } from "@prisma/client";
+import { FaMinus } from "react-icons/fa6";
 
-interface IngredientCreatorProps {
-  stepIndex: number;
-}
-
-const IngredientCreator: React.FC<IngredientCreatorProps> = ({
+export default function IngredientCreator({
   stepIndex,
-}: IngredientCreatorProps) => {
-  const { control } = useFormContext();
+}: {
+  stepIndex: number;
+}) {
+  const { control, register } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -18,14 +17,38 @@ const IngredientCreator: React.FC<IngredientCreatorProps> = ({
   });
 
   return (
-    <>
+    <div className="ml-8 space-y-4">
+      <div className="flex gap-2">
+        <div className="text-lg">Step Ingredients</div>
+        <Button type="button" size="sm" onClick={() => append({ name: "" })}>
+          Add Ingredient
+        </Button>
+      </div>
       {fields.map((ingredient, index) => (
-        <div key={ingredient.id} className="flex justify-center gap-4">
+        <div key={ingredient.id} className="flex items-center gap-4">
           <Controller
             control={control}
             name={`steps.${stepIndex}.ingredients.${index}.name`}
             render={({ field, fieldState }) => (
-              <Input {...field} label="Name" />
+              <Input {...field} label="Name" variant="bordered" isRequired />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name={`steps.${stepIndex}.ingredients.${index}.quantity`}
+            render={({ field }) => (
+              <Input
+                {...field}
+                value={field.value?.toString() || ""}
+                label="Quantity"
+                variant="bordered"
+                isRequired
+                type="number"
+                onChange={(event) => {
+                  field.onChange(+event.target.value);
+                }}
+              />
             )}
           />
 
@@ -35,9 +58,7 @@ const IngredientCreator: React.FC<IngredientCreatorProps> = ({
             render={({ field, fieldState }) => (
               <Select
                 {...field}
-                isRequired
                 label="Unit"
-                description="Select ingredient unit"
                 variant="bordered"
                 selectedKeys={[field.value]}
               >
@@ -63,34 +84,17 @@ const IngredientCreator: React.FC<IngredientCreatorProps> = ({
             )}
           />
 
-          <Controller
-            control={control}
-            name={`steps.${stepIndex}.ingredients.${index}.quantity`}
-            render={({ field, fieldState }) => (
-              <Input
-                {...field}
-                onChange={(event) => {
-                  field.onChange(+event.target.value);
-                }}
-                type="number"
-                label="Quantity"
-              />
-            )}
-          />
-
-          <Button type="button" onClick={() => remove(index)}>
-            -
+          <Button
+            radius="full"
+            color="danger"
+            type="button"
+            size="sm"
+            onClick={() => remove(index)}
+          >
+            <FaMinus />
           </Button>
         </div>
       ))}
-      <Button
-        type="button"
-        onClick={() => append({ name: "", quantity: 0, unit: "GRAM" })}
-      >
-        Add Ingredient
-      </Button>
-    </>
+    </div>
   );
-};
-
-export default IngredientCreator;
+}

@@ -127,33 +127,39 @@ export const recipeRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.recipe.create({
+      const recipe = await ctx.db.recipe.create({
         data: {
           name: input.name,
           description: input.description,
           difficulty: input.difficulty,
           tags: input.tags,
-          steps: {
-            createMany: {
-              data: input.steps.map((step) => ({
-                description: step.description,
-                duration: step.duration,
-                stepType: step.stepType,
-                ingredients: {
-                  createMany: {
-                    data: step.ingredients?.map((ingredient) => ({
-                      name: ingredient.name,
-                      quantity: ingredient.quantity,
-                      unit: ingredient.unit,
-                    })),
-                  },
-                },
-              })),
-            },
-          },
           author: { connect: { id: ctx.session.user.id } },
         },
       });
+
+      await Promise.all(
+        input.steps.map((step) => {
+          return ctx.db.recipeStep.create({
+            data: {
+              recipe: { connect: { id: recipe.id } },
+              description: step.description,
+              duration: step.duration,
+              stepType: step.stepType,
+              ingredients: {
+                createMany: {
+                  data: step.ingredients?.map((ingredient) => ({
+                    name: ingredient.name,
+                    quantity: ingredient.quantity,
+                    unit: ingredient.unit,
+                  })),
+                },
+              },
+            },
+          });
+        }),
+      );
+
+      return recipe.id;
     }),
 
   updateRecipe: protectedProcedure

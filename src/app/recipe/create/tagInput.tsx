@@ -27,7 +27,7 @@ export default function TagInput() {
   };
 
   const addTag = () => {
-    if (inputValue.trim() !== "") {
+    if (inputValue.trim() !== "" && fields.length < 10) {
       append(inputValue.trim());
       setInputValue("");
     }
@@ -52,8 +52,7 @@ export default function TagInput() {
       render={() => (
         <Input
           type="text"
-          label="Tags"
-          labelPlacement="outside"
+          label={`Recipe Tags (${fields.length}/10)`}
           size="lg"
           className="mb-2"
           value={inputValue}
@@ -63,7 +62,7 @@ export default function TagInput() {
           errorMessage={errorMessage}
           variant="bordered"
           startContent={
-            fields && (
+            fields && fields.length !== 0 ? (
               <div className="flex items-center gap-2">
                 {fields.map((field, index) => (
                   <Chip
@@ -72,17 +71,15 @@ export default function TagInput() {
                     onClose={() => handleClose(index)}
                     color="secondary"
                     variant="faded"
+                    size="sm"
                   >
                     {methods.getValues(`tags.${index}`)}
                   </Chip>
                 ))}
               </div>
-            )
+            ) : null
           }
-          endContent={fields.length}
-          placeholder={
-            fields.length === 0 ? "Enter tags, separated by comma" : ""
-          }
+          description="Enter tags, separated by comma"
         />
       )}
     />

@@ -43,7 +43,7 @@ export default function Page() {
         ingredients: z.array(
           z.object({
             name: z.string().min(1),
-            quantity: z.number().min(1),
+            quantity: z.number().min(1, "Quantity must be at least 1"),
             unit: z
               .enum([
                 "GRAM",
@@ -119,9 +119,8 @@ export default function Page() {
                 <Input
                   {...field}
                   isRequired
-                  autoFocus
-                  label="Name"
-                  description="Enter recipe name"
+                  label="Recipe name"
+                  placeholder="My tasty Pizza"
                   variant="bordered"
                   isInvalid={!!fieldState.error}
                   errorMessage={fieldState.error?.message}
@@ -136,8 +135,7 @@ export default function Page() {
                 <Select
                   {...field}
                   isRequired
-                  label="Difficulty"
-                  description="Select recipe difficulty"
+                  label="Recipe Difficulty"
                   variant="bordered"
                   isInvalid={!!fieldState.error}
                   errorMessage={fieldState.error?.message}
@@ -162,8 +160,8 @@ export default function Page() {
             render={({ fieldState }) => (
               <Textarea
                 minRows={2}
-                label="Description"
-                description="Enter recipe description"
+                label="Recipe Description"
+                placeholder="My grandma used to make this pizza for me ..."
                 variant="bordered"
                 {...methods.register("description", { required: false })}
                 isInvalid={!!fieldState.error}

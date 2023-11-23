@@ -1,11 +1,18 @@
 import React from "react";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
-import { Button, Input, Select, SelectItem, Textarea } from "@nextui-org/react";
+import {
+  Button,
+  Divider,
+  Input,
+  Select,
+  SelectItem,
+  Textarea,
+} from "@nextui-org/react";
 import { RecipeStepType } from "@prisma/client";
 
 import IngredientCreator from "./IngredientCreator";
 
-const StepCreator: React.FC = () => {
+export default function StepCreator() {
   const { control } = useFormContext();
 
   const { fields, append, remove } = useFieldArray({
@@ -15,73 +22,98 @@ const StepCreator: React.FC = () => {
 
   return (
     <>
-      {fields.map((step, index) => (
-        <div key={step.id}>
-          <Controller
-            control={control}
-            name={`steps.${index}.description`}
-            render={({ field, fieldState }) => (
-              <Textarea {...field} label="Description" />
-            )}
-          />
-
-          <Controller
-            control={control}
-            name={`steps.${index}.duration`}
-            render={({ field, fieldState }) => (
-              <Input
-                {...field}
-                onChange={(event) => {
-                  field.onChange(+event.target.value);
-                }}
-                type="number"
-                label="Duration"
-              />
-            )}
-          />
-
-          <Controller
-            control={control}
-            name={`steps.${index}.stepType`}
-            render={({ field, fieldState }) => (
-              <Select
-                {...field}
-                isRequired
-                label="StepType"
-                description="Select step type"
-                variant="bordered"
-                selectedKeys={[field.value]}
-                defaultSelectedKeys={["PREP"]}
-              >
-                {["PREP", "COOK", "REST", "SEASON", "SERVE", "MIX"].map(
-                  (stepType) => (
-                    <SelectItem
-                      key={stepType}
-                      value={stepType as RecipeStepType}
-                    >
-                      {stepType as RecipeStepType}
-                    </SelectItem>
-                  ),
-                )}
-              </Select>
-            )}
-          />
-          <IngredientCreator stepIndex={index} />
-          <Button type="button" onClick={() => remove(index)}>
-            Remove Step
+      <div className="ml-8 space-y-4">
+        <div className="flex gap-2">
+          <div className="text-lg">Steps</div>
+          <Button
+            type="button"
+            size="sm"
+            onClick={() => append({ description: "" })}
+          >
+            Add Step
           </Button>
         </div>
-      ))}
-      <Button
-        type="button"
-        onClick={() =>
-          append({ description: "", duration: 0, stepType: "PREP" })
-        }
-      >
-        Add Step
-      </Button>
+        {fields.map((step, index) => (
+          <div key={step.id}>
+            <div className="grid grid-cols-[4fr_2fr] gap-x-4 gap-y-2">
+              <Controller
+                control={control}
+                name={`steps.${index}.description`}
+                render={({ field, fieldState }) => (
+                  <Textarea
+                    className="row-span-2"
+                    {...field}
+                    label="Step Description"
+                    variant="bordered"
+                    isRequired
+                  />
+                )}
+              />
+              <Controller
+                control={control}
+                name={`steps.${index}.duration`}
+                render={({ field, fieldState }) => (
+                  <Input
+                    {...field}
+                    onChange={(event) => {
+                      field.onChange(+event.target.value);
+                    }}
+                    type="number"
+                    label="Duration"
+                    variant="bordered"
+                    isRequired
+                    size="sm"
+                  />
+                )}
+              />
+
+              <Controller
+                control={control}
+                name={`steps.${index}.stepType`}
+                render={({ field, fieldState }) => (
+                  <Select
+                    {...field}
+                    isRequired
+                    label="Step Type"
+                    variant="bordered"
+                    selectedKeys={[field.value]}
+                    defaultSelectedKeys={["PREP"]}
+                    size="sm"
+                  >
+                    {["PREP", "COOK", "REST", "SEASON", "SERVE", "MIX"].map(
+                      (stepType) => (
+                        <SelectItem
+                          key={stepType}
+                          value={stepType as RecipeStepType}
+                          className="capitalize"
+                        >
+                          {stepType}
+                        </SelectItem>
+                      ),
+                    )}
+                  </Select>
+                )}
+              />
+            </div>
+            <div className="flex justify-end py-2">
+              <Button
+                className="place-self-stretch"
+                color="danger"
+                type="button"
+                variant="flat"
+                size="sm"
+                onClick={() => remove(index)}
+              >
+                Remove Step
+              </Button>
+            </div>
+
+            <IngredientCreator stepIndex={index} />
+
+            <Divider className="my-4" />
+          </div>
+        ))}
+      </div>
     </>
   );
-};
-
-export default StepCreator;
+}
