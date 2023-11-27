@@ -80,7 +80,7 @@ export const recipeRouter = createTRPCRouter({
         name: z.string().min(1),
         description: z.string().nullable(),
         difficulty: z.enum(["EASY", "MEDIUM", "HARD", "EXPERT"]),
-        images: z.array(z.string()).nullable(),
+        images: z.array(z.string()),
         tags: z
           .array(
             z
@@ -134,7 +134,7 @@ export const recipeRouter = createTRPCRouter({
           description: input.description,
           difficulty: input.difficulty,
           tags: input.tags,
-          images: input.images ?? [], // TODO this is terrible fix it
+          images: input.images,
           author: { connect: { id: ctx.session.user.id } },
         },
       });
