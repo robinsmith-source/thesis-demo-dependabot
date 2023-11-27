@@ -16,6 +16,7 @@ import {
 import NextLink from "next/link";
 import type { Session } from "next-auth";
 import { useSession } from "next-auth/react";
+import ThemeSwitcher from "~/app/_components/ThemeSwitcher";
 import NextImage from "next/image";
 
 function LoginBar({ session }: { session: Session }) {
@@ -68,8 +69,8 @@ export default function MainNavbar() {
           />
         </NextLink>
       </NavbarBrand>
-
       <NavbarContent as="div" justify="end">
+        <ThemeSwitcher />
         {session ? (
           <LoginBar session={session} />
         ) : (
