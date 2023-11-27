@@ -13,10 +13,11 @@ import {
   NavbarContent,
   NavbarItem,
 } from "@nextui-org/react";
-import Link from "next/link";
-import type { Session } from "next-auth";
+import NextLink from "next/link";
 import NextImage from "next/image";
-import { useSession } from "next-auth/react";
+
+import type {Session} from "next-auth";
+import {useSession} from "next-auth/react";
 
 function LoginBar({ session }: { session: Session }) {
   return (
@@ -56,7 +57,7 @@ export default function MainNavbar() {
   return (
     <Navbar maxWidth="xl" className="bg-white">
       <NavbarBrand>
-        <Link href="/">
+        <NextLink href="/">
           <Image
             as={NextImage}
             width={50}
@@ -64,8 +65,8 @@ export default function MainNavbar() {
             src="/images/Logo_round_V2.png"
             alt="Logo"
           />
-        </Link>
-        <Button href="/" as={Link} size="lg" variant="light">
+        </NextLink>
+        <Button href="/" as={NextLink} size="lg" variant="light">
           Home
         </Button>
         <Dropdown>
@@ -75,8 +76,8 @@ export default function MainNavbar() {
             </Button>
           </DropdownTrigger>
           <DropdownMenu aria-label="Static Actions">
-          <DropdownItem key="Recipes" href="/recipes/public" as={Link}>Recipes</DropdownItem>
-          <DropdownItem key="Users" href="/users" as={Link}>Users</DropdownItem>
+          <DropdownItem key="Recipes" href="/recipes/public" as={NextLink}>Recipes</DropdownItem>
+          <DropdownItem key="Users" href="/users" as={NextLink}>Users</DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </NavbarBrand>
@@ -87,7 +88,7 @@ export default function MainNavbar() {
         ) : (
           <NavbarItem>
             <Button
-              as={Link}
+              as={NextLink}
               color="secondary"
               href={"/api/auth/signin"}
               variant="flat"
