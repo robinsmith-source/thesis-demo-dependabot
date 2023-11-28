@@ -8,6 +8,78 @@ async function main() {
     return;
   }
 
+  await prisma.recipeLabelCategory.upsert({
+    where: { name: "Cuisine" },
+    update: {},
+    create: {
+      name: "Cuisine",
+      RecipeLabel: {
+        create: [
+          {
+            name: "American",
+          },
+          {
+            name: "Chinese",
+          },
+          {
+            name: "French",
+          },
+          {
+            name: "Indian",
+          },
+          {
+            name: "Italian",
+          },
+          {
+            name: "Japanese",
+          },
+          {
+            name: "Mexican",
+          },
+          {
+            name: "Thai",
+          },
+          {
+            name: "Vietnamese",
+          },
+        ],
+      },
+    },
+  });
+
+  await prisma.recipeLabelCategory.upsert({
+    where: { name: "Diet" },
+    update: {},
+    create: {
+      name: "Diet",
+      RecipeLabel: {
+        create: [
+          {
+            name: "Gluten-Free",
+          },
+          {
+            name: "Keto",
+          },
+          {
+            name: "Low-Carb",
+          },
+          {
+            name: "Low-Fat",
+          },
+          {
+            name: "Paleo",
+          },
+          {
+            name: "Vegan",
+          },
+          {
+            name: "Vegetarian",
+          },
+        ],
+      },
+    },
+  });
+
   await prisma.user.upsert({
     where: { email: "testUser@example.com" },
     update: {},
@@ -30,6 +102,13 @@ async function main() {
               "Colander",
             ],
             difficulty: "MEDIUM",
+            labels: {
+              connect: [
+                {
+                  name: "Italian",
+                },
+              ],
+            },
             steps: {
               create: [
                 {
@@ -153,6 +232,16 @@ async function main() {
               "Cutting Board",
             ],
             difficulty: "EASY",
+            labels: {
+              connect: [
+                {
+                  name: "Gluten-Free",
+                },
+                {
+                  name: "Low-Carb",
+                },
+              ],
+            },
             steps: {
               create: [
                 {
@@ -250,6 +339,16 @@ async function main() {
               "Colander",
             ],
             difficulty: "MEDIUM",
+            labels: {
+              connect: [
+                {
+                  name: "Italian",
+                },
+                {
+                  name: "Vegetarian",
+                },
+              ],
+            },
             steps: {
               create: [
                 {
@@ -366,6 +465,13 @@ async function main() {
               "Wooden Spoon",
             ],
             difficulty: "EXPERT",
+            labels: {
+              connect: [
+                {
+                  name: "American",
+                },
+              ],
+            },
             steps: {
               create: [
                 {
@@ -497,6 +603,16 @@ async function main() {
               "Colander",
             ],
             difficulty: "EASY",
+            labels: {
+              connect: [
+                {
+                  name: "Italian",
+                },
+                {
+                  name: "Vegetarian",
+                },
+              ],
+            },
             steps: {
               create: [
                 {
@@ -582,6 +698,16 @@ async function main() {
               "Cutting Board",
             ],
             difficulty: "EASY",
+            labels: {
+              connect: [
+                {
+                  name: "Italian",
+                },
+                {
+                  name: "Vegetarian",
+                },
+              ],
+            },
             steps: {
               create: [
                 {
