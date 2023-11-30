@@ -1,7 +1,7 @@
 import React from "react";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import { Button, Input, Select, SelectItem } from "@nextui-org/react";
-import { Unit } from "@prisma/client";
+import type { Unit } from "@prisma/client";
 import { FaMinus } from "react-icons/fa6";
 
 export default function IngredientCreator({
@@ -47,7 +47,7 @@ export default function IngredientCreator({
             render={({ field, fieldState }) => (
               <Input
                 {...field}
-                value={field.value?.toString() || ""}
+                value={(field.value as string | undefined)?.toString() ?? ""}
                 label="Quantity"
                 variant="bordered"
                 isRequired

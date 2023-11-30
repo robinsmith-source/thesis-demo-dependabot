@@ -39,9 +39,10 @@ export default function TagInput() {
 
   useEffect(() => {
     if (Array.isArray(fieldState.error)) {
-      setErrorMessage(fieldState.error?.find((e) => !!e)?.message || "");
+      // eslint-disable-next-line
+      setErrorMessage(fieldState.error?.find((e) => !!e)?.message ?? "");
     } else if (fieldState.error) {
-      setErrorMessage(fieldState.error?.message || "");
+      setErrorMessage(fieldState.error?.message ?? "");
     } else setErrorMessage("");
   }, [fieldState.error]);
 

@@ -9,7 +9,7 @@ import {
   SelectItem,
   Textarea,
 } from "@nextui-org/react";
-import { RecipeStepType } from "@prisma/client";
+import type { RecipeStepType } from "@prisma/client";
 
 import IngredientCreator from "./IngredientCreator";
 
@@ -35,8 +35,8 @@ export default function StepCreator() {
           </Button>
         </div>
         {fields.map((step, index) => (
-          <Card>
-            <CardBody key={step.id}>
+          <Card key={step.id}>
+            <CardBody>
               <div className="grid grid-cols-[4fr_2fr] gap-x-2">
                 <Controller
                   control={control}

@@ -40,6 +40,7 @@ export default function ImageUploader() {
               <Image
                 height={100}
                 width={100}
+                alt={`Recipe image ${index}`}
                 src={`https://utfs.io/f/${getValues(`images.${index}`)}`}
               />
 
@@ -47,7 +48,9 @@ export default function ImageUploader() {
                 <Button
                   isIconOnly
                   onClick={() => {
-                    mutation.mutate({ key: getValues(`images.${index}`) });
+                    mutation.mutate({
+                      key: getValues(`images.${index}`) as string,
+                    });
                     remove(index);
                   }}
                 >

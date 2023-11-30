@@ -1,6 +1,7 @@
 import { api } from "~/trpc/server";
 import RecipeCard from "~/app/_components/RecipeCard"
 import { Input } from '@nextui-org/react';
+import NextImage from 'next/image';
 
 export default async function Home() {
   const featuredRecipes = await api.recipe.getFeaturedRecipes.query({
@@ -11,7 +12,7 @@ export default async function Home() {
         <main className="flex flex-col items-center">
             <div className="mb-4">
                 {/* Goose chef logo */}
-                <img
+                <NextImage
                     src="/images/Logo_round_V2.png"
                     alt="Logo"
                     className="w-24 h-24 mb-2 object-contain"

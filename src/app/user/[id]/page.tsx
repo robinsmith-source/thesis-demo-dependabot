@@ -1,5 +1,6 @@
 import { api } from "~/trpc/server";
 import RecipeCard from "~/app/_components/RecipeCard";
+import NextImage from "next/image";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const user = await api.user.get.query({ id: params.id });
@@ -10,16 +11,14 @@ export default async function Page({ params }: { params: { id: string } }) {
   return (
     <main>
       <div className="flex items-center gap-4 py-4">
-        {user.image ? (
-          <img
+        {user.image && (
+          <NextImage
             src={user.image}
             alt="profile picture"
             width={64}
             height={64}
             className="rounded-full"
           />
-        ) : (
-          <p>no image</p>
         )}
         <div>
           <h1 className="text-lg font-bold">{user.name}</h1>

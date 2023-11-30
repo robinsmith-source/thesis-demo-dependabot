@@ -5,14 +5,14 @@ const f = createUploadthing();
 
 export const chefFileRouter = {
   recipeImagesUploader: f({ image: { maxFileSize: "4MB" } })
-    .middleware(async ({ req }) => {
+    .middleware(async () => {
       const session = await getServerAuthSession();
 
       if (!session?.user) throw new Error("Unauthorized");
 
       return { userId: session.user.id };
     })
-    .onUploadComplete(async ({ metadata, file }) => {
+    .onUploadComplete(({ metadata, file }) => {
       console.log("Upload complete for userId:", metadata.userId);
 
       console.log("file url", file.url);
