@@ -77,7 +77,7 @@ export const recipeRouter = createTRPCRouter({
           name: z.string().optional(),
           difficulty: z.enum(["EASY", "MEDIUM", "HARD", "EXPERT"]).optional(),
           labels: z.array(z.string()).optional(),
-          // tags: z.array(z.string()).optional(),
+          tags: z.array(z.string()).optional(),
           author: z.string().optional()}))
       .query(({ ctx, input }) => {
             return ctx.db.recipe.findMany({
@@ -85,15 +85,13 @@ export const recipeRouter = createTRPCRouter({
                 take: input.take,
                 orderBy: { createdAt: "desc" },
                 where: {
-                    name: {contains: input.name},
+                    name: { contains: input.name },
                     difficulty: input.difficulty,
-                    labels: { every: {name: {in: input.labels } }},
-                    // tags:  { hasSome: input.tags },
+                    labels: { every: { name: { in: input.labels } } },
+                    tags:  { equals: input.tags },
                     author: { name: { contains: input.author } }
                 },
-                select: {
-                    id: true
-                },
+                select: { id: true },
             })
       }),
 
