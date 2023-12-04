@@ -23,6 +23,7 @@ import StepCreator from "./StepCreator";
 import { api } from "~/trpc/react";
 import React from "react";
 import { useRouter } from "next/navigation";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Page() {
   type RecipeForm = Recipe & {
@@ -89,7 +90,7 @@ export default function Page() {
 
   const mutation = api.recipe.create.useMutation({
     onSuccess: (id) => {
-      console.log(id);
+      toast.success("Recipe created!");
       router.push(`/recipe/${id}`);
       methods.reset({
         name: "",
@@ -124,6 +125,7 @@ export default function Page() {
   };
   return (
     <>
+      <Toaster />
       <FormProvider {...methods}>
         <form>
           <div className="grid grid-cols-2 gap-2">
