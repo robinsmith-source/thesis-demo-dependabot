@@ -56,6 +56,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           {recipe.images?.map((image) => (
             <Image
               as={NextImage}
+              alt={`Recipe Image`}
               src={`https://utfs.io/f/${image}`}
               key={image}
               width={200}

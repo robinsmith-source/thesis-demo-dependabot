@@ -168,11 +168,11 @@ export const recipeRouter = createTRPCRouter({
   deleteRecipeImage: protectedProcedure
     .input(z.object({ key: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      // later this should check for existing recipes, make sure the user matches and then remove the link and then delete it 
+      // later this should check for existing recipes, make sure the user matches and then remove the link and then delete it
       // for now just check it doesn't exist and then delete it
       const existingRecipe = await ctx.db.recipe.findFirst({
         where: { images: { has: input.key } },
-      })
+      });
       // make sure there is no recipe with this image
       if (existingRecipe) throw new Error("Image is used by a recipe");
 
@@ -184,13 +184,32 @@ export const recipeRouter = createTRPCRouter({
       z.object({
         id: z.string().cuid(),
         name: z.string().min(1),
-        description: z.string().optional(),
+        description: z.string().nullable(),
         difficulty: z.enum(["EASY", "MEDIUM", "HARD", "EXPERT"]),
+        images: z.array(z.string()),
+        tags: z
+          .array(
+            z
+              .string({ invalid_type_error: "Tags must be strings" })
+              .min(1)
+              .regex(/^[a-z]+$/, "Tags can only contain lowercase characters"),
+          )
+          .max(10, "A recipe can only have 10 tags")
+          .refine((items) => new Set(items).size === items.length, {
+            message: "Must be an array of unique strings",
+          }),
         steps: z.array(
           z.object({
             description: z.string(),
             duration: z.number().min(0),
-            stepType: z.enum(["PREP", "COOK", "REST"]),
+            stepType: z.enum([
+              "PREP",
+              "COOK",
+              "REST",
+              "SEASON",
+              "SERVE",
+              "MIX",
+            ]),
             ingredients: z.array(
               z.object({
                 name: z.string().min(1),
@@ -215,7 +234,7 @@ export const recipeRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.recipe.update({
+      const recipe = await ctx.db.recipe.update({
         where: {
           id: input.id,
         },
@@ -223,77 +242,13 @@ export const recipeRouter = createTRPCRouter({
           name: input.name,
           description: input.description,
           difficulty: input.difficulty,
-          steps: {
-            updateMany: {
-              where: {},
-              data: input.steps.map((step) => ({
-                description: step.description,
-                duration: step.duration,
-                stepType: step.stepType,
-                ingredients: {
-                  updateMany: {
-                    where: {},
-                    data: step.ingredients.map((ingredient) => ({
-                      name: ingredient.name,
-                      quantity: ingredient.quantity,
-                      unit: ingredient.unit,
-                    })),
-                  },
-                },
-              })),
-            },
-          },
+          tags: input.tags,
+          images: input.images,
+          author: { connect: { id: ctx.session.user.id } },
         },
       });
-    }),
 
-  updateRecipeStep: protectedProcedure
-    .input(
-      z.object({
-        id: z.string().cuid(),
-        stepId: z.string().cuid(),
-        description: z.string(),
-        duration: z.number().min(0),
-        stepType: z.enum(["PREP", "COOK", "REST"]),
-        ingredients: z.array(
-          z.object({
-            name: z.string().min(1),
-            quantity: z.number().min(1),
-            unit: z.string().optional(),
-          }),
-        ),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      return ctx.db.recipe.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          steps: {
-            update: {
-              where: {
-                id: input.id,
-              },
-              data: {
-                description: input.description,
-                duration: input.duration,
-                stepType: input.stepType,
-                ingredients: {
-                  updateMany: {
-                    where: {},
-                    data: input.ingredients.map((ingredient) => ({
-                      name: ingredient.name,
-                      quantity: ingredient.quantity,
-                      unit: ingredient.unit,
-                    })),
-                  },
-                },
-              },
-            },
-          },
-        },
-      });
+      return recipe.id;
     }),
 
   deleteRecipe: protectedProcedure

@@ -1,6 +1,6 @@
 import { api } from "~/trpc/server";
 import { getServerAuthSession } from "~/server/auth";
-import Form from "./Form";
+import FormHandler from "./FormHandler";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const session = await getServerAuthSession();
@@ -8,8 +8,10 @@ export default async function Page({ params }: { params: { id: string } }) {
     id: params.id,
   });
 
+  //TODO: Implement proper handling for that
   if (!recipe || !session || recipe.authorId !== session?.user.id) {
     return "NOIDONTTHINKSO";
   }
-  return <Form recipe={recipe} />;
+
+  return <FormHandler recipe={recipe} />;
 }
