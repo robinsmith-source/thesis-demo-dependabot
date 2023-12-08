@@ -35,21 +35,36 @@ function LoginBar({ session }: { session: Session }) {
       </DropdownTrigger>
       <DropdownMenu aria-label="Profile Actions" variant="flat">
         <DropdownItem
-            key="profile" className="h-14 gap-2">
+          textValue={`Signed in as ${session.user.name}`}
+          key="profile"
+          className="h-14 gap-2"
+        >
           <p className="font-semibold">
             Signed in as <br />
             {session.user.name}
           </p>
         </DropdownItem>
         <DropdownItem
-            as={NextLink} key="settings" href={`/user/${session.user.id}`}>
+          as={NextLink}
+          key="settings"
+          href={`/user/${session.user.id}`}
+        >
           My Profile
         </DropdownItem>
-        <DropdownItem as={NextLink} key="create-recipe" href={`/recipe/create`}>
+        <DropdownItem
+          as={NextLink}
+          key="create-recipe"
+          href={`/recipe/create`}
+          scroll={false}
+        >
           Create Recipe
         </DropdownItem>
         <DropdownItem
-            as={NextLink} key="logout" color="danger" href={"/api/auth/signout"}>
+          as={NextLink}
+          key="logout"
+          color="danger"
+          href={"/api/auth/signout"}
+        >
           Log Out
         </DropdownItem>
       </DropdownMenu>
@@ -64,7 +79,8 @@ export default function MainNavbar() {
     <Navbar maxWidth="xl" className="bg-white">
       <NavbarBrand>
         <NextLink href="/">
-          <Image as={NextImage}
+          <Image
+            as={NextImage}
             width={50}
             height={50}
             src="/images/Logo_round_V2.png"
