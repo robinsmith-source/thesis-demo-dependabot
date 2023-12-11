@@ -27,7 +27,12 @@ export default function IngredientTable({
   className?: string;
 }) {
   return (
-    <Table className={`max-w-xs py-4 ${className}`} hideHeader isCompact>
+    <Table
+      aria-label="Ingredient Table"
+      className={`max-w-xs py-4 ${className}`}
+      hideHeader
+      isCompact
+    >
       <TableHeader>
         <TableColumn maxWidth={40}>Amount</TableColumn>
         <TableColumn minWidth={40}>Ingredient</TableColumn>
