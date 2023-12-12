@@ -41,6 +41,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         <Card className="row-span-2 h-96 place-self-center">
           <Image
             as={NextImage}
+            priority
             width={500}
             height={300}
             removeWrapper
