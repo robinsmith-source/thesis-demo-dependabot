@@ -24,14 +24,14 @@ export default function ReviewCard({ review }: { review: RecipeCardProps }) {
 
   return (
     <Card className="w-96">
-      <CardHeader className="flex justify-between">
+      <CardHeader className="-mb-4 flex justify-between">
         <ReviewRating rating={rating} />
         <Button isIconOnly size="sm" color="secondary" variant="flat">
           <FaPenToSquare />
         </Button>
       </CardHeader>
       {comment && <CardBody>{comment}</CardBody>}
-      <CardFooter className="flex justify-end">
+      <CardFooter className="-mt-4 flex justify-end">
         <User
           name={
             <Link

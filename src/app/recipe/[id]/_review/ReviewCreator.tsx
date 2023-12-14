@@ -1,5 +1,11 @@
 "use client";
-import { Button, Card, Textarea } from "@nextui-org/react";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  Textarea,
+} from "@nextui-org/react";
 import { Controller, useForm } from "react-hook-form";
 import React from "react";
 import { z } from "zod";
@@ -8,6 +14,7 @@ import toast from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import RatingInput from "./RatingInput";
+import { CardHeader } from "@nextui-org/card";
 
 export default function ReviewCreator({ recipeId }: { recipeId: string }) {
   const schema = z.object({
@@ -49,8 +56,8 @@ export default function ReviewCreator({ recipeId }: { recipeId: string }) {
   };
 
   return (
-    <Card className="p-4">
-      <form className="flex flex-col gap-4">
+    <Card>
+      <CardHeader className="-mb-4">
         <Controller
           control={control}
           name="rating"
@@ -61,7 +68,8 @@ export default function ReviewCreator({ recipeId }: { recipeId: string }) {
             />
           )}
         />
-
+      </CardHeader>
+      <CardBody>
         <Controller
           control={control}
           name="comment"
@@ -76,10 +84,12 @@ export default function ReviewCreator({ recipeId }: { recipeId: string }) {
             />
           )}
         />
+      </CardBody>
+      <CardFooter className="-mt-4 flex justify-end">
         <Button color="primary" onClick={handleSubmit(onSubmit)}>
           Submit
         </Button>
-      </form>
+      </CardFooter>
     </Card>
   );
 }
