@@ -5,25 +5,21 @@ import NextImage from "next/image";
 import { notFound } from "next/navigation";
 import RecipeStep from "./RecipeStep";
 import IngredientTable from "./IngredientTable";
-import Difficulty from "~/app/_components/Difficulty";
+import DifficultyChip from "~/app/_components/DifficultyChip";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const recipe = await api.recipe.get.query({ id: params.id });
   if (!recipe) {
     notFound();
   }
-  //.map function recipe.map(rec => {return rec.icon = rec.diffcutly ? medium :  rec}
-
   return (
     <main>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <h1 className="text-2xl font-bold">
             {recipe.name}
-            <span className="ml-5 capitalize">
-              <Chip>
-                <Difficulty difficulty={recipe.difficulty}></Difficulty>
-              </Chip>
+            <span className="ml-5">
+              <DifficultyChip difficulty={recipe.difficulty} />
             </span>
           </h1>
           <p>
