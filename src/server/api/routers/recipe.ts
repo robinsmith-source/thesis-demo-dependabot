@@ -73,7 +73,7 @@ export const recipeRouter = createTRPCRouter({
       const query = {};
 
       if (input.name) {
-        query.name = { contains: input.name };
+        query.name = { contains: input.name, mode: "insensitive" };
       }
 
       if (input.difficulty) {
