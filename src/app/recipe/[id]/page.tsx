@@ -1,7 +1,7 @@
 import { api } from "~/trpc/server";
 import React from "react";
-import { Button, Card, Chip, Image, Link } from "@nextui-org/react";
-import NextImage from "next/image";
+import { Button, Link, Chip } from "@nextui-org/react";
+import NextLink from "next/link";
 import { notFound } from "next/navigation";
 import RecipeStep from "./RecipeStep";
 import IngredientTable from "./IngredientTable";
