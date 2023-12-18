@@ -99,7 +99,10 @@ async function seedUserRecipes() {
             description:
               "A classic Italian pasta dish with creamy egg sauce and crispy bacon.",
             difficulty: "MEDIUM",
-            images: [],
+            images: [
+              "68e9d0e2-c9ce-4c26-9f0a-ed11384877fc-65xcwy.jpg",
+              "77695835-b0b3-4d71-8159-0e4a413b09d0-ytip1d.jpg",
+            ],
             labels: {
               connect: [
                 {
@@ -224,7 +227,7 @@ async function seedUserRecipes() {
             description:
               "A healthy and delicious salad with grilled chicken and fresh veggies.",
             difficulty: "EASY",
-            images: [],
+            images: ["43f0b4f6-1c40-48a7-a340-7a890848a36b-1d4zl3.jpg"],
             labels: {
               connect: [
                 {
@@ -326,7 +329,7 @@ async function seedUserRecipes() {
             description:
               "A colorful pasta dish with fresh spring vegetables and a creamy sauce.",
             difficulty: "MEDIUM",
-            images: [],
+            images: ["6fe2c4a2-b4ea-4738-9c78-6c0503f8d44b-4sbvj9.jpg"],
             labels: {
               connect: [
                 {
@@ -452,7 +455,7 @@ async function seedUserRecipes() {
             description:
               "A hearty and comforting beef stew with tender meat and a rich, flavorful broth.",
             difficulty: "EXPERT",
-            images: [],
+            images: ["28603a4a-8af8-4280-8735-a0917c4ede08-hdo5gh.jpg"],
             labels: {
               connect: [
                 {
@@ -591,6 +594,7 @@ async function seedUserRecipes() {
             description:
               "A simple yet flavorful Italian pasta dish with garlic, olive oil, and red pepper flakes.",
             difficulty: "EASY",
+            images: ["997060aa-6806-4971-b4c9-9ae5556e54a1-gbxcxj.jpg"],
             labels: {
               connect: [
                 {
@@ -686,7 +690,7 @@ async function seedUserRecipes() {
             description:
               "A classic and simple Italian pizza with fresh tomatoes, mozzarella, basil, and olive oil.",
             difficulty: "EASY",
-            images: [],
+            images: ["52d9b13f-a267-4947-8dba-2ae9ab574375-hsmvrm.webp"],
             labels: {
               connect: [
                 {
