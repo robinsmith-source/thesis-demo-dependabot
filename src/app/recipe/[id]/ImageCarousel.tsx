@@ -9,11 +9,6 @@ import { AnimatePresence, motion } from "framer-motion";
 export default function ImageCarousel({ images }: { images: string[] }) {
   const [imageIndex, setImageIndex] = useState(0);
 
-  images = [
-    "https://images.unsplash.com/photo-1682685796014-2f342188a635?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxfHx8ZW58MHx8fHx8",
-    "https://plus.unsplash.com/premium_photo-1663045649003-a14867707a93?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHx80",
-    "https://images.unsplash.com/photo-1702877511798-5f8f4945f895?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzfHx8ZW58MHx8fHx8",
-  ];
   if (images.length === 0) {
     return <div></div>;
   }
