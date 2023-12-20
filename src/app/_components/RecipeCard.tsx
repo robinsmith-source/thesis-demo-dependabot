@@ -30,6 +30,7 @@ export default async function RecipeCard({ recipeId }: { recipeId: string }) {
         width={300}
         height={300}
         src={`https://utfs.io/f/${recipe.images[0]}`}
+        alt=""
         aria-hidden
         className="z-0 h-full w-full bg-center object-cover brightness-[.60]"
       />

@@ -1,3 +1,4 @@
+import type { Prisma } from "@prisma/client";
 import { z } from "zod";
 
 import {
@@ -70,7 +71,7 @@ export const recipeRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const query = {};
+      const query: Prisma.Args<typeof ctx.db.recipe, "findMany">["where"] = {};
 
       if (input.name) {
         query.name = { contains: input.name };
