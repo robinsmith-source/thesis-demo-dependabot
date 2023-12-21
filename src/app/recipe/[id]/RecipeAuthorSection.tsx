@@ -15,6 +15,7 @@ export default async function RecipeAuthorSection({
     take: 3,
     authorId: recipeAuthor.id,
   });
+  console.log(authorsRecipe);
 
   return (
     <div className="flex flex-col items-center justify-center gap-6">
@@ -46,11 +47,9 @@ export default async function RecipeAuthorSection({
             Other recipes from {recipeAuthor.name}
           </h3>
           <div className="flex items-center justify-center gap-4">
-            {authorsRecipe
-              .filter((recipe) => recipe.id !== currentRecipeId)
-              .map((recipe) => (
-                <RecipeCard recipeId={recipe.id} key={recipe.id} />
-              ))}
+            {authorsRecipe.map((recipe) => (
+              <RecipeCard recipeId={recipe.id} key={recipe.id} />
+            ))}
           </div>
         </>
       )}
