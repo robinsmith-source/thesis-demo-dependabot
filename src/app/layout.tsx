@@ -8,7 +8,7 @@ import React from "react";
 import { Providers } from "~/app/providers";
 import MainNavbar from "~/app/_components/MainNavbar";
 import SessionProvider from "~/app/_components/SessionProvider";
-import { getServerAuthSession } from "~/server/auth";
+import { auth } from "auth";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { chefFileRouter } from "~/app/api/uploadthing/core";
@@ -30,7 +30,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerAuthSession();
+  const session = await auth();
 
   return (
     //Currently there is no better solution than suppressing the error message: https://github.com/pacocoursey/next-themes/issues/169

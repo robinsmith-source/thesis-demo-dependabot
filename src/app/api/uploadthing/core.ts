@@ -1,12 +1,12 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
-import { getServerAuthSession } from "~/server/auth";
+import { auth } from "auth";
 
 const f = createUploadthing();
 
 export const chefFileRouter = {
   recipeImagesUploader: f({ image: { maxFileSize: "4MB", maxFileCount: 5 } })
     .middleware(async () => {
-      const session = await getServerAuthSession();
+      const session = await auth();
 
       if (!session?.user) throw new Error("Unauthorized");
 

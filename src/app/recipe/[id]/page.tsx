@@ -3,7 +3,7 @@ import NextLink from "next/link";
 import { notFound } from "next/navigation";
 import { FaPenToSquare } from "react-icons/fa6";
 import ReviewSection from "~/app/recipe/[id]/_review/ReviewSection";
-import { getServerAuthSession } from "~/server/auth";
+import { auth } from "auth";
 import { api } from "~/trpc/server";
 import ImageCarousel from "./ImageCarousel";
 import IngredientTable from "./IngredientTable";
@@ -15,7 +15,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     notFound();
   }
 
-  const session = await getServerAuthSession();
+  const session = await auth();
 
   return (
     <main>
@@ -28,7 +28,7 @@ export default async function Page({ params }: { params: { id: string } }) {
               ({recipe.difficulty.toLowerCase()})
             </span>
 
-            {recipe.authorId === session?.user.id && (
+            {recipe.authorId === session?.user?.id && (
               <Button
                 isIconOnly
                 as={NextLink}
@@ -80,7 +80,7 @@ export default async function Page({ params }: { params: { id: string } }) {
       <ReviewSection
         recipeId={recipe.id}
         hideReviewForm={
-          recipe.author.id === session?.user.id || session == null
+          recipe.author.id === session?.user?.id || session == null
         }
       />
     </main>

@@ -29,7 +29,7 @@ export default function Page() {
           size="lg"
           className="w-full"
           isLoading={status === "loading"}
-          onClick={() => handleSignOut()}
+          onPress={() => handleSignOut()}
         >
           Sign out
         </Button>
