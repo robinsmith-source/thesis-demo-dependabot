@@ -1,9 +1,9 @@
 "use client";
 import type { BuiltInProviderType } from "next-auth/providers";
 import { Button, CardBody, CardHeader } from "@nextui-org/react";
-import { useEffect, useState } from "react";
-import { LiteralUnion, signIn } from "next-auth/react";
-import { ClientSafeProvider } from "next-auth/lib/client";
+import { type SetStateAction, useEffect, useState } from "react";
+import { type LiteralUnion, signIn } from "next-auth/react";
+import type { ClientSafeProvider } from "next-auth/lib/client";
 
 export default function SignIn() {
   const [providers, setProviders] = useState<Record<
@@ -14,7 +14,16 @@ export default function SignIn() {
   useEffect(() => {
     (async () => {
       setProviders(
-        await fetch("/api/auth/providers").then((res) => res.json()),
+        (await fetch("/api/auth/providers").then((res) =>
+          res.json(),
+        )) as unknown as SetStateAction<
+          | Record<
+              LiteralUnion<BuiltInProviderType, string>,
+              ClientSafeProvider
+            >
+          | null
+          | undefined
+        >,
       );
     })().catch((error) => {
       console.log(error);

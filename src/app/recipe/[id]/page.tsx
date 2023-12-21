@@ -28,7 +28,7 @@ export default async function Page({ params }: { params: { id: string } }) {
               ({recipe.difficulty.toLowerCase()})
             </span>
 
-            {recipe.authorId === session?.user.id && (
+            {recipe.authorId === session?.user?.id && (
               <Button
                 isIconOnly
                 as={NextLink}
@@ -80,7 +80,7 @@ export default async function Page({ params }: { params: { id: string } }) {
       <ReviewSection
         recipeId={recipe.id}
         hideReviewForm={
-          recipe.author.id === session?.user.id || session == null
+          recipe.author.id === session?.user?.id || session == null
         }
       />
     </main>

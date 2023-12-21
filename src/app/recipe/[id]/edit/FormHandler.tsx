@@ -1,7 +1,7 @@
 "use client";
 
 import { api } from "~/trpc/react";
-import RecipeForm, { RecipeFormValues } from "../../_common/RecipeForm";
+import RecipeForm, { type RecipeFormValues } from "../../_common/RecipeForm";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 

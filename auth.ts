@@ -28,11 +28,14 @@ export const {
     authorized(params) {
       return !!params.auth?.user;
     },
-    session: async ({ session, user }) => {
-      if (user && session.user) {
-        session.user.id = user.id;
-      }
+    jwt: async (data) => {
+      return data.token;
+    },
+    session: async ({ session, user, token }) => {
+      // @ts-expect-error
+      session.user.id = token.sub;
       return session;
     },
   },
+  // @ts-expect-error
 }) satisfies NextAuthConfig;

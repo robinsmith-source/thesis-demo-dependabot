@@ -14,7 +14,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     notFound();
   }
 
-  if (!session || recipe.authorId !== session?.user.id) {
+  if (!session || recipe.authorId !== session.user?.id) {
     throw new UnauthorizedError();
   }
 
