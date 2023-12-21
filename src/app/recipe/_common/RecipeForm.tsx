@@ -52,23 +52,32 @@ export default function RecipeForm({
       z.object({
         description: z.string().min(3),
         duration: z.number().min(0),
-        stepType: z.enum(["PREP", "COOK", "REST", "SEASON", "SERVE", "MIX"]),
+        stepType: z.enum(["PREP", "COOK", "REST", "SEASON", "SERVE", "MIX"], {
+          required_error: "Step type is required",
+          invalid_type_error: "Invalid step type",
+        }),
         ingredients: z.array(
           z.object({
             name: z.string().min(1),
             quantity: z.number().min(1, "Quantity must be at least 1"),
             unit: z
-              .enum([
-                "GRAM",
-                "KILOGRAM",
-                "LITER",
-                "MILLILITER",
-                "TEASPOON",
-                "TABLESPOON",
-                "CUP",
-                "PINCH",
-                "PIECE",
-              ])
+              .enum(
+                [
+                  "GRAM",
+                  "KILOGRAM",
+                  "LITER",
+                  "MILLILITER",
+                  "TEASPOON",
+                  "TABLESPOON",
+                  "CUP",
+                  "PINCH",
+                  "PIECE",
+                ],
+                {
+                  required_error: "Unit is required",
+                  invalid_type_error: "Invalid unit",
+                },
+              )
               .nullable(),
           }),
         ),
@@ -120,13 +129,15 @@ export default function RecipeForm({
                 isInvalid={!!fieldState.error}
                 errorMessage={fieldState.error?.message}
                 selectedKeys={[field.value]}
+                disallowEmptySelection={true}
               >
                 {["EASY", "MEDIUM", "HARD", "EXPERT"].map((difficulty) => (
                   <SelectItem
                     key={difficulty}
                     value={difficulty as RecipeDifficulty}
+                    className="capitalize"
                   >
-                    {difficulty}
+                    {difficulty[0] + difficulty.slice(1).toLowerCase()}
                   </SelectItem>
                 ))}
               </Select>
