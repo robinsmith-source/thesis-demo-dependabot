@@ -4,20 +4,23 @@ import ReviewCard from "./ReviewCard";
 
 export default async function ReviewSection({
   recipeId,
-  showReviewForm = true,
+  hideReviewForm = false,
 }: {
   recipeId: string;
-  showReviewForm?: boolean;
+  hideReviewForm?: boolean;
 }) {
   const otherReviews = await api.review.getOthers.query({ recipeId });
 
-  const myReview = await api.review.getMyReview.query({
-    recipeId,
-  });
+  let myReview = null;
+  if (!hideReviewForm) {
+    myReview = await api.review.getMyReview.query({
+      recipeId,
+    });
+  }
 
   return (
     <section className="flex flex-col items-center">
-      {showReviewForm && (
+      {!hideReviewForm && (
         <ReviewFormHandler recipeId={recipeId} myReviewQuery={myReview} />
       )}
       {otherReviews && otherReviews.length > 0 && (

@@ -43,3 +43,7 @@ yarn-error.log*
 
 # Jetbrain IDEs
 .idea
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

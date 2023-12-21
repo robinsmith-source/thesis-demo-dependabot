@@ -102,7 +102,7 @@ export default function StepCreator() {
                         field.onChange(+event.target.value);
                       }}
                       type="number"
-                      label="Duration"
+                      label="Duration (in minutes)"
                       variant="bordered"
                       isRequired
                       size="sm"
@@ -122,10 +122,10 @@ export default function StepCreator() {
                       label="Step Type"
                       variant="bordered"
                       selectedKeys={[field.value]}
-                      defaultSelectedKeys={["PREP"]}
                       size="sm"
                       isInvalid={!!fieldState.error}
                       errorMessage={fieldState.error?.message}
+                      disallowEmptySelection={true}
                     >
                       {["PREP", "COOK", "REST", "SEASON", "SERVE", "MIX"].map(
                         (stepType) => (
@@ -134,7 +134,7 @@ export default function StepCreator() {
                             value={stepType as RecipeStepType}
                             className="capitalize"
                           >
-                            {stepType}
+                            {stepType[0] + stepType.slice(1).toLowerCase()}
                           </SelectItem>
                         ),
                       )}
