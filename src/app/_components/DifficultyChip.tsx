@@ -1,5 +1,5 @@
-import { RecipeDifficulty } from "@prisma/client";
-import { ReactNode } from "react";
+import { type RecipeDifficulty } from "@prisma/client";
+import { type ReactNode } from "react";
 import { FaCrown } from "react-icons/fa";
 import { Chip } from "@nextui-org/react";
 
@@ -11,7 +11,7 @@ export default function DifficultyChip({
 }): ReactNode {
   const difficultyInNumber = difficultyToNumber[difficulty];
   return (
-    <Chip>
+    <Chip className="flex gap-1">
       {Array.from(Array(difficultyInNumber), () => (
         <FaCrown key={difficultyInNumber} className={"mr-1 inline last:mr-0"} />
       ))}

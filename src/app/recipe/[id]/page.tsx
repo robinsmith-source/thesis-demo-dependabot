@@ -19,29 +19,29 @@ export default async function Page({ params }: { params: { id: string } }) {
   return (
     <main>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div>
-          <h1 className="text-2xl font-bold">
-            {recipe.name}
-            <span className="ml-5">
-              <DifficultyChip difficulty={recipe.difficulty} />
-            </span>
-          </h1>
-          <p>
-            created by{" "}
-            <Link color="secondary" href={`/user/${recipe.author.id}`}>
-              {recipe.author.name}
-            </Link>
-          </p>
+          <div>
+              <div className="flex flex-row gap-1">
+                  <h1 className="inline-block text-2xl font-bold">
+                  {recipe.name}
+              </h1>
+                  <DifficultyChip difficulty={recipe.difficulty}/>
+              </div>
+              <p>
+                  created by{" "}
+                  <Link color="secondary" href={`/user/${recipe.author.id}`}>
+                      {recipe.author.name}
+                  </Link>
+              </p>
 
-          <div className="my-2 flex gap-2">
-            {recipe.labels.map((label) => (
-              <Chip key={label.id}>{label.name}</Chip>
-            ))}
+              <div className="my-2 flex gap-2">
+                  {recipe.labels.map((label) => (
+                      <Chip key={label.id}>{label.name}</Chip>
+                  ))}
+              </div>
+              <p>{recipe.description}</p>
           </div>
-          <p>{recipe.description}</p>
-        </div>
-        <ImageCarousel images={recipe.images} />
-        <IngredientTable recipeSteps={recipe.steps} />
+          <ImageCarousel images={recipe.images}/>
+          <IngredientTable recipeSteps={recipe.steps}/>
       </div>
       <div>
         <table>
