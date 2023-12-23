@@ -71,7 +71,7 @@ model RecipeLabelCategory {
 model RecipeLabel {
   id         String              @id @default(cuid())
   name       String              @unique
-  category   RecipeLabelCategory @relation(fields: [categoryId], references: [id])
+  category   RecipeLabelCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId String
   Recipe     Recipe[]            @relation("RecipeLabels")
 }
@@ -88,16 +88,16 @@ model Recipe {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  name             String
-  description      String?
-  difficulty       RecipeDifficulty
-  steps            RecipeStep[]
-  labels           RecipeLabel[]    @relation("RecipeLabels")
-  reviews          RecipeReview[]
-  tags             String[]
-  images           String[]
+  name        String
+  description String?
+  difficulty  RecipeDifficulty
+  steps       RecipeStep[]
+  labels      RecipeLabel[]    @relation("RecipeLabels")
+  reviews     RecipeReview[]
+  tags        String[]
+  images      String[]
 
-  author     User   @relation("RecipeAuthor", fields: [authorId], references: [id])
+  author     User   @relation("RecipeAuthor", fields: [authorId], references: [id], onDelete: Cascade)
   authorId   String
   savedUsers User[] @relation("RecipeSaved")
 
@@ -119,7 +119,7 @@ model RecipeStep {
   duration    Int
   stepType    RecipeStepType
 
-  recipe      Recipe                 @relation(fields: [recipeId], references: [id])
+  recipe      Recipe                 @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   recipeId    String
   ingredients RecipeStepIngredient[]
 }
@@ -141,7 +141,7 @@ model RecipeStepIngredient {
   name         String
   quantity     Float
   unit         Unit?
-  recipeStep   RecipeStep @relation(fields: [recipeStepId], references: [id])
+  recipeStep   RecipeStep @relation(fields: [recipeStepId], references: [id], onDelete: Cascade)
   recipeStepId String
 }
 
@@ -149,9 +149,9 @@ model RecipeReview {
   id       String  @id @default(cuid())
   rating   Int // 1-5
   comment  String?
-  recipe   Recipe  @relation(fields: [recipeId], references: [id])
+  recipe   Recipe  @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   recipeId String
-  author   User    @relation(fields: [authorId], references: [id])
+  author   User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId String
 
   // limit that user can only review once

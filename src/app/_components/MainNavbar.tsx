@@ -25,6 +25,7 @@ import NextImage from "next/image";
 import { useState } from "react";
 
 function LoginBar({ session }: { session: Session }) {
+  if (!session?.user) return null;
   return (
     <Dropdown placement="bottom-end">
       <DropdownTrigger>
@@ -56,11 +57,7 @@ function LoginBar({ session }: { session: Session }) {
         >
           My Profile
         </DropdownItem>
-        <DropdownItem
-          as={NextLink}
-          key="create-recipe"
-          href={`/recipe/create`}
-        >
+        <DropdownItem as={NextLink} key="create-recipe" href={`/recipe/create`}>
           Create Recipe
         </DropdownItem>
         <DropdownItem
@@ -151,7 +148,7 @@ export default function MainNavbar() {
           <ThemeSwitcher />
         </NavbarItem>
         <NavbarItem>
-          {session ? (
+          {session?.user ? (
             <LoginBar session={session} />
           ) : (
             <Button

@@ -1,3 +1,5 @@
-export { default } from "next-auth/middleware";
+import { auth } from "auth";
 
-export const config = { matcher: [] };
+export default auth;
+
+export const config = { matcher: ["/recipe/create", "/recipe/:id/edit"] };

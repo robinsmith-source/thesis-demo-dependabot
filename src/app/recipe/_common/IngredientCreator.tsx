@@ -92,6 +92,8 @@ export default function IngredientCreator({
                       selectedKeys={[field.value]}
                       isInvalid={!!fieldState.error}
                       errorMessage={fieldState.error?.message}
+                      isRequired
+                      disallowEmptySelection={true}
                     >
                       {[
                         "GRAM",
@@ -108,7 +110,8 @@ export default function IngredientCreator({
                           key={ingredientUnit}
                           value={ingredientUnit as Unit}
                         >
-                          {ingredientUnit as Unit}
+                          {ingredientUnit[0] +
+                            ingredientUnit.slice(1).toLowerCase()}
                         </SelectItem>
                       ))}
                     </Select>
