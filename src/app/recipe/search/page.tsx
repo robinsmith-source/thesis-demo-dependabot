@@ -4,8 +4,6 @@ import RecipeCard from "~/app/_components/RecipeCard";
 import { type Recipe, PrismaClient } from "@prisma/client";
 import AdvancedRecipeSearch from "~/app/_components/search/AdvancedRecipeSearch";
 import FilterAccordion from "~/app/_components/search/FilterAccordion";
-import { Button } from "@nextui-org/react";
-import { FaFilter } from "react-icons/fa6";
 
 type Label = {
   name: string;
@@ -18,14 +16,24 @@ type LabelCategory = {
   name: string;
 };
 
-export default async function Page({ searchParams }: { searchParams?: any }) {
+interface SearchParams {
+  name?: string;
+  difficulty?: "EASY" | "MEDIUM" | "HARD" | "EXPERT";
+  tags?: string[];
+  labels?: string[];
+  author?: string;
+}
+
+
+export default async function Page({ searchParams }: { searchParams?: SearchParams }) {
   const prisma = new PrismaClient();
-  const { name, difficulty, tags, labels, author } = searchParams;
+  const { name, labels } = searchParams ?? {};
 
   //query gets adjusted with the information provided from the client component --> as search query
   const displayedRecipes = await api.recipe.getRecipesAdvanced.query({
     take: 20,
     name: name,
+    labels: labels,
   });
 
   //get all labels from the database for the searchbar autocompletion
@@ -42,18 +50,9 @@ export default async function Page({ searchParams }: { searchParams?: any }) {
   return (
     <main className="flex flex-col items-center">
       <div className="flex w-full flex-row items-center justify-between">
-        <Button
-          id="FilterToggle"
-          variant="light"
-          className="text-default-700"
-          size="md"
-        >
-          <FaFilter size="30" />
-          Advanced
-        </Button>
         <AdvancedRecipeSearch />
       </div>
-      <FilterAccordion labels={allLabelNames} categories={allLabelCategories} />
+      <FilterAccordion labels={allLabelNames} categories={allLabelCategories}/>
       {displayedRecipes && displayedRecipes.length > 0 ? (
         <div className="mt-6 grid h-full w-full grid-cols-1 place-items-center gap-4 md:grid-cols-2 lg:grid-cols-4">
           {displayedRecipes.map((recipe: Recipe) => (
@@ -63,7 +62,7 @@ export default async function Page({ searchParams }: { searchParams?: any }) {
       ) : (
         <div className="mt-20 flex items-center justify-center">
           <h2 className="text-center text-3xl font-bold text-warning-400">
-            Oh no! You'll starve!
+            Oh no! You&apos;ll starve!
           </h2>
         </div>
       )}

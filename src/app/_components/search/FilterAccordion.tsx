@@ -9,7 +9,7 @@ import {
   AutocompleteItem,
   Chip,
 } from "@nextui-org/react";
-import { FaFilter, FaTag } from "react-icons/fa6";
+import { FaTag } from "react-icons/fa6";
 import { useSearchParams } from "next/navigation";
 
 type Label = {
@@ -32,7 +32,6 @@ export default function FilterAccordion({
 }) {
   const searchParams = useSearchParams();
   const [labelInput, setLabelInput] = useState<string[]>([]);
-  const [isAccordionOpen, setIsAccordionOpen] = useState(false);
 
   function handleLabelFilter(selectedLabels: string[]) {
     const params = new URLSearchParams(searchParams);
@@ -40,8 +39,8 @@ export default function FilterAccordion({
   }
 
   return (
-    <Accordion className="mt-0" isCompact hideIndicator>
-      <AccordionItem key="filters" aria-label="filters">
+    <Accordion className="w-full" variant="light" hideIndicator>
+      <AccordionItem key="filters" aria-label="filters" title="Search Filters">
         <div className="flex flex-col flex-wrap items-start justify-start sm:flex-row sm:items-center">
           <Autocomplete
             className="mb-4 sm:mb-0 sm:w-1/3 md:w-1/4 lg:w-1/5"
@@ -74,13 +73,13 @@ export default function FilterAccordion({
                     <AutocompleteItem key={label.name}>
                       {label.name}
                     </AutocompleteItem>
-                  )) || (
+                  )) ?? (
                     <AutocompleteItem key="noElements">
                       <span className="text-danger-500">No labels found!</span>
                     </AutocompleteItem>
                   )}
               </AutocompleteSection>
-            )) || (
+            )) ?? (
                 <AutocompleteSection
                   key="noSections"
                   className="text-danger-500"
