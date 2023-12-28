@@ -1,5 +1,6 @@
 "use client";
 import {
+  Input,
   Table,
   TableBody,
   TableCell,
@@ -7,10 +8,9 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import React from "react";
+import React, { useState } from "react";
 import { Prisma } from "@prisma/client";
 import { convertUnit } from "~/app/utils";
-import { usePortionSizeContext } from "~/utils/portion-size-provider";
 
 const recipeWithIngredients = Prisma.validator<Prisma.RecipeStepDefaultArgs>()({
   include: { ingredients: true },
@@ -27,31 +27,47 @@ export default function IngredientTable({
   recipeSteps: RecipeStepWithIngredients[];
   className?: string;
 }) {
-  const { portionSize } = usePortionSizeContext();
+  const [portionSize, setPortionSize] = useState<number>();
+
   return (
-    <Table
-      aria-label="Ingredient Table"
-      className={`max-w-xs py-4 ${className}`}
-      hideHeader
-      isCompact
-    >
-      <TableHeader>
-        <TableColumn maxWidth={40}>Amount</TableColumn>
-        <TableColumn minWidth={40}>Ingredient</TableColumn>
-      </TableHeader>
-      <TableBody>
-        {recipeSteps.flatMap((step) =>
-          step.ingredients.map((ingredient) => (
-            <TableRow key={ingredient.id}>
-              <TableCell className="text-right">
-                {ingredient.quantity * portionSize}{" "}
-                {convertUnit(ingredient.unit)}
-              </TableCell>
-              <TableCell>{ingredient.name}</TableCell>
-            </TableRow>
-          )),
-        )}
-      </TableBody>
-    </Table>
+    <>
+      <Table
+        aria-label="Ingredient Table"
+        className={`max-w-xs py-4 ${className}`}
+        hideHeader
+        isCompact
+      >
+        <TableHeader>
+          <TableColumn maxWidth={40}>Amount</TableColumn>
+          <TableColumn minWidth={40}>Ingredient</TableColumn>
+        </TableHeader>
+        <TableBody>
+          {recipeSteps.flatMap((step) =>
+            step.ingredients.map((ingredient) => (
+              <TableRow key={ingredient.id}>
+                <TableCell className="text-right">
+                  {ingredient.quantity * portionSize}{" "}
+                  {convertUnit(ingredient.unit)}
+                </TableCell>
+                <TableCell>{ingredient.name}</TableCell>
+              </TableRow>
+            )),
+          )}
+        </TableBody>
+      </Table>
+
+      <Input
+        onValueChange={(value) => {
+          console.log(value);
+          setPortionSize(parseInt(value));
+        }}
+        size="sm"
+        type="number"
+        min={0}
+        defaultValue={portionSize + ""}
+        placeholder="requiered portion"
+        className="w-40"
+      />
+    </>
   );
 }
