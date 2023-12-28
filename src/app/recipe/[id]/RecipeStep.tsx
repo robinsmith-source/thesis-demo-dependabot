@@ -20,11 +20,9 @@ export default function RecipeStep({ step }: { step: RecipeStep }) {
         </ul>
       </td>
       <td className="py-2 align-top">
-        <p className="font-medium">{step.description}</p>
-        <div className="pt-0.5 text-gray-500">
           {step.duration} {step.duration === 1 ? "minute" : "minutes"}{" "}
           <StepTypeChip stepType={step.stepType} />
-        </div>
+        <p className="font-medium">{step.description}</p>
       </td>
     </tr>
   );
