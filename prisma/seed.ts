@@ -156,7 +156,7 @@ async function seedUserRecipes() {
                       {
                         name: "Eggs",
                         quantity: 2,
-                        unit: "PIECE"
+                        unit: "PIECE",
                       },
                       {
                         name: "Parmesan",
@@ -801,6 +801,7 @@ async function seedUserRecipes() {
             description:
               "A quick and healthy vegetarian stir-fry with a colorful mix of vegetables and tofu.",
             difficulty: "EASY",
+            images: ["b3940c1c-5142-407f-b80f-e4010415ac87-nt79li.webp"],
             labels: {
               connect: [
                 {
@@ -923,6 +924,7 @@ async function seedUserRecipes() {
             name: "Fruit Smoothie",
             description: "A refreshing and easy-to-make fruit smoothie.",
             difficulty: "EASY",
+            images: ["0304f9a7-93e4-45c6-aafb-83ddd3b536f1-gumhj9.jpg"],
             labels: {
               connect: [{ name: "Vegan" }, { name: "Gluten-Free" }],
             },
@@ -954,6 +956,7 @@ async function seedUserRecipes() {
             description:
               "A savory beef stir-fry with fresh broccoli and a flavorful sauce.",
             difficulty: "MEDIUM",
+            images: ["d83a911c-bc2f-43ba-b0e1-11d295754f42-wxk4uu.jpg"],
             labels: {
               connect: [{ name: "Chinese" }],
             },
@@ -1015,6 +1018,7 @@ async function seedUserRecipes() {
             description:
               "A trendy and satisfying snack featuring creamy avocado on toasted bread with a perfectly poached egg.",
             difficulty: "MEDIUM",
+            images: ["036f15ca-478b-42c0-a300-b6eb196beb99-v6kb4n.jpg"],
             labels: {
               connect: [{ name: "Low-Fat" }, { name: "Vegetarian" }],
             },
@@ -1072,6 +1076,7 @@ async function seedUserRecipes() {
             description:
               "A refreshing and bite-sized snack with cherry tomatoes, fresh mozzarella, and basil.",
             difficulty: "EASY",
+            images: ["92a355f5-e44b-4da2-afba-26998e665170-lrlsg9.jpg"],
             labels: {
               connect: [{ name: "Italian" }, { name: "Vegetarian" }],
             },
@@ -1117,6 +1122,7 @@ async function seedUserRecipes() {
             description:
               "A healthy and satisfying snack with whole wheat wraps, hummus, and colorful vegetables.",
             difficulty: "EASY",
+            images: ["ebe59729-80a7-4d81-914d-40e6f215d628-69wfh8.jpg"],
             labels: {
               connect: [{ name: "Vegetarian" }, { name: "Low-Fat" }],
             },

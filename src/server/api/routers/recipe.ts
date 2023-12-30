@@ -71,7 +71,7 @@ export const recipeRouter = createTRPCRouter({
         where: {
           ...(input.excludeRecipeId && { id: { not: input.excludeRecipeId } }),
           ...(input.authorId && { authorId: input.authorId }),
-          tags: { hasEvery: input.tags },
+          ...(input.tags && { tags: { hasEvery: input.tags } }),
           ...(input.labels && createLabelQuery(input.labels)),
         },
         skip: input.skip ?? 0,
