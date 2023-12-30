@@ -40,7 +40,7 @@ export default function ImageCarousel({ images }: { images: string[] }) {
           isIconOnly
           startContent={<FaChevronLeft />}
           size="sm"
-          onClick={() => {
+          onPress={() => {
             setImageIndex((i) => (i - 1 < 0 ? images.length - 1 : i - 1));
           }}
         />
@@ -49,7 +49,7 @@ export default function ImageCarousel({ images }: { images: string[] }) {
           isIconOnly
           startContent={<FaChevronRight />}
           size="sm"
-          onClick={() => {
+          onPress={() => {
             setImageIndex((i) => (i + 1 >= images.length ? 0 : i + 1));
           }}
         />

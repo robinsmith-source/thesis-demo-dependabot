@@ -52,6 +52,7 @@ model User {
   recipes       Recipe[]       @relation("RecipeAuthor")
   savedRecipes  Recipe[]       @relation("RecipeSaved")
   reviews       RecipeReview[]
+  shoppingLists ShoppingList[]
 }
 
 model VerificationToken {
@@ -158,4 +159,24 @@ model RecipeReview {
   @@unique([recipeId, authorId])
 }
 
-// TODO: Shopping list and weekly planner
+model ShoppingList {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name        String
+  description String?
+  items       ShoppingListItem[]
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId String
+}
+
+model ShoppingListItem {
+  id          String     @id @default(cuid())
+  name        String
+  quantity    Float
+  unit        Unit?
+  shoppingList ShoppingList @relation(fields: [shoppingListId], references: [id], onDelete: Cascade)
+  shoppingListId String
+}
+
+// TODO: Weekly planner

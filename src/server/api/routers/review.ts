@@ -102,7 +102,7 @@ export const reviewRouter = createTRPCRouter({
   update: protectedProcedure
     .input(
       z.object({
-        recipeId: z.string().cuid(),
+        reviewId: z.string().cuid(),
         rating: z.number().min(1).max(5),
         comment: z.string().optional(),
       }),
@@ -110,7 +110,7 @@ export const reviewRouter = createTRPCRouter({
     .mutation(async ({ input, ctx }) => {
       const existingReview = await ctx.db.recipeReview.findFirst({
         where: {
-          recipeId: input.recipeId,
+          id: input.reviewId,
           authorId: ctx.session.user.id,
         },
       });

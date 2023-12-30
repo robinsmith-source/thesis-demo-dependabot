@@ -32,27 +32,56 @@ export const recipeRouter = createTRPCRouter({
       });
     }),
 
-  getRecipePreview: publicProcedure
-    .input(z.object({ id: z.string().cuid() }))
-    .query(({ input, ctx }) => {
-      return ctx.db.recipe.findFirst({
-        where: { id: input.id },
-        include: {
-          labels: true,
-          author: true,
-        },
-      });
-    }),
-
-  getLatestRecipes: publicProcedure
-    .input(z.object({ take: z.number().min(1).max(50) }))
+  getRecipeCards: publicProcedure
+    .input(
+      z.object({
+        take: z.number().min(1).max(50),
+        skip: z.number().min(0).optional(),
+        excludeRecipeId: z.string().cuid().optional(),
+        orderBy: z.enum(["NEWEST", "OLDEST"]).optional(),
+        authorId: z.string().cuid().optional(),
+        tags: z.array(z.string()).optional(),
+        labels: z.array(z.string()).optional(),
+      }),
+    )
     .query(({ ctx, input }) => {
+      function createLabelQuery(labels: string[]) {
+        return {
+          AND: labels.map((label) => ({
+            labels: {
+              some: {
+                name: label,
+              },
+            },
+          })),
+        };
+      }
+
       return ctx.db.recipe.findMany({
-        orderBy: { createdAt: "desc" },
-        where: {},
+        orderBy: (() => {
+          switch (input.orderBy) {
+            case "NEWEST":
+              return { createdAt: "desc" };
+            case "OLDEST":
+              return { createdAt: "asc" };
+            default:
+              return { createdAt: "desc" };
+          }
+        })(),
+        where: {
+          ...(input.excludeRecipeId && { id: { not: input.excludeRecipeId } }),
+          ...(input.authorId && { authorId: input.authorId }),
+          tags: { hasEvery: input.tags },
+          ...(input.labels && createLabelQuery(input.labels)),
+        },
+        skip: input.skip ?? 0,
         take: input.take,
         select: {
           id: true,
+          name: true,
+          difficulty: true,
+          labels: { select: { name: true } },
+          images: true,
         },
       });
     }),
@@ -367,11 +396,28 @@ export const recipeRouter = createTRPCRouter({
       });
     }),
 
-  deleteRecipe: protectedProcedure
-    .input(z.object({ id: z.string().cuid() }))
+  delete: protectedProcedure
+    .input(z.object({ recipeId: z.string().cuid() }))
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.recipe.delete({
-        where: { id: input.id },
+      const recipe = await ctx.db.recipe.findFirst({
+        where: { id: input.recipeId, authorId: ctx.session.user.id },
+      });
+
+      if (!recipe)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Recipe does not exist.",
+        });
+
+      return ctx.db.$transaction(async (tx) => {
+        await tx.recipe.delete({
+          where: {
+            id: input.recipeId,
+            authorId: ctx.session.user.id,
+          },
+        });
+        console.log("img", recipe.images);
+        recipe.images.length > 0 && (await utapi.deleteFiles(recipe.images));
       });
     }),
 });

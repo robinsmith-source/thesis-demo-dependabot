@@ -15,7 +15,7 @@ export default function Error({
         <h1 className="text-5xl font-bold">Something went wrong!</h1>
         <h2 className="text-xl">{error.message}</h2>
       </div>
-      <Button variant="solid" color="warning" onClick={reset}>
+      <Button variant="solid" color="warning" onPress={reset}>
         Try Again
       </Button>
     </div>

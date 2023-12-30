@@ -16,20 +16,20 @@ import { motion } from "framer-motion";
 import IngredientCreator from "./IngredientCreator";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa6";
 
-export default function StepCreator() {
+export default function StepCreator({ className }: { className?: string }) {
   const { control } = useFormContext();
   const { fields, swap, append, remove } = useFieldArray({
     control,
     name: "steps",
   });
   return (
-    <div className="ml-8 space-y-4">
+    <div className={`${className} space-y-4`}>
       <div className="flex gap-2">
         <h2 className="text-lg">Steps</h2>
         <Button
           type="button"
           size="sm"
-          onClick={() => append({ description: "" })}
+          onPress={() => append({ description: "" })}
         >
           Add Step
         </Button>
@@ -51,14 +51,14 @@ export default function StepCreator() {
                   isIconOnly
                   startContent={<FaChevronUp />}
                   size="sm"
-                  onClick={() => index > 0 && swap(index, index - 1)}
+                  onPress={() => index > 0 && swap(index, index - 1)}
                 />
                 <Button
                   isDisabled={index === fields.length - 1}
                   isIconOnly
                   startContent={<FaChevronDown />}
                   size="sm"
-                  onClick={() =>
+                  onPress={() =>
                     index < fields.length - 1 && swap(index, index + 1)
                   }
                 />
@@ -70,7 +70,7 @@ export default function StepCreator() {
                 type="button"
                 variant="flat"
                 size="sm"
-                onClick={() => remove(index)}
+                onPress={() => remove(index)}
               >
                 Remove Step
               </Button>

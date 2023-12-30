@@ -67,7 +67,7 @@ export default function ReviewForm({
         />
       </CardBody>
       <CardFooter className="-mt-4 flex justify-end">
-        <Button color="primary" onClick={handleSubmit(submit)}>
+        <Button color="success" onClick={handleSubmit(submit)}>
           Submit
         </Button>
       </CardFooter>

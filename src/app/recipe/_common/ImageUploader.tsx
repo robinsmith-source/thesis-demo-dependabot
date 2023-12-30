@@ -38,13 +38,19 @@ export default function ImageUploader() {
           append(file.key);
         });
         setFiles([]);
-        toast.success("Upload completed");
+        toast.success("Upload completed", {
+          id: "imageUpload",
+        });
       },
       onUploadError: () => {
-        toast.error("Error occurred while uploading");
+        toast.error("Error occurred while uploading", {
+          id: "imageUpload",
+        });
       },
       onUploadBegin: () => {
-        toast.loading("Upload has begun");
+        toast.loading("Upload has begun", {
+          id: "imageUpload",
+        });
       },
     },
   );
@@ -60,13 +66,13 @@ export default function ImageUploader() {
   });
 
   return (
-    <Card className="col-span-2">
+    <Card className="col-span-2 shadow-sm">
       {isUploading && (
         <CardHeader>
           <Progress isIndeterminate aria-label="Loading..." />
         </CardHeader>
       )}
-      <CardBody className="h-64 p-4">
+      <CardBody className="h-64 bg-default-100 p-4">
         <div
           {...getRootProps()}
           className="flex h-full flex-col items-center justify-center rounded-xl border-2 border-dashed border-primary"
@@ -79,20 +85,22 @@ export default function ImageUploader() {
           </p>
           <Button
             isDisabled={files.length === 0}
-            onClick={() => startUpload(files)}
-            className="mt-4 "
+            onPress={() => startUpload(files)}
+            className={`mt-4 ${
+              files.length === 0 ? "opacity-0" : "opacity-100"
+            }`}
             color="success"
           >
             {files.length === 0
               ? "Select Files"
               : files.length === 1
-              ? `Upload ${files.length} selected file`
-              : `Upload ${files.length} selected files`}
+                ? `Upload ${files.length} selected file`
+                : `Upload ${files.length} selected files`}
           </Button>
         </div>
       </CardBody>
       {fields.length > 0 && (
-        <CardFooter>
+        <CardFooter className="bg-default-100">
           <div className="flex flex-wrap justify-center gap-2 p-1">
             {fields.map((image, index) => (
               <div
@@ -108,7 +116,7 @@ export default function ImageUploader() {
                 <div className="absolute inset-0 z-10 grid place-items-center bg-black/20 text-white opacity-0 transition focus-within:opacity-100 hover:opacity-100">
                   <Button
                     isIconOnly
-                    onClick={() => {
+                    onPress={() => {
                       mutation.mutate({
                         key: getValues(`images.${index}`) as string,
                       });

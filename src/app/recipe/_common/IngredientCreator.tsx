@@ -34,7 +34,7 @@ export default function IngredientCreator({
               <Button
                 type="button"
                 size="sm"
-                onClick={() => append({ name: "" })}
+                onPress={() => append({ name: "" })}
               >
                 Add Ingredient
               </Button>
@@ -124,7 +124,7 @@ export default function IngredientCreator({
                   type="button"
                   size="sm"
                   variant="flat"
-                  onClick={() => remove(index)}
+                  onPress={() => remove(index)}
                 >
                   <FaMinus />
                 </Button>
