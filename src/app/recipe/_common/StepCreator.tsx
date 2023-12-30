@@ -29,7 +29,7 @@ export default function StepCreator({ className }: { className?: string }) {
         <Button
           type="button"
           size="sm"
-          onClick={() => append({ description: "" })}
+          onPress={() => append({ description: "" })}
         >
           Add Step
         </Button>
@@ -51,14 +51,14 @@ export default function StepCreator({ className }: { className?: string }) {
                   isIconOnly
                   startContent={<FaChevronUp />}
                   size="sm"
-                  onClick={() => index > 0 && swap(index, index - 1)}
+                  onPress={() => index > 0 && swap(index, index - 1)}
                 />
                 <Button
                   isDisabled={index === fields.length - 1}
                   isIconOnly
                   startContent={<FaChevronDown />}
                   size="sm"
-                  onClick={() =>
+                  onPress={() =>
                     index < fields.length - 1 && swap(index, index + 1)
                   }
                 />
@@ -70,7 +70,7 @@ export default function StepCreator({ className }: { className?: string }) {
                 type="button"
                 variant="flat"
                 size="sm"
-                onClick={() => remove(index)}
+                onPress={() => remove(index)}
               >
                 Remove Step
               </Button>

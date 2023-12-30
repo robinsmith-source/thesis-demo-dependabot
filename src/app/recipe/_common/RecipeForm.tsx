@@ -149,7 +149,7 @@ export default function RecipeForm({
             name="description"
             render={({ fieldState }) => (
               <Textarea
-                className={"col-span-full"}
+                className={"col-span-full mb-2"}
                 minRows={2}
                 label="Recipe Description"
                 placeholder="My grandma used to make this pizza for me ..."
@@ -167,7 +167,7 @@ export default function RecipeForm({
         </div>
 
         <Divider className="my-4" />
-        <Button color="success" onClick={methods.handleSubmit(submit)}>
+        <Button color="success" onPress={() => methods.handleSubmit(submit)}>
           Submit
         </Button>
       </form>

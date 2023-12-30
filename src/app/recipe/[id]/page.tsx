@@ -2,7 +2,7 @@ import { Button, Chip, Divider, Link } from "@nextui-org/react";
 import NextLink from "next/link";
 import { notFound } from "next/navigation";
 import { FaPenToSquare } from "react-icons/fa6";
-import ReviewSection from "~/app/recipe/[id]/_review/ReviewSection";
+import ReviewSection from "./_review/ReviewSection";
 import { auth } from "auth";
 import { api } from "~/trpc/server";
 import ImageCarousel from "./ImageCarousel";

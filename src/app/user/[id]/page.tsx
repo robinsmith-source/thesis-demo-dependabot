@@ -1,15 +1,21 @@
 import { api } from "~/trpc/server";
-import RecipeCard from "~/app/_components/RecipeCard";
 import NextImage from "next/image";
+import RecipeCardsSection from "~/app/_components/RecipeCardsSection";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const user = await api.user.get.query({ id: params.id });
+  const userRecipes = await api.recipe.getRecipeCards.query({
+    tags: [],
+    take: 20,
+    authorId: params.id,
+  });
+
   if (!user) {
     return <div>404</div>;
   }
 
   return (
-    <main>
+    <main className="flex flex-col space-y-4">
       <div className="flex items-center gap-4 py-4">
         {user.image && (
           <NextImage
@@ -25,12 +31,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           <p>Created {user.recipes.length} recipes</p>
         </div>
       </div>
-
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {user.recipes.map((recipe) => (
-          <RecipeCard recipeId={recipe.id} key={recipe.id} />
-        ))}
-      </div>
+      <RecipeCardsSection recipes={userRecipes} />
     </main>
   );
 }

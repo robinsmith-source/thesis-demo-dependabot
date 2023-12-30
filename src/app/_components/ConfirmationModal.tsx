@@ -34,11 +34,11 @@ export default function ConfirmationModal({
                 <p>{body}</p>
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" onPress={onConfirm}>
-                  Confirm
-                </Button>
                 <Button variant="light" onPress={onClose}>
                   Close
+                </Button>
+                <Button color="danger" onPress={onConfirm}>
+                  Delete
                 </Button>
               </ModalFooter>
             </>

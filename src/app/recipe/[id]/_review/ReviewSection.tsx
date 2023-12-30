@@ -24,7 +24,7 @@ export default async function ReviewSection({
         <ReviewFormHandler recipeId={recipeId} myReviewQuery={myReview} />
       )}
       {otherReviews && otherReviews.length > 0 && (
-        <div className="mt-4 flex justify-center gap-2">
+        <div className="mt-4 flex flex-col items-center justify-center gap-3">
           {otherReviews.map((review) => (
             <ReviewCard review={review} key={review.id} />
           ))}
