@@ -60,25 +60,23 @@ export default function RecipeForm({
           z.object({
             name: z.string().min(1),
             quantity: z.number().min(1, "Quantity must be at least 1"),
-            unit: z
-              .enum(
-                [
-                  "GRAM",
-                  "KILOGRAM",
-                  "LITER",
-                  "MILLILITER",
-                  "TEASPOON",
-                  "TABLESPOON",
-                  "CUP",
-                  "PINCH",
-                  "PIECE",
-                ],
-                {
-                  required_error: "Unit is required",
-                  invalid_type_error: "Invalid unit",
-                },
-              )
-              .nullable(),
+            unit: z.enum(
+              [
+                "GRAM",
+                "KILOGRAM",
+                "LITER",
+                "MILLILITER",
+                "TEASPOON",
+                "TABLESPOON",
+                "CUP",
+                "PINCH",
+                "PIECE",
+              ],
+              {
+                required_error: "Unit is required",
+                invalid_type_error: "Invalid unit",
+              },
+            ),
           }),
         ),
       }),

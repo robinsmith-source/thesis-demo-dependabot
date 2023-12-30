@@ -12,9 +12,6 @@ const unitConversion = {
   PIECE: "",
 };
 
-export function convertUnit(unit: Unit | null): string {
-  if (!unit) {
-    return "";
-  }
+export function convertUnit(unit: Unit): string {
   return unitConversion?.[unit] ?? "";
 }
