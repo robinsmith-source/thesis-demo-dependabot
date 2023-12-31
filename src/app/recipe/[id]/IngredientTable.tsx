@@ -56,7 +56,7 @@ export default function IngredientTable({
     <>
       <Table
         aria-label="Ingredient Table"
-        className={`max-w-xs py-4 ${className}`}
+        className={`max-w-xs ${className}`}
         selectionMode="multiple"
         selectedKeys={selectedKeys}
         onSelectionChange={(keys) => {

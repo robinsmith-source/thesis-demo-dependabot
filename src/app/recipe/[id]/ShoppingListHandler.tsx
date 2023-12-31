@@ -41,19 +41,26 @@ export default function ShoppingListHandler({
     },
   });
 
-  console.log("ingredients: ", selectedIngredients, "list: ", shoppingListId);
-
   return (
-    <div>
+    <div className="flex max-w-xs flex-col gap-4">
       <ShoppingListSelector
         shoppingLists={shoppingLists}
         onChange={(listId) => setShoppingListId(listId)}
       />
+      <Button
+        onClick={handleAddItem}
+        isDisabled={
+          !shoppingListId ||
+          !selectedIngredients ||
+          selectedIngredients.length < 1
+        }
+      >
+        Add items to shopping list
+      </Button>
       <IngredientTable
         ingredients={ingredients}
         onSelect={(ingredients) => setSelectedIngredients(ingredients)}
       />
-      <Button onClick={handleAddItem}>Add to shopping list</Button>
     </div>
   );
 }
