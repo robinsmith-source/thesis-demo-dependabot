@@ -37,6 +37,9 @@ export default function ShoppingListHandler({
     });
   }
 
+  //TODO: Should be removed when merging
+  console.log(selectedIngredients);
+  console.log(shoppingListId);
   const createMutation = api.shoppingList.addItems.useMutation({
     onSuccess: () => {
       toast.success(

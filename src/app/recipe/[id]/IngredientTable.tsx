@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { RecipeStepIngredient } from "@prisma/client";
 import { convertUnitName } from "~/app/utils";
 import {
@@ -37,7 +37,7 @@ export default function IngredientTable({
   );
   const summarizedIngredients = calculateIngredients(ingredients, portionSize);
 
-  useEffect(() => {
+  function handleSelect() {
     if (selectedKeys === "all") {
       setSelectedIngredients(summarizedIngredients);
     } else {
@@ -48,7 +48,7 @@ export default function IngredientTable({
       );
     }
     onSelect(selectedIngredients);
-  }, [selectedKeys]);
+  }
 
   return (
     <>
@@ -60,6 +60,7 @@ export default function IngredientTable({
         onSelectionChange={(keys) => {
           //@ts-expect-error TODO: Fix this
           setSelectedKeys(keys);
+          handleSelect();
         }}
         isCompact
       >
