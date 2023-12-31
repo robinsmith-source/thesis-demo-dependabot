@@ -1,5 +1,6 @@
 "use client";
 import {
+  Button,
   Input,
   Table,
   TableBody,
@@ -8,8 +9,10 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Prisma } from "@prisma/client";
+import { api } from "~/trpc/react";
+import toast from "react-hot-toast";
 import { convertUnitName } from "~/app/utils";
 import { calculateIngredients } from "~/utils/IngredientCalculator";
 
@@ -28,16 +31,43 @@ export default function IngredientTable({
   recipeSteps: RecipeStepWithIngredients[];
   className?: string;
 }) {
+  const [selectedKeys, setSelectedKeys] = useState(new Set<string>());
+
   const [portionSize, setPortionSize] = useState<number>(1);
   const ingredients = recipeSteps.flatMap((step) => step.ingredients);
-  const result = calculateIngredients(ingredients, portionSize);
+  const summarizedIngredients = calculateIngredients(ingredients, portionSize);
 
+  //TODO: add shopping list selector
+  function handleAddItem() {
+    createMutation.mutate({
+      shoppingListId: "clqsrvv0u0004x34jx0i0xmk9",
+      ingredients: selectedIngredients.map((ingredient) => ({
+        ...ingredient,
+      })),
+    });
+  }
+
+  const selectedIngredients = summarizedIngredients.filter((_, index) =>
+    selectedKeys.has(index.toString()),
+  );
+
+  const createMutation = api.shoppingList.addItems.useMutation({
+    onSuccess: () => {
+      toast.success("Ingredients added successfully");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+  //TODO: fix ESLint error
   return (
     <>
       <Table
         aria-label="Ingredient Table"
         className={`max-w-xs py-4 ${className}`}
-        hideHeader
+        selectionMode="multiple"
+        selectedKeys={selectedKeys}
+        onSelectionChange={setSelectedKeys}
         isCompact
       >
         <TableHeader>
@@ -45,7 +75,7 @@ export default function IngredientTable({
           <TableColumn minWidth={40}>Ingredient</TableColumn>
         </TableHeader>
         <TableBody>
-          {result.map((ingredient, index) => (
+          {summarizedIngredients.map((ingredient, index) => (
             <TableRow key={index}>
               <TableCell className="text-right">
                 {ingredient.quantity} {convertUnitName(ingredient.unit)}
@@ -55,7 +85,9 @@ export default function IngredientTable({
           ))}
         </TableBody>
       </Table>
-
+      <Button color="success" onClick={handleAddItem}>
+        Add Ingredients
+      </Button>
       <Input
         onValueChange={(value) => {
           setPortionSize(parseInt(value));

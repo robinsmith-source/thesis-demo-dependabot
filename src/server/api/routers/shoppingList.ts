@@ -6,6 +6,7 @@ import {
   publicProcedure,
 } from "~/server/api/trpc";
 import { equivalentUnits } from "~/utils/IngredientCalculator";
+import { Unit } from "@prisma/client";
 
 export const shoppingListRouter = createTRPCRouter({
   create: protectedProcedure
@@ -67,43 +68,39 @@ export const shoppingListRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      await Promise.all(
-        input.ingredients.map(async (ingredient) => {
-          const shoppingListItem = await ctx.db.shoppingListItem.upsert({
-            where: {
-              shoppingListId: input.shoppingListId,
-              name_unit: {
-                name: ingredient.name,
-                unit: ingredient.unit,
-              },
-            },
-            create: {
-              shoppingList: { connect: { id: input.shoppingListId } },
-              ...ingredient,
-            },
-            update: {
-              quantity: {
-                increment: ingredient.quantity,
-              },
-            },
-          });
+      return ctx.db.$transaction(async (tx) => {
+        await Promise.all(
+          input.ingredients.map(async (ingredient) => {
+            const getEquivalentUnits = (): [Unit, Unit] | null =>
+              equivalentUnits.find(
+                ([u1, u2]) => u1 === ingredient.unit || u2 === ingredient.unit,
+              ) || null;
 
-          const equivalentUnit = equivalentUnits.find(
-            ([smallUnit]) => smallUnit === shoppingListItem.unit,
-          );
-
-          if (equivalentUnit && shoppingListItem.quantity > 1000) {
-            await ctx.db.shoppingListItem.update({
+            const shoppingListItem = await tx.shoppingListItem.upsert({
               where: {
-                id: shoppingListItem.id,
+                name_unit_shoppingListId: {
+                  name: ingredient.name,
+                  unit: getEquivalentUnits()?.[0] || ingredient.unit,
+                  shoppingListId: input.shoppingListId,
+                },
               },
-              data: {
-                quantity: shoppingListItem.quantity / 1000,
-                unit: equivalentUnit[1],
+              create: {
+                shoppingList: { connect: { id: input.shoppingListId } },
+                ...ingredient,
+              },
+              update: {
+                quantity: {
+                  increment:
+                    getEquivalentUnits() &&
+                    getEquivalentUnits()?.[1] === ingredient.unit
+                      ? ingredient.quantity * 1000
+                      : ingredient.quantity,
+                },
               },
             });
-          }
-        }),
-      );
+            return shoppingListItem.id;
+          }),
+        );
+      });
     }),
 });

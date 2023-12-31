@@ -1,9 +1,9 @@
-import { Unit } from "@prisma/client";
+import type { Unit } from "@prisma/client";
 
 export type Ingredient = {
   name: string;
   quantity: number;
-  unit: Unit | null;
+  unit: Unit;
 };
 
 export const equivalentUnits: [Unit, Unit][] = [
@@ -32,7 +32,7 @@ export function calculateIngredients(
       result.push({
         ...ingredient,
         ...convertUnit(ingredient.unit, ingredient.quantity * portionSize),
-      });
+      } as Ingredient);
     }
   });
 

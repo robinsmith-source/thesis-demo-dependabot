@@ -8,8 +8,6 @@ import { api } from "~/trpc/server";
 import ImageCarousel from "./ImageCarousel";
 import IngredientTable from "./IngredientTable";
 import RecipeStep from "./RecipeStep";
-import PortionSizeInput from "~/app/_components/PortionSizeInput";
-import { PortionSizeProvider } from "~/utils/portion-size-provider";
 import RecipeDeleteHandler from "~/app/recipe/[id]/RecipeDeleteHandler";
 
 export default async function Page({ params }: { params: { id: string } }) {
@@ -21,16 +19,15 @@ export default async function Page({ params }: { params: { id: string } }) {
   const session = await auth();
   console.log(recipe.images);
   return (
-    <PortionSizeProvider>
-      <main>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div>
-            <div className="flex items-center gap-x-2">
-              <h1 className="text-2xl font-bold">{recipe.name}</h1>
+    <main>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <div className="flex items-center gap-x-2">
+            <h1 className="text-2xl font-bold">{recipe.name}</h1>
 
-              <span className="capitalize">
-                ({recipe.difficulty.toLowerCase()})
-              </span>
+            <span className="capitalize">
+              ({recipe.difficulty.toLowerCase()})
+            </span>
 
             {recipe.authorId === session?.user?.id && (
               <>
@@ -42,59 +39,56 @@ export default async function Page({ params }: { params: { id: string } }) {
                 >
                   <FaPenToSquare />
                 </Button>
-              )}
                 <RecipeDeleteHandler recipeId={recipe.id} />
               </>
             )}
           </div>
 
-            <p>
-              created by <br />
-              <Link color="secondary" href={`/user/${recipe.author.id}`}>
-                {recipe.author.name}
-              </Link>
-            </p>
+          <p>
+            created by <br />
+            <Link color="secondary" href={`/user/${recipe.author.id}`}>
+              {recipe.author.name}
+            </Link>
+          </p>
 
-            <div className="my-2 flex gap-2">
-              {recipe.labels.map((label) => (
-                <Chip key={label.id}>{label.name}</Chip>
-              ))}
-            </div>
-            <p>{recipe.description}</p>
+          <div className="my-2 flex gap-2">
+            {recipe.labels.map((label) => (
+              <Chip key={label.id}>{label.name}</Chip>
+            ))}
           </div>
-          <ImageCarousel images={recipe.images} />
-          <div>
-            <PortionSizeInput />
-            <IngredientTable recipeSteps={recipe.steps} />
-          </div>
+          <p>{recipe.description}</p>
         </div>
+        <ImageCarousel images={recipe.images} />
         <div>
-          <table>
-            <thead>
-              <tr>
-                <th className="pr-4 text-right">Ingredients</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recipe.steps.map((step) => (
-                <RecipeStep step={step} key={step.id} />
-              ))}
-            </tbody>
-          </table>
+          <IngredientTable recipeSteps={recipe.steps} />
         </div>
-        <div className="mt-4 flex justify-center gap-2">
-          {recipe.tags.map((tag) => (
-            <Chip key={tag}>#{tag}</Chip>
-          ))}
-        </div>
-        <Divider className="my-4" />
-        <ReviewSection
-          recipeId={recipe.id}
-          hideReviewForm={
-            recipe.author.id === session?.user?.id || session == null
-          }
-        />
-      </main>
-    </PortionSizeProvider>
+      </div>
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <th className="pr-4 text-right">Ingredients</th>
+            </tr>
+          </thead>
+          <tbody>
+            {recipe.steps.map((step) => (
+              <RecipeStep step={step} key={step.id} />
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="mt-4 flex justify-center gap-2">
+        {recipe.tags.map((tag) => (
+          <Chip key={tag}>#{tag}</Chip>
+        ))}
+      </div>
+      <Divider className="my-4" />
+      <ReviewSection
+        recipeId={recipe.id}
+        hideReviewForm={
+          recipe.author.id === session?.user?.id || session == null
+        }
+      />
+    </main>
   );
 }
