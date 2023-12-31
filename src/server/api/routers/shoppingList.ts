@@ -74,13 +74,13 @@ export const shoppingListRouter = createTRPCRouter({
             const getEquivalentUnits = (): [Unit, Unit] | null =>
               equivalentUnits.find(
                 ([u1, u2]) => u1 === ingredient.unit || u2 === ingredient.unit,
-              ) || null;
+              ) ?? null;
 
             const shoppingListItem = await tx.shoppingListItem.upsert({
               where: {
                 name_unit_shoppingListId: {
                   name: ingredient.name,
-                  unit: getEquivalentUnits()?.[0] || ingredient.unit,
+                  unit: getEquivalentUnits()?.[0] ?? ingredient.unit,
                   shoppingListId: input.shoppingListId,
                 },
               },

@@ -6,15 +6,17 @@ import ReviewSection from "./_review/ReviewSection";
 import { auth } from "auth";
 import { api } from "~/trpc/server";
 import ImageCarousel from "./ImageCarousel";
-import IngredientTable from "./IngredientTable";
 import RecipeStep from "./RecipeStep";
 import RecipeDeleteHandler from "~/app/recipe/[id]/RecipeDeleteHandler";
+import ShoppingListHandler from "~/app/recipe/[id]/ShoppingListHandler";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const recipe = await api.recipe.get.query({ id: params.id });
   if (!recipe) {
     notFound();
   }
+
+  const shoppingLists = await api.shoppingList.getAll.query();
 
   const session = await auth();
   console.log(recipe.images);
@@ -59,9 +61,10 @@ export default async function Page({ params }: { params: { id: string } }) {
           <p>{recipe.description}</p>
         </div>
         <ImageCarousel images={recipe.images} />
-        <div>
-          <IngredientTable recipeSteps={recipe.steps} />
-        </div>
+        <ShoppingListHandler
+          shoppingLists={shoppingLists}
+          ingredients={recipe.steps.flatMap((step) => step.ingredients)}
+        />
       </div>
       <div>
         <table>

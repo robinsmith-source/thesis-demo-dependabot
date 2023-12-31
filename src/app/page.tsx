@@ -7,7 +7,6 @@ export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const latestRecipes = await api.recipe.getRecipeCards.query({
-    tags: [],
     take: 20,
   });
 
