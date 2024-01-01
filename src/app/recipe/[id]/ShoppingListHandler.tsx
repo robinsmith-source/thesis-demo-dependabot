@@ -1,6 +1,6 @@
 "use client";
 import ShoppingListSelector from "~/app/_components/ShoppingListSelector";
-import IngredientTable from "~/app/recipe/[id]/IngredientTable";
+import IngredientTable from "~/app/_components/IngredientTable";
 import type { RecipeStepIngredient } from "@prisma/client";
 import { type Key, useCallback, useState } from "react";
 import { api } from "~/trpc/react";
@@ -90,6 +90,7 @@ export default function ShoppingListHandler({
       )}
       <IngredientTable
         isSelectable={isAuthorized}
+        isPortionable
         ingredients={ingredients}
         onSelect={onSelect}
       />

@@ -139,4 +139,27 @@ export const shoppingListRouter = createTRPCRouter({
         );
       });
     }),
+
+  delete: protectedProcedure
+    .input(
+      z.object({
+        shoppingListId: z.string().cuid(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        return await ctx.db.shoppingList.delete({
+          where: {
+            id: input.shoppingListId,
+            authorId: ctx.session.user.id,
+          },
+        });
+      } catch (error) {
+        console.log(error);
+        new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Something went wrong!",
+        });
+      }
+    }),
 });

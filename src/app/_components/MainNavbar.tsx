@@ -55,9 +55,6 @@ function LoginBar({ session }: { session: Session }) {
         <DropdownItem as={NextLink} key="create-recipe" href={`/recipe/create`}>
           Create Recipe
         </DropdownItem>
-        <DropdownItem as={NextLink} key="shopping-list" href={`/shoppingList`}>
-          Shopping List
-        </DropdownItem>
         <DropdownItem
           as={NextLink}
           key="logout"
