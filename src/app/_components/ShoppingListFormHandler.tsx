@@ -24,8 +24,8 @@ interface ShoppingListFormHandlerProps {
   shoppingList?: {
     id: string;
     name: string;
-    description?: string | null;
-  } | null;
+    description?: string;
+  };
 }
 
 export default function ShoppingListFormHandler({
@@ -33,11 +33,6 @@ export default function ShoppingListFormHandler({
   buttonSize = "md",
   shoppingList,
 }: ShoppingListFormHandlerProps) {
-  if (mode !== Modes.CREATE && !shoppingList) {
-    throw new Error(
-      "Shopping list form handler in edit mode requires a shopping list",
-    );
-  }
   const { onOpen, isOpen, onOpenChange, onClose } = useDisclosure();
   const router = useRouter();
 
@@ -82,6 +77,9 @@ export default function ShoppingListFormHandler({
   });
 
   const onDelete = (shoppingListId: string) => {
+    if (!shoppingList) {
+      throw new Error("No shopping list provided");
+    }
     deleteMutation.mutate({
       shoppingListId,
     });
@@ -100,59 +98,120 @@ export default function ShoppingListFormHandler({
 
   return (
     <>
-      {mode === Modes.CREATE && (
+      <ButtonVariants mode={mode} buttonSize={buttonSize} onOpen={onOpen} />
+      <Modals
+        mode={mode}
+        onOpenChange={onOpenChange}
+        isOpen={isOpen}
+        onCreate={onCreate}
+        onEdit={onEdit}
+        onDelete={onDelete}
+        onClose={onClose}
+        shoppingList={shoppingList}
+      />
+    </>
+  );
+}
+
+function ButtonVariants({
+  onOpen,
+  mode,
+  buttonSize,
+}: {
+  onOpen: () => void;
+  mode: Modes;
+  buttonSize: "sm" | "md" | "lg";
+}) {
+  switch (mode) {
+    case Modes.CREATE:
+      return (
         <Button isIconOnly color="success" size={buttonSize} onPress={onOpen}>
           <FaPlus />
         </Button>
-      )}
-
-      {mode === Modes.EDIT && (
+      );
+    case Modes.EDIT:
+      return (
         <Button isIconOnly color="secondary" size={buttonSize} onPress={onOpen}>
           <FaPenToSquare />
         </Button>
-      )}
-
-      {mode === Modes.DELETE && (
+      );
+    case Modes.DELETE:
+      return (
         <Button isIconOnly color="danger" size={buttonSize} onPress={onOpen}>
           <FaTrash />
         </Button>
-      )}
+      );
+    default:
+      throw new Error("Invalid mode");
+  }
+}
 
-      {mode !== Modes.DELETE && (
+function Modals({
+  onOpenChange,
+  isOpen,
+  onClose,
+  mode,
+  shoppingList,
+  onCreate,
+  onEdit,
+  onDelete,
+}: {
+  onOpenChange: () => void;
+  isOpen: boolean;
+  onClose: () => void;
+  mode: Modes;
+  shoppingList?: {
+    id: string;
+    name: string;
+    description?: string;
+  };
+  onCreate: (data: ShoppingListFormType) => void;
+  onEdit: (data: ShoppingListFormType) => void;
+  onDelete: (shoppingListId: string) => void;
+}) {
+  switch (mode) {
+    case Modes.CREATE:
+      return (
         <ShoppingListFormModal
           isOpen={isOpen}
           onOpenChange={onOpenChange}
-          title={
-            mode === Modes.CREATE
-              ? "Create Shopping List"
-              : "Edit Shopping List"
-          }
-          formValue={
-            mode === Modes.EDIT
-              ? {
-                  id: shoppingList?.id ?? "",
-                  name: shoppingList?.name ?? "",
-                  description: shoppingList?.description ?? null,
-                }
-              : null
-          }
-          submit={mode === Modes.CREATE ? onCreate : onEdit}
+          title="Create Shopping List"
+          submit={onCreate}
         />
-      )}
-      {mode === Modes.DELETE && (
+      );
+    case Modes.EDIT:
+      if (!shoppingList) {
+        throw new Error("No shopping list provided");
+      }
+      return (
+        <ShoppingListFormModal
+          isOpen={isOpen}
+          onOpenChange={onOpenChange}
+          title="Edit Shopping List"
+          formValue={{
+            ...shoppingList,
+          }}
+          submit={onEdit}
+        />
+      );
+    case Modes.DELETE:
+      if (!shoppingList) {
+        throw new Error("No shopping list provided");
+      }
+      return (
         <ConfirmationModal
           isOpen={isOpen}
           onOpenChange={onOpenChange}
-          title={"Delete Shopping List"}
-          body={
-            "Are you sure you want to delete this shopping list? This action cannot be undone."
-          }
+          title="Delete Shopping List"
+          body="Are you sure you want to delete this shopping list? 
+          This action cannot be undone."
           onConfirm={() => {
-            onDelete(shoppingList!.id);
+            onDelete(shoppingList.id);
             onClose();
           }}
         />
-      )}
-    </>
-  );
+      );
+    default:
+      throw new Error("Invalid mode");
+  }
 }

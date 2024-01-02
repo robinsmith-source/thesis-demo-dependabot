@@ -18,11 +18,11 @@ interface ShoppingListFormModalProps {
   onOpenChange: () => void;
   isOpen: boolean;
   title: string;
-  formValue: {
+  formValue?: {
     id: string;
     name: string;
-    description: string | null;
-  } | null;
+    description?: string;
+  };
   submit: (shoppingListForm: ShoppingListFormType) => void;
 }
 
@@ -47,7 +47,8 @@ export default function ShoppingListFormModal({
       ...formValue,
     },
   });
-
+  console.log("title", title);
+  console.log("formvalue", formValue);
   return (
     <>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false}>
