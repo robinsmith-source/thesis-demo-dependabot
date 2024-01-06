@@ -1,7 +1,5 @@
-import { Button, Chip, Divider, Link } from "@nextui-org/react";
-import NextLink from "next/link";
+import { Chip, Divider, Link } from "@nextui-org/react";
 import { notFound } from "next/navigation";
-import { FaPenToSquare } from "react-icons/fa6";
 import ReviewSection from "~/app/recipe/[id]/_review/ReviewSection";
 import { auth } from "auth";
 import { api } from "~/trpc/server";
@@ -22,54 +20,26 @@ export default async function Page({ params }: { params: { id: string } }) {
     <main>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <div className="flex items-center gap-x-2">
-            <h1 className="text-2xl font-bold">{recipe.name}</h1>
-
-            <span className="capitalize">
-              ({recipe.difficulty.toLowerCase()})
-            </span>
-
-            {recipe.authorId === session?.user?.id && (
-              <Button
-                isIconOnly
-                as={NextLink}
-                color="secondary"
-                href={`${params.id}/edit`}
-              >
-                <FaPenToSquare />
-              </Button>
-            )}
+          <div className="flex flex-row gap-1">
+            <h1 className="inline-block text-2xl font-bold">{recipe.name}</h1>
+            <DifficultyChip difficulty={recipe.difficulty} />
           </div>
-
           <p>
-            created by <br />
+            created by{" "}
             <Link color="secondary" href={`/user/${recipe.author.id}`}>
               {recipe.author.name}
             </Link>
           </p>
-          <div>
-              <div className="flex flex-row gap-1">
-                  <h1 className="inline-block text-2xl font-bold">
-                  {recipe.name}
-              </h1>
-                  <DifficultyChip difficulty={recipe.difficulty}/>
-              </div>
-              <p>
-                  created by{" "}
-                  <Link color="secondary" href={`/user/${recipe.author.id}`}>
-                      {recipe.author.name}
-                  </Link>
-              </p>
 
-              <div className="my-2 flex gap-2">
-                  {recipe.labels.map((label) => (
-                      <Chip key={label.id}>{label.name}</Chip>
-                  ))}
-              </div>
-              <p>{recipe.description}</p>
+          <div className="my-2 flex gap-2">
+            {recipe.labels.map((label) => (
+              <Chip key={label.id}>{label.name}</Chip>
+            ))}
           </div>
-          <ImageCarousel images={recipe.images}/>
-          <IngredientTable recipeSteps={recipe.steps}/>
+          <p>{recipe.description}</p>
+        </div>
+        <ImageCarousel images={recipe.images} />
+        <IngredientTable recipeSteps={recipe.steps} />
       </div>
       <div>
         <table>
