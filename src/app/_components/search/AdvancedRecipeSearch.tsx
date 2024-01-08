@@ -17,7 +17,7 @@ export default function AdvancedRecipeSearch() {
     (searchFilters: string) => {
       const params = new URLSearchParams(searchParams);
 
-      if (searchFilters != null) { // "" === null | without this empty search bar does not work
+      searchFilters ? params.set("name", searchFilters ) : params.delete("name");
         params.set("name", searchFilters); 
       }
       router.replace(`${pathname}?${params.toString()}`);
