@@ -8,7 +8,8 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { useState } from "react";
+import type { Selection } from "@nextui-org/react";
+import { useEffect, useState } from "react";
 import { convertUnitName } from "~/app/utils";
 import {
   calculateIngredients,
@@ -36,29 +37,37 @@ export default function IngredientTable({
   }[];
   onSelect?: (selectedIngredients: Ingredient[]) => void;
 }) {
-  const [selectedKeys, setSelectedKeys] = useState<"all" | Set<string>>(
-    new Set<string>(),
-  );
-
   const [portionSize, setPortionSize] = useState<number>(1);
-  const [selectedIngredients, setSelectedIngredients] = useState<Ingredient[]>(
-    [],
-  );
   const summarizedIngredients = calculateIngredients(ingredients, portionSize);
 
-  function handleSelect() {
-    if (selectedKeys === "all") {
-      setSelectedIngredients(summarizedIngredients);
-    } else {
-      setSelectedIngredients(
-        summarizedIngredients.filter((_, index) =>
+  const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set());
+  const [shouldEmitSelection, setShouldEmitSelection] =
+    useState<boolean>(false);
+
+  const selectedIngredients =
+    selectedKeys === "all"
+      ? summarizedIngredients
+      : summarizedIngredients.filter((_, index) =>
           selectedKeys.has(index.toString()),
-        ),
-      );
-    }
+        );
+
+  useEffect(() => {
+    if (!shouldEmitSelection) return;
     if (onSelect) {
       onSelect(selectedIngredients);
     }
+    setShouldEmitSelection(false);
+  }, [selectedIngredients, shouldEmitSelection, onSelect]);
+
+  useEffect(() => {
+    if (isSelectable) {
+      setSelectedKeys(new Set());
+    }
+  }, [summarizedIngredients.map((ingredient) => ingredient.id).join(",")]);
+
+  function handleSelect(keys: Selection) {
+    setSelectedKeys(keys);
+    setShouldEmitSelection(true);
   }
 
   return (
@@ -69,11 +78,7 @@ export default function IngredientTable({
         selectionMode={isSelectable ? "multiple" : "none"}
         removeWrapper={removeWrapper}
         selectedKeys={selectedKeys}
-        onSelectionChange={(keys) => {
-          //@ts-expect-error TODO: Fix this
-          setSelectedKeys(keys);
-          handleSelect();
-        }}
+        onSelectionChange={handleSelect}
         isCompact
         isStriped
       >
