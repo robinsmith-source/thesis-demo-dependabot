@@ -59,6 +59,7 @@ export default function IngredientTable({
     setShouldEmitSelection(false);
   }, [selectedIngredients, shouldEmitSelection, onSelect]);
 
+  //TODO: fix 2 build warnings with dependency array here
   useEffect(() => {
     if (isSelectable) {
       setSelectedKeys(new Set());

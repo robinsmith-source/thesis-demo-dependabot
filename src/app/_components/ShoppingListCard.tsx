@@ -122,7 +122,7 @@ export default function ShoppingListCard({
     <motion.div layout transition={{ type: "spring", duration: 0.2 }}>
       <Card className="w-full sm:w-[17rem]">
         <CardHeader className="flex flex-col items-start justify-center space-y-2">
-          <div className="flex w-full items-center justify-between">
+          <div className="flex w-full flex-wrap items-center justify-between">
             <h2 className="text-xl font-semibold">{shoppingList.name}</h2>
             <div className="space-x-2">
               <ShoppingListHandler
