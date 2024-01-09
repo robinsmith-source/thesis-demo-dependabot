@@ -111,6 +111,7 @@ export default function ShoppingListCard({
     onSuccess: () => {
       toast.success("Shopping list items deleted");
       router.refresh();
+      setSelectedIngredients([]);
     },
     onError: (error) => {
       console.log(error);
@@ -231,7 +232,12 @@ export default function ShoppingListCard({
 
           {shoppingList.items.length > 0 ? (
             <>
-              <Button size="sm" color="danger" onPress={onDelete}>
+              <Button
+                size="sm"
+                color="danger"
+                onPress={onDelete}
+                isDisabled={selectedIngredients.length === 0}
+              >
                 Remove Items
               </Button>
 
