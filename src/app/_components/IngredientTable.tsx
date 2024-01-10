@@ -16,6 +16,7 @@ import {
   type Ingredient,
 } from "~/utils/IngredientCalculator";
 import type { Unit } from "@prisma/client";
+import { usePortionSize } from "~/app/recipe/[id]/PortionSizeContext";
 
 export default function IngredientTable({
   className,
@@ -37,7 +38,7 @@ export default function IngredientTable({
   }[];
   onSelect?: (selectedIngredients: Ingredient[]) => void;
 }) {
-  const [portionSize, setPortionSize] = useState<number>(1);
+  const { portionSize, setPortionSize } = usePortionSize();
   const summarizedIngredients = calculateIngredients(ingredients, portionSize);
 
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set());
