@@ -40,7 +40,7 @@ export function calculateIngredients(
   result.forEach((ingredient) => {
     const converted = convertUnit(ingredient.unit, ingredient.quantity);
     ingredient.quantity = converted.quantity;
-    ingredient.unit = converted.unit as Unit;
+    ingredient.unit = converted.unit!;
   });
 
   function convertUnit(unit: Unit | null, quantity: number) {

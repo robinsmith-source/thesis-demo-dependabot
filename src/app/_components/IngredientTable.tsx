@@ -1,5 +1,5 @@
 "use client";
-import { Button, CardFooter, Selection } from "@nextui-org/react";
+import { Button, CardFooter, type Selection } from "@nextui-org/react";
 import {
   Table,
   TableBody,

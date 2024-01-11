@@ -1,11 +1,11 @@
 "use client";
 import {
-  Dispatch,
+  type Dispatch,
   createContext,
   useContext,
   useState,
-  SetStateAction,
-  ReactNode,
+  type SetStateAction,
+  type ReactNode,
 } from "react";
 
 const PortionSizeContext = createContext<{
@@ -13,6 +13,7 @@ const PortionSizeContext = createContext<{
   setPortionSize: Dispatch<SetStateAction<number>>;
 }>({
   portionSize: 1,
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setPortionSize: () => {},
 });
 

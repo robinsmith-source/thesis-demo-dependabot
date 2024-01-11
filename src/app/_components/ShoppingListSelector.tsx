@@ -25,7 +25,6 @@ export default function ShoppingListSelector({
         variant="bordered"
         placeholder="Choose a shopping list"
         className="max-w-xs"
-        size="sm"
         selectedKey={value as string}
         onSelectionChange={(value) => {
           setValue(value);

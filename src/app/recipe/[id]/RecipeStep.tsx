@@ -16,7 +16,7 @@ export default function RecipeStep({ step }: { step: RecipeStep }) {
         <ul>
           {calculateIngredients(step.ingredients, portionSize).map(
             (ingredient) => (
-              <li>
+              <li key={ingredient.id}>
                 {ingredient.quantity} {convertUnitName(ingredient.unit)}{" "}
                 {ingredient.name}
               </li>
