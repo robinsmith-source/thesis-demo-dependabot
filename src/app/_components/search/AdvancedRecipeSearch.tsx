@@ -23,7 +23,6 @@ export default function AdvancedRecipeSearch(className?: string) {
 
   return (
       <Input
-        fullWidth
         type="text"
         defaultValue={searchParams.get("name")?.toString()}
         placeholder="Search recipes..."
