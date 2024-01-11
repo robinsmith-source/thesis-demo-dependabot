@@ -32,15 +32,9 @@ export function calculateIngredients(
     } else {
       result.push({
         ...ingredient,
-        quantity: ingredient.quantity * portionSize,
+        ...convertUnit(ingredient.unit, ingredient.quantity * portionSize),
       } as Ingredient);
     }
-  });
-
-  result.forEach((ingredient) => {
-    const converted = convertUnit(ingredient.unit, ingredient.quantity);
-    ingredient.quantity = converted.quantity;
-    ingredient.unit = converted.unit as Unit;
   });
 
   function convertUnit(unit: Unit | null, quantity: number) {
