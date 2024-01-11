@@ -23,6 +23,8 @@ export default function DifficultyInput() {
 
   const updateURLParams = (difficulty: number | null) => {
     const params = new URLSearchParams(searchParams);
+    params.set('page', '1');
+    
     if (difficulty !== null) {
       params.set("difficulty", difficulty.toString());
     } else {

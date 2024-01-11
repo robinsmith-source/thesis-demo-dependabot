@@ -4,6 +4,7 @@ import { PrismaClient } from "@prisma/client";
 import AdvancedRecipeSearch from "~/app/_components/search/AdvancedRecipeSearch";
 import FilterAccordion from "~/app/_components/search/FilterAccordion";
 import RecipeCardsSection from "~/app/_components/RecipeCardsSection";
+import QueryPagination from "~/app/_components/search/QueryPagination";
 
 type Label = {
   name: string;
@@ -16,6 +17,8 @@ type urlParams = {
   name?: string;
   labels?: string;
   difficulty?: number;
+  take?: number;
+  page?: number;
 };
 
 type apiParams = {
@@ -28,8 +31,8 @@ type apiParams = {
 
 // translate parameters
 const createQueryParams = (params: urlParams) => {
-  const { name, labels, difficulty } = params;
-  const queryParameters: apiParams = { take: 20 };
+  const { name, labels, difficulty, take, page } = params;
+  const queryParameters: apiParams = { take: take ?? 4 };
 
   if (name) queryParameters.name = name;
   if (labels) queryParameters.labels = labels.split(",");
@@ -50,6 +53,9 @@ const createQueryParams = (params: urlParams) => {
         break;
     }
   }
+  if (page) {
+    queryParameters.skip = (page - 1) * (queryParameters.take ?? 0);
+  }
 
   return queryParameters;
 };
@@ -59,26 +65,29 @@ export default async function Page({
 }: {
   searchParams?: urlParams;
 }) {
-  const prisma = new PrismaClient();
-  const queryParameters = createQueryParams(searchParams ?? {});
-
-  //adjust api query with filters provided client components
-  const displayedRecipes =
-    await api.recipe.getRecipeCards.query(queryParameters);
-
   // get all labels with their categories from DB for autocomplete items
-const allLabels: Label[] = await prisma.recipeLabel.findMany({
-  select: { name: true, category: true },
-});
+  const prisma = new PrismaClient();
+  const allLabels: Label[] = await prisma.recipeLabel.findMany({
+    select: { name: true, category: true },
+  });
+
+  const queryParameters = createQueryParams(searchParams ?? {});
+  const displayedRecipeCards = await api.recipe.getRecipeCards.query(queryParameters);
+  const count = await api.recipe.getRecipeCount.query(queryParameters);
+
+  // calculate page count for pagination
+  const pageCount = Math.ceil(Number(count) / (queryParameters.take ?? 0));
 
   return (
     <main className="flex flex-col items-center">
-      <div className="flex w-full flex-row items-center justify-between">
-        <AdvancedRecipeSearch />
-      </div>
-      <FilterAccordion labels={allLabels} />
-      <div>
-        <RecipeCardsSection recipes={displayedRecipes} />
+        <div className="flex w-full flex-row items-center justify-between">
+          <AdvancedRecipeSearch />
+          </div>
+          <FilterAccordion labels={allLabels} />
+      <span>number of matches: {count} </span>
+      <div className="flex flex-col items-center justify-start">
+        <RecipeCardsSection recipes={displayedRecipeCards} />
+        <QueryPagination pageCount={pageCount} className="mt-2" />
       </div>
     </main>
   );

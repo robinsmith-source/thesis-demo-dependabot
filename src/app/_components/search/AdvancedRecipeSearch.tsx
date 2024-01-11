@@ -5,30 +5,36 @@ import { FaMagnifyingGlass } from "react-icons/fa6";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 
-export default function AdvancedRecipeSearch(className?: string) { 
+type AdvancedRecipeSearchProps = {
+  className?: string;
+};
+
+export default function AdvancedRecipeSearch({
+  className = "w-full",
+}: AdvancedRecipeSearchProps) {
   const pathname = usePathname();
   const router = useRouter();
-  if (!className) className = "w-full";
-
   const searchParams = useSearchParams();
+
+  if (!className) className = "w-full";
 
   const handleSearch = useDebouncedCallback((searchFilters: string) => {
     const params = new URLSearchParams(searchParams);
+    params.set("page", "1");
 
     searchFilters ? params.set("name", searchFilters) : params.delete("name");
-    params.set("name", searchFilters);
 
     router.replace(`${pathname}?${params.toString()}`);
   }, 333); // debounce in ms
 
   return (
-      <Input
-        type="text"
-        defaultValue={searchParams.get("name")?.toString()}
-        placeholder="Search recipes..."
-        onValueChange={handleSearch}
-        endContent={<FaMagnifyingGlass />}
-        className={className}
-      />
+    <Input
+      type="text"
+      defaultValue={searchParams.get("name")?.toString()}
+      placeholder="Search recipes..."
+      onValueChange={handleSearch}
+      endContent={<FaMagnifyingGlass />}
+      className={className}
+    />
   );
 }
