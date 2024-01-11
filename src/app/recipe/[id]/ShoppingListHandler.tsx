@@ -6,8 +6,9 @@ import { type Key, useCallback, useState } from "react";
 import { api } from "~/trpc/react";
 import toast from "react-hot-toast";
 import type { Ingredient } from "~/utils/IngredientCalculator";
-import { Button } from "@nextui-org/react";
+import { Button, CardBody } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import { Card, CardHeader } from "@nextui-org/card";
 
 interface ShoppingListHandlerProps {
   isAuthorized?: boolean;
@@ -60,39 +61,45 @@ export default function ShoppingListHandler({
   }, []);
 
   return (
-    <div className="flex max-w-xs flex-col gap-4">
-      {isAuthorized && (
-        <>
-          <ShoppingListSelector
-            shoppingLists={shoppingLists}
-            onChange={(listId) => setShoppingListId(listId)}
-          />
-          <Button
-            onClick={handleAddItem}
-            isDisabled={
-              !shoppingListId ||
-              !selectedIngredients ||
-              selectedIngredients.length < 1
-            }
-          >
-            {!selectedIngredients || selectedIngredients.length < 1
-              ? "Select ingredients"
-              : !shoppingListId
-                ? "Select shopping list"
-                : `Add ${
-                    selectedIngredients?.length <= 1
-                      ? "Ingredient"
-                      : "Ingredients"
-                  } to shopping list`}
-          </Button>
-        </>
-      )}
-      <IngredientTable
-        isSelectable={isAuthorized}
-        isPortionable
-        ingredients={ingredients}
-        onSelect={onSelect}
-      />
-    </div>
+    <Card className="flex max-w-xs flex-col">
+      <CardHeader className="flex flex-col gap-4">
+        {isAuthorized && (
+          <>
+            <ShoppingListSelector
+              shoppingLists={shoppingLists}
+              onChange={(listId) => setShoppingListId(listId)}
+            />
+            <Button
+              onClick={handleAddItem}
+              className="w-full"
+              isDisabled={
+                !shoppingListId ||
+                !selectedIngredients ||
+                selectedIngredients.length < 1
+              }
+            >
+              {!selectedIngredients || selectedIngredients.length < 1
+                ? "Select ingredients"
+                : !shoppingListId
+                  ? "Select shopping list"
+                  : `Add ${
+                      selectedIngredients?.length <= 1
+                        ? "Ingredient"
+                        : "Ingredients"
+                    } to shopping list`}
+            </Button>
+          </>
+        )}
+      </CardHeader>
+      <CardBody>
+        <IngredientTable
+          isSelectable={isAuthorized}
+          isPortionable
+          removeWrapper
+          ingredients={ingredients}
+          onSelect={onSelect}
+        />
+      </CardBody>
+    </Card>
   );
 }

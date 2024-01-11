@@ -28,7 +28,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   console.log(recipe.images);
   return (
-    <main>
+    <main className="space-y-6">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <div className="flex items-center gap-x-2">
@@ -74,6 +74,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           ingredients={recipe.steps.flatMap((step) => step.ingredients)}
         />
       </div>
+      <Divider className="my-4" />
       <div>
         <table>
           <thead>
