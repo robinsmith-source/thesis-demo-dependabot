@@ -1,17 +1,9 @@
 import { api } from "~/trpc/server";
 
-import { PrismaClient } from "@prisma/client";
 import AdvancedRecipeSearch from "~/app/_components/search/AdvancedRecipeSearch";
 import FilterAccordion from "~/app/_components/search/FilterAccordion";
 import RecipeCardsSection from "~/app/_components/RecipeCardsSection";
 import QueryPagination from "~/app/_components/search/QueryPagination";
-
-type Label = {
-  name: string;
-  category: {
-    name: string;
-  };
-};
 
 type urlParams = {
   name?: string;
@@ -66,10 +58,7 @@ export default async function Page({
   searchParams?: urlParams;
 }) {
   // get all labels with their categories from DB for autocomplete items
-  const prisma = new PrismaClient();
-  const allLabels: Label[] = await prisma.recipeLabel.findMany({
-    select: { name: true, category: true },
-  });
+  const allLabels = await api.recipeLabel.getAll.query();
 
   const queryParameters = createQueryParams(searchParams ?? {});
   const displayedRecipeCards =
@@ -85,10 +74,8 @@ export default async function Page({
         <AdvancedRecipeSearch />
       </div>
       <FilterAccordion labels={allLabels} />
-      <div className="flex flex-col items-center justify-start">
-        <RecipeCardsSection recipes={displayedRecipeCards} />
-        <QueryPagination pageCount={pageCount} className="mt-2" />
-      </div>
+      <RecipeCardsSection recipes={displayedRecipeCards} />
+      <QueryPagination pageCount={pageCount} className="mt-2" />
     </main>
   );
 }
