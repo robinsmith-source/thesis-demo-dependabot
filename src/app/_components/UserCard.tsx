@@ -28,6 +28,7 @@ export default async function UserCard({
             color="secondary"
             src={user.image ?? undefined}
             name={user.name ?? undefined}
+            showFallback
           />
         </Link>
 
