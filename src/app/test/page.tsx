@@ -1,18 +1,45 @@
-import { encode } from "@auth/core/jwt";
+import { decode, encode } from "@auth/core/jwt";
+
+import { PrismaClient } from "@prisma/client";
 
 export default async function Test() {
-  const test = await encode({
-    salt: "salt",
-    secret: "p7jNlDHks88U2pqcDrdHdZTuA8/4xA7NurJ5nnIjKRY=",
+  const prisma = new PrismaClient();
+  const account = await prisma.user.upsert({
+    where: {
+      email: `testing${1}@example.com`,
+    },
+    create: {
+      name: `Testing ${1}`,
+      email: `testing${1}@example.com`,
+    },
+    update: {},
+  });
+
+  const token = await encode({
+    salt: `salt`,
+    secret: process.env.AUTH_SECRET as string,
     maxAge: 1000 * 60 * 60,
     token: {
-      name: "zusor",
-      email: "tobias.d.messner@gmail.com",
-      picture:
-        "https://cdn.discordapp.com/avatars/124906016063094785/99f4cf2acbe0260f4f345085120502a9.png",
-      sub: "clr9b5hz70000dq5w2yf3408p",
-      jti: "a0f567cb-a125-40d8-80f6-d23810ad966f",
+      name: account.name,
+      email: account.email,
+      picture: "https://placekitten.com/400/400",
+      sub: account.id,
+      jti: "3b861310-d8d8-481e-ad9e-25cbd7e1e3df",
     },
   });
-  return <div>{test}</div>;
+
+  const decoded = await decode({
+    salt: `salt`,
+    secret: process.env.AUTH_SECRET as string,
+    token:
+      "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..NC6rZzWkCZLfLi58.-em0uNB1OiVPQNbfik1x2JoA0A244L3i9yQ_CFGHbo-5thb_Ns9J2RZpSoMU0WiYpH-Qee7Y6F9KIoFUzZgVrkL_nf0-Xjlgh6FFO40Nz4_DoMR2WFnpiM4CA4ghBv3yH3pCqLEclEoy_--9y9O3BCxEqHYWOwSj-u7sqJgTdjK0GjlgymuuMbFz2zt1tPRNy2mKhO13YPXqETeTKdhyA-TQqahpLUeWDj7fla5qLy0bRB0zzl7SwoTSHPqOLe70oWHpD4Go2eiBtYazfbT45w.XlBrgKrai822WhDLUToQpA",
+  });
+
+  return (
+    <div>
+      <p>{token}</p>
+      <br />
+      <p>{JSON.stringify(decoded)}</p>
+    </div>
+  );
 }

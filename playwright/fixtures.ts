@@ -51,7 +51,7 @@ export const test = baseTest.extend<{}, { workerStorageState: string }>({
       });
 
       const token = await encode({
-        salt: `test-salt-${id}`,
+        salt: "authjs.session-token",
         secret: process.env.AUTH_SECRET as string,
         maxAge: 1000 * 60 * 60,
         token: {
@@ -67,7 +67,7 @@ export const test = baseTest.extend<{}, { workerStorageState: string }>({
       await page.goto("http://localhost:3000/");
       await page.context().addCookies([
         {
-          name: "auth.js.session-token",
+          name: "authjs.session-token",
           value: token,
           domain: "localhost",
           path: "/",
