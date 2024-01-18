@@ -43,7 +43,7 @@ export default function ReviewForm({
   }
 
   return (
-    <Card className=" w-full sm:w-[36rem]">
+    <Card className="w-full sm:w-[36rem]">
       <CardHeader className="-mb-4">
         <Controller
           control={control}
