@@ -31,7 +31,8 @@ export const {
     jwt: async (data) => {
       return data.token;
     },
-    session: async ({ session, user, token }) => {
+    // @ts-expect-error
+    session: async ({ session, token }) => {
       // @ts-expect-error
       session.user.id = token.sub;
       return session;
