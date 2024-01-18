@@ -61,7 +61,7 @@ export default function IngredientTable({
       onSelect(selectedIngredients);
     }
     setShouldEmitSelection(false);
-  }, [selectedIngredients, shouldEmitSelection, onSelect]);
+  }, [selectedIngredients, shouldEmitSelection, onSelect, portionSize]);
 
   const ingredientsIds = summarizedIngredients
     .map((ingredient) => ingredient.id)
@@ -112,6 +112,7 @@ export default function IngredientTable({
             isIconOnly
             onPress={() => {
               setPortionSize((portionSize) => portionSize - 1);
+              setShouldEmitSelection(selectedIngredients.length > 0);
               setAnimation({
                 x: -30,
               });
@@ -141,6 +142,7 @@ export default function IngredientTable({
             isIconOnly
             onPress={() => {
               setPortionSize((portionSize) => portionSize + 1);
+              setShouldEmitSelection(selectedIngredients.length > 0);
               setAnimation({
                 x: 30,
               });
