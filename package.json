@@ -3,17 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "prisma": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+    "seed": "jiti prisma/seed.ts"
   },
   "scripts": {
     "dev": "next dev",
-    "db:reset": "prisma migragte reset --force",
+    "db:reset": "prisma migrate reset --force",
     "db:seed": "prisma db seed",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "db:deploy": "prisma migrate deploy",
     "build": "next build",
-    "vercel-deploy": "npm run build && npm run db:deploy && npm run db:seed",
+    "vercel-deploy": "pnpm run build && pnpm run db:deploy && pnpm run db:seed",
     "postinstall": "prisma generate",
     "lint": "next lint",
     "start": "next start"
@@ -31,7 +31,6 @@
     "@trpc/server": "^10.37.1",
     "@uploadthing/react": "^6.0.2",
     "framer-motion": "^10.16.4",
-    "luxon": "^3.4.3",
     "next": "^14.0.3",
     "next-auth": "^5.0.0-beta.4",
     "next-themes": "^0.2.1",
@@ -57,16 +56,15 @@
     "autoprefixer": "^10.4.14",
     "eslint": "^8.47.0",
     "eslint-config-next": "^14.0.3",
+    "jiti": "^1.21.0",
     "postcss": "^8.4.27",
     "prettier": "^3.0.0",
     "prettier-plugin-tailwindcss": "^0.5.1",
     "prisma": "^5.7.1",
     "tailwindcss": "^3.3.3",
-    "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   },
   "ct3aMetadata": {
     "initVersion": "7.22.0"
-  },
-  "packageManager": "npm@9.5.1"
+  }
 }
