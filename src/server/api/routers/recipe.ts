@@ -1,4 +1,3 @@
-import type { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -12,8 +11,8 @@ import { utapi } from "~/server/uploadthing";
 export const recipeRouter = createTRPCRouter({
   get: publicProcedure
     .input(z.object({ id: z.string().cuid() }))
-    .query(({ input, ctx }) => {
-      return ctx.db.recipe.findFirst({
+    .query(async ({ input, ctx }) => {
+      const recipe = await ctx.db.recipe.findFirst({
         where: { id: input.id },
         include: {
           steps: {
@@ -30,20 +29,30 @@ export const recipeRouter = createTRPCRouter({
           author: true,
         },
       });
+
+      if (!recipe) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Recipe not found.",
+        });
+      }
+
+      return recipe;
     }),
 
-  getRecipeCards: publicProcedure
+  getCards: publicProcedure
     .input(
       z.object({
         take: z.number().min(1).max(50),
         skip: z.number().min(0).optional(),
         name: z.string().optional(),
         difficulty: z.enum(["EASY", "MEDIUM", "HARD", "EXPERT"]).optional(),
-        excludeRecipeId: z.string().cuid().optional(),
-        orderBy: z.enum(["NEWEST", "OLDEST"]).optional(),
-        authorId: z.string().cuid().optional(),
         tags: z.array(z.string()).optional(),
         labels: z.array(z.string()).optional(),
+        authorId: z.string().cuid().optional(),
+        orderBy: z.enum(["NEWEST", "OLDEST"]).optional(),
+        excludeRecipeId: z.string().cuid().optional(),
+        isFollowingFeed: z.boolean().optional(),
       }),
     )
     .query(({ ctx, input }) => {
@@ -71,12 +80,17 @@ export const recipeRouter = createTRPCRouter({
           }
         })(),
         where: {
-          ...(input.name && { name: { contains: input.name, mode: "insensitive" } }),
+          ...(input.name && {
+            name: { contains: input.name, mode: "insensitive" },
+          }),
           ...(input.difficulty && { difficulty: input.difficulty }),
-          ...(input.excludeRecipeId && { id: { not: input.excludeRecipeId } }),
-          ...(input.authorId && { authorId: input.authorId }),
           ...(input.tags && { tags: { hasEvery: input.tags } }),
           ...(input.labels && createLabelQuery(input.labels)),
+          ...(input.authorId && { authorId: input.authorId }),
+          ...(input.excludeRecipeId && { id: { not: input.excludeRecipeId } }),
+          ...(input.isFollowingFeed && {
+            author: { followedBy: { some: { id: ctx?.session?.user?.id } } },
+          }),
         },
         skip: input.skip ?? 0,
         take: input.take,
@@ -165,8 +179,8 @@ export const recipeRouter = createTRPCRouter({
   create: protectedProcedure
     .input(
       z.object({
-        name: z.string().min(1),
-        description: z.string().nullable(),
+        name: z.string().min(3).max(50),
+        description: z.string().min(3).max(300).nullable(),
         difficulty: z.enum(["EASY", "MEDIUM", "HARD", "EXPERT"]),
         images: z.array(z.string()),
         tags: z
@@ -182,8 +196,8 @@ export const recipeRouter = createTRPCRouter({
           }),
         steps: z.array(
           z.object({
-            description: z.string(),
-            duration: z.number().min(0),
+            description: z.string().min(3).max(300),
+            duration: z.number().min(1),
             stepType: z.enum([
               "PREP",
               "COOK",
@@ -194,7 +208,7 @@ export const recipeRouter = createTRPCRouter({
             ]),
             ingredients: z.array(
               z.object({
-                name: z.string().min(1),
+                name: z.string().min(1).max(50),
                 quantity: z.number().min(1),
                 unit: z.enum([
                   "GRAM",
@@ -254,27 +268,43 @@ export const recipeRouter = createTRPCRouter({
   deleteRecipeImage: protectedProcedure
     .input(z.object({ key: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      // later this should check for existing recipes, make sure the user matches and then remove the link and then delete it
-      // for now just check it doesn't exist and then delete it
       const existingRecipe = await ctx.db.recipe.findFirst({
         where: { images: { has: input.key } },
       });
-      // make sure there is no recipe with this image
-      if (existingRecipe)
+
+      if (!existingRecipe) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Recipe with the specified image key not found.",
+        });
+      }
+
+      if (existingRecipe.authorId !== ctx.session.user.id) {
         throw new TRPCError({
           code: "FORBIDDEN",
-          message: "You can't delete images used by a recipe",
+          message: "You can't delete images used by another user's recipe.",
         });
+      }
 
       await utapi.deleteFiles(input.key);
+
+      // If the image was associated with a recipe, remove the link from the recipe
+      await ctx.db.recipe.update({
+        where: { id: existingRecipe.id },
+        data: {
+          images: {
+            set: existingRecipe.images.filter((img) => img !== input.key),
+          },
+        },
+      });
     }),
 
-  updateRecipe: protectedProcedure
+  update: protectedProcedure
     .input(
       z.object({
         id: z.string().cuid(),
-        name: z.string().min(1),
-        description: z.string().nullable(),
+        name: z.string().min(3).max(50),
+        description: z.string().min(3).max(300).nullable(),
         difficulty: z.enum(["EASY", "MEDIUM", "HARD", "EXPERT"]),
         images: z.array(z.string()),
         tags: z
@@ -290,8 +320,8 @@ export const recipeRouter = createTRPCRouter({
           }),
         steps: z.array(
           z.object({
-            description: z.string(),
-            duration: z.number().min(0),
+            description: z.string().min(3).max(300),
+            duration: z.number().min(1),
             stepType: z.enum([
               "PREP",
               "COOK",
@@ -302,7 +332,7 @@ export const recipeRouter = createTRPCRouter({
             ]),
             ingredients: z.array(
               z.object({
-                name: z.string().min(1),
+                name: z.string().min(1).max(50),
                 quantity: z.number().min(1),
                 unit: z.enum([
                   "GRAM",
@@ -326,11 +356,12 @@ export const recipeRouter = createTRPCRouter({
         where: { id: input.id },
       });
 
-      if (!recipe)
+      if (!recipe) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Recipe does not exist.",
+          message: "Recipe not found.",
         });
+      }
 
       if (recipe.authorId !== ctx.session.user.id) {
         throw new TRPCError({
@@ -353,6 +384,7 @@ export const recipeRouter = createTRPCRouter({
             author: { connect: { id: ctx.session.user.id } },
           },
         });
+
         await tx.recipeStep.deleteMany({
           where: {
             recipeId: input.id,
@@ -392,21 +424,24 @@ export const recipeRouter = createTRPCRouter({
         where: { id: input.recipeId, authorId: ctx.session.user.id },
       });
 
-      if (!recipe)
+      if (!recipe) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Recipe does not exist.",
+          message: "Recipe not found.",
         });
+      }
 
-      return ctx.db.$transaction(async (tx) => {
+      await ctx.db.$transaction(async (tx) => {
         await tx.recipe.delete({
           where: {
             id: input.recipeId,
             authorId: ctx.session.user.id,
           },
         });
-        console.log("img", recipe.images);
-        recipe.images.length > 0 && (await utapi.deleteFiles(recipe.images));
+
+        if (recipe.images.length > 0) {
+          await utapi.deleteFiles(recipe.images);
+        }
       });
     }),
 });

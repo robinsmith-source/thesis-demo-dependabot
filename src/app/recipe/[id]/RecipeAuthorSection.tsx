@@ -10,7 +10,7 @@ export default async function RecipeAuthorSection({
   currentRecipeId: string;
   recipeAuthor: UserType;
 }) {
-  const authorsRecipe = await api.recipe.getRecipeCards.query({
+  const authorsRecipe = await api.recipe.getCards.query({
     take: 3,
     excludeRecipeId: currentRecipeId,
     authorId: recipeAuthor.id,

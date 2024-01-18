@@ -42,7 +42,7 @@ export const shoppingListRouter = createTRPCRouter({
       if (!existingList) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Shopping List not found",
+          message: "Shopping List not found.",
         });
       }
 
@@ -57,8 +57,8 @@ export const shoppingListRouter = createTRPCRouter({
       });
     }),
 
-  getAllTables: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.shoppingList.findMany({
+  getAllTables: protectedProcedure.query(async ({ ctx }) => {
+    const tables = await ctx.db.shoppingList.findMany({
       orderBy: { createdAt: "desc" },
       where: { authorId: ctx.session.user.id },
       include: {
@@ -67,10 +67,19 @@ export const shoppingListRouter = createTRPCRouter({
         },
       },
     });
+
+    if (!tables) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Tables not found.",
+      });
+    }
+
+    return tables;
   }),
 
-  getAllLists: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.shoppingList.findMany({
+  getAllLists: protectedProcedure.query(async ({ ctx }) => {
+    const lists = await ctx.db.shoppingList.findMany({
       orderBy: { createdAt: "desc" },
       where: { authorId: ctx.session.user.id },
       select: {
@@ -78,6 +87,15 @@ export const shoppingListRouter = createTRPCRouter({
         name: true,
       },
     });
+
+    if (!lists) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Lists not found.",
+      });
+    }
+
+    return lists;
   }),
 
   addItems: protectedProcedure
@@ -105,7 +123,21 @@ export const shoppingListRouter = createTRPCRouter({
     )
     .mutation(async ({ input, ctx }) => {
       return ctx.db.$transaction(async (tx) => {
-        await Promise.all(
+        const existingList = await tx.shoppingList.findFirst({
+          where: {
+            id: input.shoppingListId,
+            authorId: ctx.session.user.id,
+          },
+        });
+
+        if (!existingList) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Shopping List not found.",
+          });
+        }
+
+        return Promise.all(
           input.ingredients.map(async (ingredient) => {
             const getEquivalentUnits = (): [Unit, Unit] | null =>
               equivalentUnits.find(
@@ -147,20 +179,25 @@ export const shoppingListRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      try {
-        return await ctx.db.shoppingList.delete({
-          where: {
-            id: input.shoppingListId,
-            authorId: ctx.session.user.id,
-          },
-        });
-      } catch (error) {
-        console.log(error);
-        new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Something went wrong!",
+      const existingList = await ctx.db.shoppingList.findFirst({
+        where: {
+          id: input.shoppingListId,
+          authorId: ctx.session.user.id,
+        },
+      });
+
+      if (!existingList) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Shopping List not found.",
         });
       }
+
+      return ctx.db.shoppingList.delete({
+        where: {
+          id: input.shoppingListId,
+        },
+      });
     }),
 
   deleteItems: protectedProcedure
@@ -171,33 +208,43 @@ export const shoppingListRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      const existingList = await ctx.db.shoppingList.findFirst({
+      const existingList = await ctx.db.shoppingList.findUniqueOrThrow({
         where: {
           id: input.shoppingListId,
           authorId: ctx.session.user.id,
         },
       });
+
       if (!existingList) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Shopping List not found",
+          message: "Shopping List not found.",
         });
       }
-      try {
-        return await ctx.db.shoppingListItem.deleteMany({
-          where: {
-            id: {
-              in: input.items,
-            },
-            shoppingListId: input.shoppingListId,
+
+      const items = await ctx.db.shoppingListItem.findMany({
+        where: {
+          id: {
+            in: input.items,
           },
-        });
-      } catch (error) {
-        console.log(error);
-        new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Something went wrong!",
+          shoppingListId: input.shoppingListId,
+        },
+      });
+
+      if (!items) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Items not found.",
         });
       }
+
+      return ctx.db.shoppingListItem.deleteMany({
+        where: {
+          id: {
+            in: input.items,
+          },
+          shoppingListId: input.shoppingListId,
+        },
+      });
     }),
 });

@@ -34,8 +34,15 @@ export default function RecipeForm({
   submit: (recipeForm: RecipeFormValues) => void;
 }) {
   const schema = z.object({
-    name: z.string().min(3, "Names must be at least 3 characters long"),
-    description: z.string().nullable(),
+    name: z
+      .string()
+      .min(3, "Names must be at least 3 characters long")
+      .max(50, "Names can only be 50 characters long"),
+    description: z
+      .string()
+      .min(3, "Descriptions must be at least 3 characters long")
+      .max(500, "Descriptions can only be 500 characters long")
+      .optional(),
     difficulty: z.enum(["EASY", "MEDIUM", "HARD", "EXPERT"]),
     tags: z
       .array(
@@ -50,15 +57,21 @@ export default function RecipeForm({
     images: z.array(z.string()),
     steps: z.array(
       z.object({
-        description: z.string().min(3),
-        duration: z.number().min(0),
+        description: z
+          .string()
+          .min(3, "Descriptions must be at least 3 characters long")
+          .max(500, "Descriptions can only be 500 characters long"),
+        duration: z.number().min(1, "Duration must be at least 1 minute"),
         stepType: z.enum(["PREP", "COOK", "REST", "SEASON", "SERVE", "MIX"], {
           required_error: "Step type is required",
           invalid_type_error: "Invalid step type",
         }),
         ingredients: z.array(
           z.object({
-            name: z.string().min(1),
+            name: z
+              .string()
+              .min(1, "Name must be at least 1 character long")
+              .max(50, "Name can only be 50 characters long"),
             quantity: z.number().min(1, "Quantity must be at least 1"),
             unit: z.enum(
               [

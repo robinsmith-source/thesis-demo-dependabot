@@ -10,43 +10,45 @@ import { TRPCError } from "@trpc/server";
 export const userRouter = createTRPCRouter({
   get: publicProcedure
     .input(z.object({ id: z.string().cuid() }))
-    .query(({ input, ctx }) => {
-      return ctx.db.user.findFirst({
+    .query(async ({ input, ctx }) => {
+      const user = await ctx.db.user.findFirst({
         where: { id: input.id },
-        include: {
-          recipes: true,
-        },
+        include: { recipes: true },
       });
+
+      if (!user) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User not found",
+        });
+      }
+
+      return user;
     }),
 
   getMetadata: publicProcedure
     .input(z.object({ id: z.string().cuid() }))
     .query(async ({ input, ctx }) => {
-      if (ctx?.session?.user?.id && input.id !== ctx.session.user.id) {
-        const [following, metadata] = await ctx.db.$transaction([
+      const loggedInUserId = ctx?.session?.user?.id;
+
+      if (ctx?.session?.user?.id && input.id !== loggedInUserId) {
+        const [isFollowing, metadata] = await ctx.db.$transaction([
           ctx.db.user.findFirst({
             where: {
-              id: ctx.session.user.id,
-              following: {
-                some: {
-                  id: input.id,
-                },
-              },
+              id: loggedInUserId,
+              following: { some: { id: input.id } },
             },
           }),
           ctx.db.user.findFirst({
             where: { id: input.id },
             select: {
               _count: {
-                select: {
-                  recipes: true,
-                  following: true,
-                  followedBy: true,
-                },
+                select: { recipes: true, following: true, followedBy: true },
               },
             },
           }),
         ]);
+
         if (!metadata) {
           throw new TRPCError({
             code: "NOT_FOUND",
@@ -55,7 +57,7 @@ export const userRouter = createTRPCRouter({
         }
 
         return {
-          following: following !== null,
+          following: isFollowing !== null,
           recipeCount: metadata._count.recipes,
           followingCount: metadata._count.following,
           followedByCount: metadata._count.followedBy,
@@ -65,20 +67,18 @@ export const userRouter = createTRPCRouter({
           where: { id: input.id },
           select: {
             _count: {
-              select: {
-                recipes: true,
-                following: true,
-                followedBy: true,
-              },
+              select: { recipes: true, following: true, followedBy: true },
             },
           },
         });
+
         if (!metadata) {
           throw new TRPCError({
             code: "NOT_FOUND",
             message: "User not found",
           });
         }
+
         return {
           following: null,
           recipeCount: metadata._count.recipes,
@@ -88,32 +88,61 @@ export const userRouter = createTRPCRouter({
       }
     }),
 
-  getAll: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.recipe.findMany({
+  getAll: protectedProcedure.query(async ({ ctx }) => {
+    const users = await ctx.db.recipe.findMany({
       orderBy: { createdAt: "desc" },
     });
+
+    if (!users) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Users not found.",
+      });
+    }
+
+    return users;
   }),
 
   getFollowers: protectedProcedure
     .input(z.object({ id: z.string().cuid() }))
-    .query(({ input, ctx }) => {
-      return ctx.db.user.findMany({
+    .query(async ({ input, ctx }) => {
+      const followers = await ctx.db.user.findMany({
         where: { following: { some: { id: input.id } } },
       });
+
+      if (!followers) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Followers not found.",
+        });
+      }
+
+      return followers;
     }),
 
   getFollowing: protectedProcedure
     .input(z.object({ id: z.string().cuid() }))
-    .query(({ input, ctx }) => {
-      return ctx.db.user.findMany({
+    .query(async ({ input, ctx }) => {
+      const following = await ctx.db.user.findMany({
         where: { followedBy: { some: { id: input.id } } },
       });
+
+      if (!following) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Following not found.",
+        });
+      }
+
+      return following;
     }),
 
   follow: protectedProcedure
     .input(z.object({ id: z.string().cuid() }))
     .mutation(({ input, ctx }) => {
-      if (input.id === ctx.session.user.id) {
+      const loggedInUserId = ctx.session.user.id;
+
+      if (input.id === loggedInUserId) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "You cannot follow yourself",
@@ -121,21 +150,17 @@ export const userRouter = createTRPCRouter({
       }
 
       return ctx.db.user.update({
-        where: { id: ctx.session.user.id },
-        data: {
-          following: {
-            connect: {
-              id: input.id,
-            },
-          },
-        },
+        where: { id: loggedInUserId },
+        data: { following: { connect: { id: input.id } } },
       });
     }),
 
   unfollow: protectedProcedure
     .input(z.object({ id: z.string().cuid() }))
     .mutation(({ input, ctx }) => {
-      if (input.id === ctx.session.user.id) {
+      const loggedInUserId = ctx.session.user.id;
+
+      if (input.id === loggedInUserId) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "You cannot unfollow yourself",
@@ -143,14 +168,8 @@ export const userRouter = createTRPCRouter({
       }
 
       return ctx.db.user.update({
-        where: { id: ctx.session.user.id },
-        data: {
-          following: {
-            disconnect: {
-              id: input.id,
-            },
-          },
-        },
+        where: { id: loggedInUserId },
+        data: { following: { disconnect: { id: input.id } } },
       });
     }),
 });

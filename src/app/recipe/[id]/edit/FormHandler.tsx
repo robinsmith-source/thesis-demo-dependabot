@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 
 export default function FormHandler({ recipe }: { recipe: RecipeFormValues }) {
   const router = useRouter();
-  const mutation = api.recipe.updateRecipe.useMutation({
+  const mutation = api.recipe.update.useMutation({
     onSuccess: (id) => {
       toast.success(`Recipe Updated!`);
       router.push(`/recipe/${id}`);

@@ -4,8 +4,9 @@ import RecipeCardsSection from "~/app/_components/RecipeCardsSection";
 export const dynamic = "force-dynamic";
 
 export default async function Following() {
-  const latestRecipes = await api.recipe.getFollowingFeed.query({
+  const latestRecipes = await api.recipe.getCards.query({
     take: 20,
+    isFollowingFeed: true,
   });
 
   return (
