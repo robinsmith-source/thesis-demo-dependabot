@@ -8,7 +8,7 @@ type QueryPaginationProps = {
     className?: string;
   };
 
-export default function QueryPagination({ pageCount, className = "" }: QueryPaginationProps) {
+export default function QueryPagination({ pageCount, className }: QueryPaginationProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
