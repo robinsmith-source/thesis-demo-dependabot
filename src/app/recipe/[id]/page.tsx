@@ -33,11 +33,13 @@ export default async function Page({ params }: { params: { id: string } }) {
       <PortionSizeProvider>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
-            <div className="flex flex-col items-start justify-center gap-y-1">
-              <h1 className="text-2xl font-bold">{recipe.name}</h1>
+            <div className="flex flex-col items-start justify-center gap-2">
+              <div className="flex items-center justify-center gap-3">
+                <h1 className="text-3xl font-bold">{recipe.name}</h1>
+                <DifficultyChip difficulty={recipe.difficulty} />
+              </div>
 
               <RatingDisplay rating={averageRating} total={totalReviews} />
-              <DifficultyChip difficulty={recipe.difficulty} />
 
               {recipe.authorId === session?.user?.id && (
                 <>
