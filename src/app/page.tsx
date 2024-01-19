@@ -1,5 +1,5 @@
 import { api } from "~/trpc/server";
-import { Button, Image } from "@nextui-org/react";
+import { Button, Card, CardBody, Divider, Image } from "@nextui-org/react";
 import NextImage from "next/image";
 import RecipeCardsSection from "~/app/_components/RecipeCardsSection";
 import { FadeIn } from "~/app/lib/animations/FadeIn";
@@ -19,62 +19,66 @@ export default async function Home() {
 
   return (
     <main className="space-y-32">
-      <section className="pt-8 md:h-full md:pt-28">
+      <section className="pt-8 md:h-full md:pt-16">
         <FadeIn>
-          <div className="grid grid-cols-1 place-items-center gap-6 md:grid-cols-2">
-            <div className="space-y-8">
-              <h1 className="text-5xl md:text-7xl">
-                Welcome to{" "}
-                <span className="bg-gradient-to-r from-primary-500 to-accent bg-clip-text font-bold tracking-tight text-transparent">
-                  Goose Chef
-                </span>
-                !
-              </h1>
+          <Card>
+            <CardBody>
+              <div className="mx-4 my-8 grid grid-cols-1 place-items-center gap-6  md:grid-cols-2">
+                <div className="space-y-8">
+                  <h1 className="text-5xl md:text-7xl">
+                    Welcome to{" "}
+                    <span className="bg-gradient-to-r from-primary-500 to-accent bg-clip-text font-bold tracking-tight text-transparent">
+                      Goose Chef
+                    </span>
+                    !
+                  </h1>
 
-              <p className="text-4xl font-semibold tracking-tight md:text-5xl">
-                The cooking website with your favourite Recipes!
-              </p>
+                  <p className="text-4xl font-semibold tracking-tight md:text-5xl">
+                    The cooking website with your favourite Recipes!
+                  </p>
 
-              <p className="text-2xl leading-7">
-                Add your own Recipes, share them with Friends and Family. Or
-                explore new Recipes from other Cooking-Enthusiasts!
-              </p>
+                  <p className="text-2xl leading-7">
+                    Add your own Recipes, share them with Friends and Family. Or
+                    explore new Recipes from other Cooking-Enthusiasts!
+                  </p>
 
-              <div className="flex justify-center space-x-3 md:justify-start">
-                <Button
-                  className="mt-8"
-                  color="primary"
-                  size="lg"
-                  variant="solid"
-                  as={NextLink}
-                  //TODO: insert link to search page
-                  href="/"
-                >
-                  Explore Recipes
-                </Button>{" "}
-                <Button
-                  className="mt-8"
-                  color="primary"
-                  size="lg"
-                  variant="faded"
-                  as={NextLink}
-                  href="/recipe/create"
-                >
-                  Create Recipe
-                </Button>
+                  <div className="flex justify-center space-x-3 md:justify-start">
+                    <Button
+                      className="mt-8"
+                      color="primary"
+                      size="lg"
+                      variant="solid"
+                      as={NextLink}
+                      //TODO: insert link to search page
+                      href="/"
+                    >
+                      Explore Recipes
+                    </Button>{" "}
+                    <Button
+                      className="mt-8"
+                      color="primary"
+                      size="lg"
+                      variant="faded"
+                      as={NextLink}
+                      href="/recipe/create"
+                    >
+                      Create Recipe
+                    </Button>
+                  </div>
+                </div>
+
+                <Image
+                  as={NextImage}
+                  width={500}
+                  height={500}
+                  priority
+                  src="/images/goose_chef_paperbag.png"
+                  alt="Logo"
+                  className="h-120 w-120 mb-2 hidden object-contain md:block"
+                />
               </div>
-            </div>
-
-            <Image
-              as={NextImage}
-              width={500}
-              height={500}
-              priority
-              src="/images/goose_chef_paperbag.png"
-              alt="Logo"
-              className="h-120 w-120 mb-2 hidden object-contain md:block"
-            />
-          </div>
+            </CardBody>
+          </Card>
         </FadeIn>
       </section>
 
