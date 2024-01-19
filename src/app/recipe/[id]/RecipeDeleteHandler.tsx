@@ -2,9 +2,9 @@
 import { api } from "~/trpc/react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import ConfirmationModal from "~/app/_components/ConfirmationModal";
 import { Button, useDisclosure } from "@nextui-org/react";
 import { FaTrash } from "react-icons/fa6";
+import UniversalModal from "~/app/_components/UniversalModal";
 
 export default function RecipeDeleteHandler({
   recipeId,
@@ -36,17 +36,22 @@ export default function RecipeDeleteHandler({
       <Button isIconOnly color="danger" onPress={onOpen}>
         <FaTrash />
       </Button>
-      <ConfirmationModal
+      <UniversalModal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        title="Delete Recipe"
-        body="Are you sure you want to delete this recipe?
-This action cannot be undone."
         onConfirm={() => {
           onDelete(recipeId);
           onClose();
         }}
-      />
+        title="Delete Recipe"
+        submitColor="danger"
+      >
+        <p>
+          Are you sure you want to delete this recipe?
+          <br />{" "}
+          <span className="font-semibold">This action cannot be undone.</span>
+        </p>
+      </UniversalModal>
     </>
   );
 }

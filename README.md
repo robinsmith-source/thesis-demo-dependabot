@@ -1,10 +1,12 @@
-# chef-emoji-pinched-hands-kitchen-knife
+# GooseChef
 
 This is our repository for our SE3 project implementing a recipe app.
 
 ## Setup
 ### Prerequisites
 - Install node >18
+- Make sure `corepack` is installed using `npm install -g corepack`
+- Install `pnpm` using `corepack enable pnpm`
 - Install docker and docker-compose
 - Create a Discord application [here](https://discord.com/developers/applications)
   - Set the OAuth2 redirect URL to `http://localhost:3000/api/auth/callback/discord`
@@ -23,12 +25,12 @@ This is our repository for our SE3 project implementing a recipe app.
 
 ## Development
 - Run `docker-compose up -d` to start the database
-- Run `npm run db:reset` to set up the database
-- Run `npm run dev` to start the development server
+- Run `pnpm run db:reset` to set up the database
+- Run `pnpm run dev` to start the development server
 ### Database
-- If you're testing changes to the database, run `npm run db:push` to apply the changes to the database
+- If you're testing changes to the database, run `pnpm run db:push` to apply the changes to the database
 - Once you've decided your database changes are good, make a migration
-  - Run `npx prisma migrate dev --name <migration-name>` to generate a migration
+  - Run `pnpm run prisma migrate dev --name <migration-name>` to generate a migration
 ### Formatting
 - This project uses [Prettier](https://prettier.io/) for formatting
 - WebStorm has built-in support for Prettier

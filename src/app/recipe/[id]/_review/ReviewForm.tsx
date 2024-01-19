@@ -6,12 +6,12 @@ import {
   CardFooter,
   Textarea,
 } from "@nextui-org/react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import RatingInput from "./RatingInput";
 import { CardHeader } from "@nextui-org/card";
-import type { RecipeReview } from ".prisma/client";
+import type { RecipeReview } from "@prisma/client";
 
 export default function ReviewForm({
   formValue,
@@ -25,11 +25,11 @@ export default function ReviewForm({
     comment: z.string(),
   });
 
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, formState } = useForm({
     mode: "onTouched",
     resolver: zodResolver(schema),
     defaultValues: {
-      rating: 3,
+      rating: 0,
       comment: "",
       ...formValue,
     },
@@ -75,7 +75,11 @@ export default function ReviewForm({
         />
       </CardBody>
       <CardFooter className="-mt-4 flex justify-end">
-        <Button color="success" onClick={handleSubmit(submit)}>
+        <Button
+          color="success"
+          onClick={handleSubmit(submit)}
+          isDisabled={!formState.isValid}
+        >
           Submit
         </Button>
       </CardFooter>

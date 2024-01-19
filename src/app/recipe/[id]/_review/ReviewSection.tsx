@@ -11,12 +11,9 @@ export default async function ReviewSection({
 }) {
   const otherReviews = await api.review.getOthers.query({ recipeId });
 
-  let myReview = null;
-  if (!hideReviewForm) {
-    myReview = await api.review.getMyReview.query({
-      recipeId,
-    });
-  }
+  const myReview = hideReviewForm
+    ? null
+    : await api.review.getMyReview.query({ recipeId });
 
   return (
     <section className="flex flex-col items-center">

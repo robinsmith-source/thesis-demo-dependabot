@@ -41,7 +41,7 @@ export default function RatingInput({
             {index <= (hoverValue || value) ? (
               <FaStar className="fill-orange-400" size={20} />
             ) : (
-              <FaRegStar size={20} />
+              <FaRegStar className="fill-gray-400" size={20} />
             )}
           </motion.li>
         ))}
