@@ -6,8 +6,7 @@ import RecipeCardsSection from "~/app/_components/RecipeCardsSection";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const latestRecipes = await api.recipe.getRecipeCards.query({
-    tags: [],
+  const latestRecipes = await api.recipe.getCards.query({
     take: 20,
   });
 

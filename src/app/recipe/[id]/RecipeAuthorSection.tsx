@@ -1,7 +1,7 @@
-import { Link, User } from "@nextui-org/react";
 import type { User as UserType } from "@prisma/client";
 import { api } from "~/trpc/server";
 import RecipeCardsSection from "~/app/_components/RecipeCardsSection";
+import UserCard from "~/app/_components/UserCard";
 
 export default async function RecipeAuthorSection({
   currentRecipeId,
@@ -10,7 +10,7 @@ export default async function RecipeAuthorSection({
   currentRecipeId: string;
   recipeAuthor: UserType;
 }) {
-  const authorsRecipe = await api.recipe.getRecipeCards.query({
+  const authorsRecipe = await api.recipe.getCards.query({
     take: 3,
     excludeRecipeId: currentRecipeId,
     authorId: recipeAuthor.id,
@@ -19,26 +19,7 @@ export default async function RecipeAuthorSection({
   return (
     <div className="flex flex-col items-center justify-center gap-6">
       <h2 className="text-2xl font-semibold">Recipe created by</h2>
-      <User
-        className="flex gap-4"
-        name={
-          <Link
-            color="secondary"
-            href={`/user/${recipeAuthor.id}`}
-            showAnchorIcon
-            size="md"
-          >
-            {recipeAuthor.name}
-          </Link>
-        }
-        avatarProps={{
-          isBordered: true,
-          as: "button",
-          color: "secondary",
-          size: "md",
-          src: recipeAuthor.image ?? undefined,
-        }}
-      />
+      <UserCard user={recipeAuthor} highlightLink />
 
       {authorsRecipe.length > 0 && (
         <>

@@ -5,8 +5,9 @@ import { useEffect, useState } from "react";
 import ReviewForm from "./ReviewForm";
 import ReviewCard from "./ReviewCard";
 import { AnimatePresence, motion } from "framer-motion";
-import ConfirmationModal from "~/app/_components/ConfirmationModal";
 import { useDisclosure } from "@nextui-org/react";
+import UniversalModal from "~/app/_components/UniversalModal";
+import { useRouter } from "next/navigation";
 
 enum Modes {
   CREATE,
@@ -46,6 +47,7 @@ export default function ReviewFormHandler({
     }
   }, [myReviewQuery]);
 
+  const router = useRouter();
   const onCreate = (data: { rating: number; comment: string | null }) => {
     createMutation.mutate({
       rating: data.rating,
@@ -63,6 +65,7 @@ export default function ReviewFormHandler({
         comment: data.comment,
       });
       setMode(Modes.VIEW);
+      router.refresh();
     },
     onError: (error) => {
       toast.error(error.message);
@@ -90,6 +93,7 @@ export default function ReviewFormHandler({
         comment: data.comment,
       });
       setMode(Modes.VIEW);
+      router.refresh();
     },
     onError: (error) => {
       toast.error(error.message);
@@ -107,6 +111,7 @@ export default function ReviewFormHandler({
       toast.success("Review deleted successfully");
       setSubmittedReview(null);
       setMode(Modes.CREATE);
+      router.refresh();
     },
     onError: (error) => {
       toast.error(error.message);
@@ -162,17 +167,25 @@ export default function ReviewFormHandler({
                 onOpen();
               }}
             />
-            <ConfirmationModal
+
+            <UniversalModal
               isOpen={isOpen}
               onOpenChange={onOpenChange}
-              title="Delete Review"
-              body="Are you sure you want to delete this review?
-This action cannot be undone."
               onConfirm={() => {
                 onDelete(submittedReview.id);
                 onClose();
               }}
-            />
+              title="Delete Review"
+              submitColor="danger"
+            >
+              <p>
+                Are you sure you want to delete this review?
+                <br />{" "}
+                <span className="font-semibold">
+                  This action cannot be undone.
+                </span>
+              </p>
+            </UniversalModal>
           </motion.div>
         )}
       </AnimatePresence>

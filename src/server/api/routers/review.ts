@@ -31,14 +31,14 @@ export const reviewRouter = createTRPCRouter({
         });
       }
 
-      const recipe = await ctx.db.recipe.findFirst({
+      const ownRecipe = await ctx.db.recipe.findFirst({
         where: {
           id: input.recipeId,
           authorId: ctx.session.user.id,
         },
       });
 
-      if (recipe) {
+      if (ownRecipe) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "You cannot review your own recipe",
@@ -51,6 +51,26 @@ export const reviewRouter = createTRPCRouter({
           comment: input.comment,
           recipe: { connect: { id: input.recipeId } },
           author: { connect: { id: ctx.session.user.id } },
+        },
+      });
+    }),
+
+  getMyReview: protectedProcedure
+    .input(
+      z.object({
+        recipeId: z.string().cuid(),
+      }),
+    )
+    .query(({ input, ctx }) => {
+      return ctx.db.recipeReview.findFirst({
+        where: {
+          recipeId: input.recipeId,
+          authorId: ctx.session.user.id,
+        },
+        select: {
+          id: true,
+          rating: true,
+          comment: true,
         },
       });
     }),
@@ -75,26 +95,6 @@ export const reviewRouter = createTRPCRouter({
               image: true,
             },
           },
-        },
-      });
-    }),
-
-  getMyReview: protectedProcedure
-    .input(
-      z.object({
-        recipeId: z.string().cuid(),
-      }),
-    )
-    .query(({ input, ctx }) => {
-      return ctx.db.recipeReview.findFirst({
-        where: {
-          recipeId: input.recipeId,
-          authorId: ctx.session.user.id,
-        },
-        select: {
-          id: true,
-          rating: true,
-          comment: true,
         },
       });
     }),
@@ -133,7 +133,6 @@ export const reviewRouter = createTRPCRouter({
       });
     }),
 
-  //TODO: Should be done better when implementing delete functionality
   delete: protectedProcedure
     .input(
       z.object({
@@ -141,19 +140,25 @@ export const reviewRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      try {
-        return await ctx.db.recipeReview.delete({
-          where: {
-            id: input.reviewId,
-            authorId: ctx.session.user.id,
-          },
-        });
-      } catch (error) {
-        console.log(error);
-        new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Something went wrong!",
+      const existingReview = await ctx.db.recipeReview.findFirst({
+        where: {
+          id: input.reviewId,
+          authorId: ctx.session.user.id,
+        },
+      });
+
+      if (!existingReview) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Review not found",
         });
       }
+
+      return ctx.db.recipeReview.delete({
+        where: {
+          id: existingReview.id,
+          authorId: ctx.session.user.id,
+        },
+      });
     }),
 });

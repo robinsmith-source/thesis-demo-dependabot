@@ -7,7 +7,7 @@ import {
   Link,
   User,
 } from "@nextui-org/react";
-import ReviewRating from "~/app/_components/ReviewRating";
+import RatingDisplay from "~/app/_components/RatingDisplay";
 import { FaPenToSquare, FaTrash } from "react-icons/fa6";
 
 type ReviewCardProps = {
@@ -35,7 +35,7 @@ export default function ReviewCard({
   return (
     <Card className="w-[36rem]">
       <CardHeader className="flex items-center justify-between">
-        <ReviewRating rating={rating} />
+        <RatingDisplay rating={rating} />
         <div className="flex gap-2">
           {handleEditClick && (
             <Button
