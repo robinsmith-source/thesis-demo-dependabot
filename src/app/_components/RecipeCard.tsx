@@ -40,7 +40,15 @@ export default function RecipeCard({
           <DifficultyChip difficulty={recipe.difficulty} />
           <RatingDisplay size={20} rating={averageRating} isMinimalistic />
         </div>
-        <h2 className="text-lg font-semibold text-white">{recipe.name}</h2>
+        <h2
+          className={
+            recipe.images.length === 0
+              ? "text-lg font-semibold text-foreground"
+              : "text-lg font-semibold text-white"
+          }
+        >
+          {recipe.name}
+        </h2>
       </CardHeader>
 
       <Image
