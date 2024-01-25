@@ -88,6 +88,56 @@ export const userRouter = createTRPCRouter({
       }
     }),
 
+  getCards: publicProcedure
+    .input(
+      z.object({
+        take: z.number().min(1).max(50),
+        skip: z.number().min(0).optional(),
+        name: z.string().optional(),
+        orderBy: z.enum(["POPULARITY", "ALPHABETIC"]).optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const users = await ctx.db.user.findMany({
+        orderBy: (() => {
+          switch (input.orderBy) {
+            case "POPULARITY":
+              return { followedBy: { _count: "desc" } };
+            case "ALPHABETIC":
+              return { name: "asc" };
+          }
+        })(),
+        where: { name: { contains: input.name, mode: "insensitive" },
+        },
+        take: input.take,
+        skip: input.skip ?? 0,
+      });
+      return users;
+    }),
+
+  getCardCount: publicProcedure
+    .input(
+      z.object({
+        take: z.number().min(1).max(50),
+        skip: z.number().min(0).optional(),
+        name: z.string().optional(),
+        orderBy: z.enum(["POPULARITY", "ALPHABETIC"]).optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return ctx.db.user.count({
+        orderBy: (() => {
+          switch (input.orderBy) {
+            case "POPULARITY":
+              return { followedBy: { _count: "desc" } };
+            case "ALPHABETIC":
+              return { name: "asc" };
+          }
+        })(),
+        where: { name: { contains: input.name, mode: "insensitive" } },
+      });
+    }),
+
   getAll: protectedProcedure.query(async ({ ctx }) => {
     const users = await ctx.db.recipe.findMany({
       orderBy: { createdAt: "desc" },

@@ -18,13 +18,16 @@ export default function SearchViewOptions() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const sortOptions = [
+  const sortOptions = pathname === "/recipe/search" ? [
     { label: "Newest", value: "NEWEST" },
     { label: "Oldest", value: "OLDEST" },
     { label: "Rating", value: "RATING" },
+  ] : [
+    { label: "Popularity", value: "POPULARITY" },
+    { label: "Alphabetic", value: "ALPHABETIC" },
   ];
   const [selectedSorting, setSelectedSorting] = useState([
-    searchParams.get("order") ?? "NEWEST",
+    searchParams.get("order") ?? sortOptions[0]?.value ?? "",
   ]);
 
   const pageSizes = ["4", "6", "12"];
