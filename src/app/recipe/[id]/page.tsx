@@ -14,6 +14,7 @@ import ShoppingListHandler from "~/app/recipe/[id]/ShoppingListHandler";
 import { PortionSizeProvider } from "~/app/recipe/[id]/PortionSizeContext";
 import RatingDisplay from "~/app/_components/RatingDisplay";
 import { calculateAverage } from "~/utils/RatingCalculator";
+import RecipeSaveButton from "./RecipeSaveButton";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const session = await auth();
@@ -93,6 +94,13 @@ export default async function Page({ params }: { params: { id: string } }) {
           </table>
         </div>
       </PortionSizeProvider>
+      {session?.user && (
+        <RecipeSaveButton
+          recipeId={recipe.id}
+          isSaved={recipe.savedUsers.length > 0}
+          savedCount={recipe._count.savedUsers}
+        />
+      )}
       <div className="mt-4 flex flex-wrap justify-center gap-2">
         {recipe.tags.map((tag) => (
           <Chip color="secondary" key={tag} variant="flat">

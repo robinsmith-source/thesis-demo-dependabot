@@ -1,20 +1,16 @@
 "use client";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { api } from "~/trpc/react";
 import RecipeForm, { type RecipeFormValues } from "../_common/RecipeForm";
-import { useRouter } from "next/navigation";
-import { revalidatePath } from "next/cache";
-import { useSession } from "next-auth/react";
 
 export default function RecipeCreate() {
   const router = useRouter();
-  const { data: session } = useSession();
 
   const mutation = api.recipe.create.useMutation({
     onSuccess: (id) => {
       toast.success("Recipe created!");
       router.push(`/recipe/${id}`);
-      revalidatePath(`/user/${session?.user?.id}`);
     },
   });
 

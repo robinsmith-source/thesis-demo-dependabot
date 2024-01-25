@@ -1,6 +1,6 @@
+import { nextui } from "@nextui-org/react";
 import { type Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
-import { nextui } from "@nextui-org/react";
 import { withUt } from "uploadthing/tw";
 
 export default withUt({
@@ -73,7 +73,7 @@ export default withUt({
               "700": "#4D8019",
               "800": "#335511",
               "900": "#1A2B08",
-              DEFAULT: "#B0E57B",
+              DEFAULT: "#80D52A",
             },
             secondary: {
               "50": "#FBF6FE",
