@@ -4,7 +4,7 @@ import { type User } from "@prisma/client";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { api } from "~/trpc/react";
-import { RouterOutputs } from "~/trpc/shared";
+import type { RouterOutputs } from "~/trpc/shared";
 
 interface UserCardInnerProps {
   user: User;
