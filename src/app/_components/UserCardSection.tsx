@@ -11,25 +11,29 @@ export default function UserCardSection({
   layout?: "grid" | "flex";
   users: User[];
 }) {
+  if (users.length === 0) {
+    return (
+      <section className="mx-auto">
+        <h3 className="p-5 text-lg font-semibold text-warning-500">
+          Friendless?
+        </h3>
+      </section>
+    );
+  }
+
   return (
-    <>
-      {users.length === 0 ? (
-        <h3 className="text-warning-300">Friendless?</h3>
-      ) : (
-        <section
-          className={`${className} w-full place-items-center justify-center gap-8 ${
-            layout === "grid"
-              ? "grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3"
-              : "flex flex-wrap "
-          }`}
-        >
-          {users.map((user) => (
-            <Card key={user.id} className="m-3 p-2">
-              <UserCard user={user} withFollowButton={false} />
-            </Card>
-          ))}
-        </section>
-      )}
-    </>
+    <section
+      className={`${className} w-full place-items-center justify-center gap-8 ${
+        layout === "grid"
+          ? "grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3"
+          : "flex flex-wrap "
+      }`}
+    >
+      {users.map((user) => (
+        <Card key={user.id} className="m-3 p-2">
+          <UserCard user={user} withFollowButton={false} />
+        </Card>
+      ))}
+    </section>
   );
 }

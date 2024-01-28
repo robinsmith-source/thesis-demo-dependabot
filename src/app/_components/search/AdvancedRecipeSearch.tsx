@@ -39,13 +39,14 @@ export default function AdvancedRecipeSearch({
   return (
     <div className="mb-5 w-full justify-center">
       <Card>
-        <div className="m-2 flex flex-row items-center justify-normal space-x-2">
+        <div className="m-2 flex items-center gap-x-2">
           {/* large screen */}
           <Button
             variant="flat"
             color="secondary"
+            size="lg"
             startContent={<FaFilter />}
-            className="hidden w-28 items-center md:flex"
+            className="hidden w-48 md:flex"
             onClick={() => setFiltersCollapsed(!filtersCollapsed)}
           >
             <span>Filters</span>
@@ -54,8 +55,9 @@ export default function AdvancedRecipeSearch({
           <Button
             variant="flat"
             color="secondary"
+            size="lg"
             isIconOnly
-            className="sm:block md:hidden"
+            className="sm:flex md:hidden"
             onClick={() => setFiltersCollapsed(!filtersCollapsed)}
           >
             <FaFilter />
@@ -71,11 +73,6 @@ export default function AdvancedRecipeSearch({
           <SearchViewOptions />
         </div>
         <motion.div
-          className={
-            !filtersCollapsed
-              ? "mx-4 my-2 flex flex-col items-start justify-between lg:flex-row lg:items-center"
-              : ""
-          }
           initial={{ opacity: 0, height: 0 }}
           animate={{
             opacity: !filtersCollapsed ? 1 : 0,
@@ -83,7 +80,7 @@ export default function AdvancedRecipeSearch({
           }}
           transition={{ duration: 0.2 }}
         >
-          <div className="mt-2 flex w-full flex-col items-center space-y-2 md:flex-row">
+          <div className="flex flex-col justify-between gap-y-2 px-4 py-3 sm:flex-row sm:items-center">
             <div className="flex w-full flex-row items-center space-x-2">
               <span className="font-bold text-default-600">Difficulty</span>
               <DifficultyInput />

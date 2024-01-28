@@ -37,10 +37,8 @@ export default async function Page({
 }: {
   searchParams?: urlParams;
 }) {
-
   const queryParameters = createQueryParams(searchParams ?? {});
   const displayedUserCards = await api.user.getCards.query(queryParameters);
-
 
   // calculate page count for pagination
   const count = await api.user.getCardCount.query(queryParameters);
@@ -50,7 +48,9 @@ export default async function Page({
     <main className="flex flex-col items-center">
       <UserSearch />
       <UserCardSection users={displayedUserCards} />
-      <QueryPagination pageCount={pageCount} className="mt-2" />
+      {pageCount > 0 ? (
+        <QueryPagination pageCount={pageCount} className="mt-2" />
+      ) : null}
     </main>
   );
 }

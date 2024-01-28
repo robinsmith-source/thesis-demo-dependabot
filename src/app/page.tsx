@@ -49,9 +49,9 @@ export default async function Home() {
                       size="lg"
                       variant="solid"
                       as={NextLink}
-                      href="/recipe/create"
+                      href="/recipe/search"
                     >
-                      Create Recipe
+                      Explore Recipes
                     </Button>
                     <Button
                       className="mt-8"
@@ -59,9 +59,9 @@ export default async function Home() {
                       size="lg"
                       variant="ghost"
                       as={NextLink}
-                      href="/shopping-list"
+                      href="/recipe/create"
                     >
-                      Shopping List
+                      Create Recipe
                     </Button>
                   </div>
                 </div>

@@ -62,7 +62,9 @@ export default async function Page({
     <main className="flex flex-col items-center">
       <AdvancedRecipeSearch categories={categories} />
       <RecipeCardsSection recipes={displayedRecipeCards} />
-      <QueryPagination pageCount={pageCount} className="mt-2" />
+      {pageCount > 0 ? (
+        <QueryPagination pageCount={pageCount} className="mt-2" />
+      ) : null}
     </main>
   );
 }

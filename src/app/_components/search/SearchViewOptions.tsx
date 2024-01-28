@@ -18,14 +18,17 @@ export default function SearchViewOptions() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const sortOptions = pathname === "/recipe/search" ? [
-    { label: "Newest", value: "NEWEST" },
-    { label: "Oldest", value: "OLDEST" },
-    { label: "Rating", value: "RATING" },
-  ] : [
-    { label: "Popularity", value: "POPULARITY" },
-    { label: "Alphabetic", value: "ALPHABETIC" },
-  ];
+  const sortOptions =
+    pathname === "/recipe/search"
+      ? [
+          { label: "Newest", value: "NEWEST" },
+          { label: "Oldest", value: "OLDEST" },
+          { label: "Rating", value: "RATING" },
+        ]
+      : [
+          { label: "Popularity", value: "POPULARITY" },
+          { label: "Alphabetic", value: "ALPHABETIC" },
+        ];
   const [selectedSorting, setSelectedSorting] = useState([
     searchParams.get("order") ?? sortOptions[0]?.value ?? "",
   ]);
@@ -57,7 +60,7 @@ export default function SearchViewOptions() {
   return (
     <div>
       {/* large screen */}
-      <div className="hidden flex-row items-center justify-around space-x-1 md:flex">
+      <div className="hidden items-center gap-1 md:flex">
         <Select
           fullWidth={false}
           size="sm"
@@ -84,7 +87,7 @@ export default function SearchViewOptions() {
           size="sm"
           className="w-28"
           selectionMode="single"
-          label="pagesize"
+          label="# per Page"
           disallowEmptySelection
           defaultSelectedKeys={selectedPageSize}
           selectedKeys={selectedPageSize}
@@ -103,7 +106,7 @@ export default function SearchViewOptions() {
         </Select>
       </div>
       {/* small screen */}
-      <div className="flex-row items-center justify-between space-x-1 sm:flex  md:hidden">
+      <div className="flex flex-row items-center gap-1 md:hidden">
         <Dropdown>
           <DropdownTrigger>
             <Button isIconOnly variant="flat" size="lg">
