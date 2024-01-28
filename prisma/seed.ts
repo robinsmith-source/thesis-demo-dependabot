@@ -106,8 +106,8 @@ async function seedEasterEgg() {
               "Deswegen machen wa des ganze in UML",
             difficulty: "MEDIUM",
             images: [
-              "https://utfs.io/f/41ddc442-6796-4023-bd5f-c512f9d08257-1nq2cb.png",
-              "https://utfs.io/f/e8b55680-bc74-49a8-b869-22e92e98a998-1nq2cb.png",
+              "41ddc442-6796-4023-bd5f-c512f9d08257-1nq2cb.png",
+              "e8b55680-bc74-49a8-b869-22e92e98a998-1nq2cb.png",
             ],
             labels: {
               connect: [
@@ -174,9 +174,9 @@ async function seedEasterEgg() {
               "Bei und gibt es Gewinne Gewinne heutzutage zum Nikolaus. Und wir haben da eine kleine Frage vorbereitet, weil ohne Frage auch keine Preise! Und der Preis ist Heiß, der Heiß ist Preis",
             difficulty: "HARD",
             images: [
-              "https://utfs.io/f/4c505332-8a25-4b03-bfc9-170d3220223f-1nq2cb.png",
-              "https://utfs.io/f/40af2fd7-5166-45b5-ace6-ac091396e932-1nq2cb.png",
-              "https://utfs.io/f/691ebba0-34f9-4d1e-aff9-6b0b0c541e3e-1nq2cb.png",
+              "4c505332-8a25-4b03-bfc9-170d3220223f-1nq2cb.png",
+              "40af2fd7-5166-45b5-ace6-ac091396e932-1nq2cb.png",
+              "691ebba0-34f9-4d1e-aff9-6b0b0c541e3e-1nq2cb.png",
             ],
             labels: {
               connect: [
