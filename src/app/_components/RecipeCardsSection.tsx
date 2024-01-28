@@ -13,7 +13,7 @@ export default function RecipeCardsSection({
   if (recipes.length === 0) {
     return (
       <section className="mx-auto">
-        <h3 className="p-5 text-lg font-semibold text-warning-500">
+        <h3 className="p-5 text-center text-lg font-semibold text-warning-500">
           Oh no, you&apos;ll starve!
         </h3>
       </section>

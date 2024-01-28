@@ -25,12 +25,12 @@ export default function UserCardSection({
     <section
       className={`${className} w-full place-items-center justify-center gap-8 ${
         layout === "grid"
-          ? "grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3"
+          ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
           : "flex flex-wrap "
       }`}
     >
       {users.map((user) => (
-        <Card key={user.id} className="m-3 p-2">
+        <Card key={user.id} className="p-2">
           <UserCard user={user} withFollowButton={false} />
         </Card>
       ))}

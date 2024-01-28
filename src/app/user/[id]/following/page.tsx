@@ -1,7 +1,5 @@
 import { api } from "~/trpc/server";
-import UserCard from "~/app/_components/UserCard";
-import { Card } from "@nextui-org/card";
-import { CardBody } from "@nextui-org/react";
+import UserCardSection from "~/app/_components/UserCardSection";
 
 export default async function Following({
   params,
@@ -12,13 +10,7 @@ export default async function Following({
 
   return (
     <main className="flex flex-wrap">
-      {following.map((follower) => (
-        <Card key={follower.id}>
-          <CardBody>
-            <UserCard user={follower} />
-          </CardBody>
-        </Card>
-      ))}
+      <UserCardSection users={following} />
     </main>
   );
 }
