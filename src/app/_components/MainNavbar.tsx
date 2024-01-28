@@ -162,8 +162,10 @@ export default function MainNavbar({ session }: { session: Session | null }) {
             <Link
               as={NextLink}
               href={item.href}
-              className="w-full text-default-600"
               size="lg"
+              className={
+                pathname === item.href ? "w-full text-primary-600" : "w-full text-default-600"
+              }
               onClick={() => setIsMenuOpen(false)}
             >
               {item.name}
