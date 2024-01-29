@@ -1,15 +1,18 @@
 "use client";
-import { type Prisma, RecipeStepType } from "@prisma/client";
+import { Chip } from "@nextui-org/react";
+
 import { convertUnitName } from "~/app/utils";
 import { calculateIngredients } from "~/utils/IngredientCalculator";
-import { Chip } from "@nextui-org/react";
 import { usePortionSize } from "~/app/recipe/[id]/PortionSizeContext";
 
-type RecipeStep = Prisma.RecipeStepGetPayload<{
-  include: { ingredients: true };
-}>;
+import { RecipeStepType } from "@prisma/client";
+import type { RouterOutputs } from "~/trpc/shared";
 
-export default function RecipeStep({ step }: { step: RecipeStep }) {
+export default function RecipeStep({
+  step,
+}: {
+  step: RouterOutputs["recipe"]["get"]["steps"][0];
+}) {
   const { portionSize } = usePortionSize();
   const stepTypeColor = (step: RecipeStepType) => {
     switch (step) {

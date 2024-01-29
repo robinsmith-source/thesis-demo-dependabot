@@ -6,7 +6,7 @@ import {
   CardFooter,
   Textarea,
 } from "@nextui-org/react";
-import { useForm, Controller } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import RatingInput from "./RatingInput";
@@ -43,7 +43,7 @@ export default function ReviewForm({
   }
 
   return (
-    <Card className="w-[36rem]">
+    <Card className="w-full sm:w-[36rem]">
       <CardHeader className="-mb-4">
         <Controller
           control={control}
@@ -77,7 +77,7 @@ export default function ReviewForm({
       <CardFooter className="-mt-4 flex justify-end">
         <Button
           color="success"
-          onClick={handleSubmit(submit)}
+          onPress={() => handleSubmit(submit)()}
           isDisabled={!formState.isValid}
         >
           Submit

@@ -1,6 +1,6 @@
 import { api } from "~/trpc/server";
-import ShoppingListFormHandler from "~/app/_components/ShoppingListFormHandler";
-import ShoppingListTableSection from "~/app/_components/ShoppingListTableSection";
+import ShoppingListFormHandler from "~/app/shopping-list/ShoppingListFormHandler";
+import ShoppingListTableSection from "~/app/shopping-list/ShoppingListTableSection";
 import { Modes } from "~/app/lib/shoppingListModes";
 
 export const dynamic = "force-dynamic";

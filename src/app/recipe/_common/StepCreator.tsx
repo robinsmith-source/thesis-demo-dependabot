@@ -29,7 +29,9 @@ export default function StepCreator({ className }: { className?: string }) {
         <Button
           type="button"
           size="sm"
-          onPress={() => append({ description: "" })}
+          onPress={() =>
+            append({ description: "", duration: 1, stepType: "PREP" })
+          }
         >
           Add Step
         </Button>
@@ -67,7 +69,6 @@ export default function StepCreator({ className }: { className?: string }) {
               <Button
                 className="place-self-stretch"
                 color="danger"
-                type="button"
                 variant="flat"
                 size="sm"
                 onPress={() => remove(index)}
@@ -76,13 +77,13 @@ export default function StepCreator({ className }: { className?: string }) {
               </Button>
             </CardHeader>
             <CardBody>
-              <div className="grid grid-cols-[4fr_2fr] gap-x-2">
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-[4fr_2fr]">
                 <Controller
                   control={control}
                   name={`steps.${index}.description`}
                   render={({ field, fieldState }) => (
                     <Textarea
-                      className="row-span-2"
+                      className="col-span-2 sm:col-span-1 sm:row-span-2"
                       {...field}
                       label="Step Description"
                       variant="bordered"
@@ -97,6 +98,7 @@ export default function StepCreator({ className }: { className?: string }) {
                   name={`steps.${index}.duration`}
                   render={({ field, fieldState }) => (
                     <Input
+                      className="col-span-1"
                       {...field}
                       onChange={(event) => {
                         field.onChange(+event.target.value);
@@ -117,6 +119,7 @@ export default function StepCreator({ className }: { className?: string }) {
                   name={`steps.${index}.stepType`}
                   render={({ field, fieldState }) => (
                     <Select
+                      className="col-span-1"
                       {...field}
                       isRequired
                       label="Step Type"
@@ -132,7 +135,6 @@ export default function StepCreator({ className }: { className?: string }) {
                           <SelectItem
                             key={stepType}
                             value={stepType as RecipeStepType}
-                            className="capitalize"
                           >
                             {stepType[0] + stepType.slice(1).toLowerCase()}
                           </SelectItem>

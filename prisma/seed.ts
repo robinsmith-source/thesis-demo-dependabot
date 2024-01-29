@@ -6,6 +6,7 @@ async function main() {
   await seedRecipeLabels();
   if (process.env.VERCEL_ENV !== "production") {
     await seedUserRecipes();
+    await seedEasterEgg();
   }
 }
 
@@ -19,6 +20,9 @@ async function seedRecipeLabels() {
         create: [
           {
             name: "American",
+          },
+          {
+            name: "German",
           },
           {
             name: "Chinese",
@@ -76,6 +80,149 @@ async function seedRecipeLabels() {
           },
           {
             name: "Vegetarian",
+          },
+        ],
+      },
+    },
+  });
+}
+
+async function seedEasterEgg() {
+  await prisma.user.upsert({
+    where: { email: "tobiasJordine@example.com" },
+    update: {},
+    create: {
+      name: "Tobias Jordine",
+      email: "tobiasJordine@example.com",
+      emailVerified: new Date(),
+      image:
+        "https://utfs.io/f/4eb2c611-e9dd-42a6-8ab5-220b07fe8ebb-1xlmb4.png",
+      recipes: {
+        create: [
+          {
+            name: "UML Glühwein",
+            description:
+              "JA HALLO. Heut gibt's noch nen kleinen Tipp, wie man ganz einfach des Hausmacher EHHH Glühwein Rezept machen kann - FÜR INFORMATIKER!!!! " +
+              "Deswegen machen wa des ganze in UML",
+            difficulty: "MEDIUM",
+            images: [
+              "e8b55680-bc74-49a8-b869-22e92e98a998-1nq2cb.png",
+              "41ddc442-6796-4023-bd5f-c512f9d08257-1nq2cb.png",
+            ],
+            labels: {
+              connect: [
+                {
+                  name: "German",
+                },
+                {
+                  name: "Paleo",
+                },
+              ],
+            },
+            tags: ["oldme", "life", "cooking", "bff", "friends", "together"],
+            steps: {
+              create: [
+                {
+                  description:
+                    "Topf ist immer nicht schlecht. Topf - Des finde ich auch eine gute Sache.",
+                  stepType: "PREP",
+                  duration: 1,
+                },
+                {
+                  description:
+                    "Ja was brauchen wir dann noch? Vielleicht ein Herd oder. Machen wir noch ein Herd dazu - JAA IST GUT " +
+                    "Das ganze muss ja auch warm sein. Name ist Programm!",
+                  stepType: "PREP",
+                  duration: 1,
+                },
+                {
+                  description:
+                    "Aber jetzt fehlt uns noch unsere Zutaten oder? Und wir machens ganz einfach oder? - Ja auf ganz schnell - Ja wir nehmen nen Tetrapack Glühwein.",
+                  stepType: "PREP",
+                  duration: 1,
+                  ingredients: {
+                    create: {
+                      name: "TetraPack",
+                      quantity: 1,
+                      unit: "PIECE",
+                    },
+                  },
+                },
+                {
+                  description: "Wir rufen die Methode 'schütt' von Topf auf",
+                  stepType: "MIX",
+                  duration: 1,
+                },
+                {
+                  description: "Und setz auf Herd oder sowas in der Richtung",
+                  stepType: "COOK",
+                  duration: 10,
+                },
+                {
+                  description:
+                    "So des lassen wir's mal zur Vereinfachung und Zack fertig ist der Glühwein. Bitte schreibt uns in die Kommentare, wie's geklappt hat. Viel Spaß damit!",
+                  stepType: "SERVE",
+                  duration: 2,
+                },
+              ],
+            },
+          },
+          {
+            name: "Nikolaus Gewinnspiel",
+            description:
+              "Hallo Liebe Freunde und Freundinnen der Informatik - HOHOHO. Heute Willkommen beim MM und MI Homeshopping Center! uNd CsM iSt aUcH dAbEi!!! " +
+              "Bei und gibt es Gewinne Gewinne heutzutage zum Nikolaus. Und wir haben da eine kleine Frage vorbereitet, weil ohne Frage auch keine Preise! Und der Preis ist Heiß, der Heiß ist Preis",
+            difficulty: "HARD",
+            images: [
+              "4c505332-8a25-4b03-bfc9-170d3220223f-1nq2cb.png",
+              "40af2fd7-5166-45b5-ace6-ac091396e932-1nq2cb.png",
+              "691ebba0-34f9-4d1e-aff9-6b0b0c541e3e-1nq2cb.png",
+            ],
+            labels: {
+              connect: [
+                {
+                  name: "German",
+                },
+                {
+                  name: "Paleo",
+                },
+              ],
+            },
+            tags: ["q&a", "20 facts about me", "tooRich", "giveaway"],
+            steps: {
+              create: [
+                {
+                  description: "Wer hat Minix erfunden?",
+                  stepType: "PREP",
+                  duration: 2,
+                  ingredients: {
+                    create: [
+                      {
+                        name: "Andrew Reindeer",
+                        quantity: 1,
+                        unit: "PIECE",
+                      },
+                      {
+                        name: "Andrew Tanenbaum",
+                        quantity: 1,
+                        unit: "PIECE",
+                      },
+                      {
+                        name: "Andrew Santaclaus",
+                        quantity: 1,
+                        unit: "PIECE",
+                      },
+                    ],
+                  },
+                },
+                {
+                  description:
+                    "Jetzt anrufen unter der Nummer 0800 900 800 oder in die Kommentare, je nachdem was einfacher ist.",
+                  stepType: "SERVE",
+                  duration: 5,
+                },
+              ],
+            },
           },
         ],
       },

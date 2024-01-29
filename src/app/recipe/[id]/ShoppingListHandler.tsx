@@ -1,5 +1,5 @@
 "use client";
-import ShoppingListSelector from "~/app/_components/ShoppingListSelector";
+import ShoppingListSelector from "~/app/shopping-list/ShoppingListSelector";
 import IngredientTable from "~/app/_components/IngredientTable";
 import type { RecipeStepIngredient } from "@prisma/client";
 import { type Key, useCallback, useState } from "react";
@@ -28,6 +28,7 @@ export default function ShoppingListHandler({
   const [selectedIngredients, setSelectedIngredients] =
     useState<Ingredient[]>();
   const router = useRouter();
+
   function handleAddItem() {
     createMutation.mutate({
       shoppingListId: shoppingListId as string,
@@ -61,7 +62,7 @@ export default function ShoppingListHandler({
   }, []);
 
   return (
-    <Card className="flex max-w-xs flex-col">
+    <Card className="flex w-full flex-col sm:max-w-xs">
       <CardHeader className="flex flex-col gap-4">
         {isAuthorized && (
           <>
@@ -70,7 +71,7 @@ export default function ShoppingListHandler({
               onChange={(listId) => setShoppingListId(listId)}
             />
             <Button
-              onClick={handleAddItem}
+              onPress={() => handleAddItem}
               className="w-full"
               isDisabled={
                 !shoppingListId ||
@@ -81,18 +82,19 @@ export default function ShoppingListHandler({
               {!selectedIngredients || selectedIngredients.length < 1
                 ? "Select ingredients"
                 : !shoppingListId
-                  ? "Select shopping list"
-                  : `Add ${
-                      selectedIngredients?.length <= 1
-                        ? "Ingredient"
-                        : "Ingredients"
-                    } to shopping list`}
+                ? "Select shopping list"
+                : `Add ${
+                    selectedIngredients?.length <= 1
+                      ? "Ingredient"
+                      : "Ingredients"
+                  } to shopping list`}
             </Button>
           </>
         )}
       </CardHeader>
       <CardBody>
         <IngredientTable
+          className="w-full sm:max-w-xs"
           isSelectable={isAuthorized}
           isPortionable
           removeWrapper

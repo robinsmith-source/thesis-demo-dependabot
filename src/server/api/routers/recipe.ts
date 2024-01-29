@@ -28,6 +28,16 @@ export const recipeRouter = createTRPCRouter({
           },
           labels: true,
           author: true,
+          savedUsers: {
+            where: {
+              id: ctx?.session?.user?.id,
+            },
+          },
+          _count: {
+            select: {
+              savedUsers: true,
+            },
+          },
         },
       });
 
@@ -54,6 +64,7 @@ export const recipeRouter = createTRPCRouter({
         orderBy: z.enum(["NEWEST", "OLDEST", "RATING"]).optional(),
         excludeRecipeId: z.string().cuid().optional(),
         isFollowingFeed: z.boolean().optional(),
+        savedFeedUserId: z.string().cuid().optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -92,6 +103,9 @@ export const recipeRouter = createTRPCRouter({
           ...(input.isFollowingFeed && {
             author: { followedBy: { some: { id: ctx?.session?.user?.id } } },
           }),
+          ...(input.savedFeedUserId && {
+            savedUsers: { some: { id: input.savedFeedUserId } },
+          }),
         },
         skip: input.skip ?? 0,
         take: input.take,
@@ -120,11 +134,82 @@ export const recipeRouter = createTRPCRouter({
       return recipes;
     }),
 
+  getRecipeCount: publicProcedure
+    .input(
+      z.object({
+        take: z.number().min(1).max(50),
+        skip: z.number().min(0).optional(),
+        name: z.string().optional(),
+        difficulty: z.enum(["EASY", "MEDIUM", "HARD", "EXPERT"]).optional(),
+        excludeRecipeId: z.string().cuid().optional(),
+        authorId: z.string().cuid().optional(),
+        tags: z.array(z.string()).optional(),
+        labels: z.array(z.string()).optional(),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      function createLabelQuery(labels: string[]) {
+        return {
+          AND: labels.map((label) => ({
+            labels: {
+              some: {
+                name: label,
+              },
+            },
+          })),
+        };
+      }
+
+      return ctx.db.recipe.count({
+        where: {
+          ...(input.name && { name: { contains: input.name, mode: "insensitive" } }),
+          ...(input.difficulty && { difficulty: input.difficulty }),
+          ...(input.excludeRecipeId && { id: { not: input.excludeRecipeId } }),
+          ...(input.authorId && { authorId: input.authorId }),
+          ...(input.tags && { tags: { hasEvery: input.tags } }),
+          ...(input.labels && createLabelQuery(input.labels)),
+        },
+      });
+    }),
+
+  getFollowingFeed: protectedProcedure
+    .input(
+      z.object({
+        take: z.number().min(1).max(50),
+        skip: z.number().min(0).optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return ctx.db.recipe.findMany({
+        where: {
+          author: {
+            followedBy: {
+              some: {
+                id: ctx.session.user.id,
+              },
+            },
+          },
+        },
+        select: {
+          id: true,
+          name: true,
+          difficulty: true,
+          labels: { select: { name: true } },
+          images: true,
+        },
+        take: input.take,
+        skip: input.skip ?? 0,
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    }),
+
   create: protectedProcedure
     .input(
       z.object({
         name: z.string().min(3).max(50),
-        description: z.string().min(3).max(300).nullable(),
+        description: z.string().min(3).max(300),
         difficulty: z.enum(["EASY", "MEDIUM", "HARD", "EXPERT"]),
         images: z.array(z.string()),
         tags: z
@@ -138,39 +223,51 @@ export const recipeRouter = createTRPCRouter({
           .refine((items) => new Set(items).size === items.length, {
             message: "Must be an array of unique strings",
           }),
-        steps: z.array(
-          z.object({
-            description: z.string().min(3).max(300),
-            duration: z.number().min(1),
-            stepType: z.enum([
-              "PREP",
-              "COOK",
-              "REST",
-              "SEASON",
-              "SERVE",
-              "MIX",
-            ]),
-            ingredients: z.array(
-              z.object({
-                name: z.string().min(1).max(50),
-                quantity: z.number().min(1),
-                unit: z.enum([
-                  "GRAM",
-                  "KILOGRAM",
-                  "LITER",
-                  "MILLILITER",
-                  "TEASPOON",
-                  "TABLESPOON",
-                  "CUP",
-                  "PINCH",
-                  "PIECE",
-                ]),
-              }),
-            ),
-          }),
-        ),
+        steps: z
+          .array(
+            z.object({
+              description: z.string().min(3).max(300),
+              duration: z.number().min(1),
+              stepType: z.enum([
+                "PREP",
+                "COOK",
+                "REST",
+                "SEASON",
+                "SERVE",
+                "MIX",
+              ]),
+              ingredients: z.array(
+                z.object({
+                  name: z.string().min(1).max(50),
+                  quantity: z.number().min(1),
+                  unit: z.enum([
+                    "GRAM",
+                    "KILOGRAM",
+                    "LITER",
+                    "MILLILITER",
+                    "TEASPOON",
+                    "TABLESPOON",
+                    "CUP",
+                    "PINCH",
+                    "PIECE",
+                  ]),
+                }),
+              ),
+            }),
+          )
+          .nonempty("A recipe must have at least one step")
+          .refine(
+            (steps) =>
+              steps.some(
+                (step) => step.ingredients && step.ingredients.length > 0,
+              ),
+            {
+              message: "A recipe must have at least one ingredient",
+            },
+          ),
       }),
     )
+
     .mutation(async ({ ctx, input }) => {
       return await ctx.db.$transaction(async (tx) => {
         const recipe = await tx.recipe.create({
@@ -248,7 +345,7 @@ export const recipeRouter = createTRPCRouter({
       z.object({
         id: z.string().cuid(),
         name: z.string().min(3).max(50),
-        description: z.string().min(3).max(300).nullable(),
+        description: z.string().min(3).max(300),
         difficulty: z.enum(["EASY", "MEDIUM", "HARD", "EXPERT"]),
         images: z.array(z.string()),
         tags: z
@@ -262,37 +359,48 @@ export const recipeRouter = createTRPCRouter({
           .refine((items) => new Set(items).size === items.length, {
             message: "Must be an array of unique strings",
           }),
-        steps: z.array(
-          z.object({
-            description: z.string().min(3).max(300),
-            duration: z.number().min(1),
-            stepType: z.enum([
-              "PREP",
-              "COOK",
-              "REST",
-              "SEASON",
-              "SERVE",
-              "MIX",
-            ]),
-            ingredients: z.array(
-              z.object({
-                name: z.string().min(1).max(50),
-                quantity: z.number().min(1),
-                unit: z.enum([
-                  "GRAM",
-                  "KILOGRAM",
-                  "LITER",
-                  "MILLILITER",
-                  "TEASPOON",
-                  "TABLESPOON",
-                  "CUP",
-                  "PINCH",
-                  "PIECE",
-                ]),
-              }),
-            ),
-          }),
-        ),
+        steps: z
+          .array(
+            z.object({
+              description: z.string().min(3).max(300),
+              duration: z.number().min(1),
+              stepType: z.enum([
+                "PREP",
+                "COOK",
+                "REST",
+                "SEASON",
+                "SERVE",
+                "MIX",
+              ]),
+              ingredients: z.array(
+                z.object({
+                  name: z.string().min(1).max(50),
+                  quantity: z.number().min(1),
+                  unit: z.enum([
+                    "GRAM",
+                    "KILOGRAM",
+                    "LITER",
+                    "MILLILITER",
+                    "TEASPOON",
+                    "TABLESPOON",
+                    "CUP",
+                    "PINCH",
+                    "PIECE",
+                  ]),
+                }),
+              ),
+            }),
+          )
+          .nonempty("A recipe must have at least one step")
+          .refine(
+            (steps) =>
+              steps.some(
+                (step) => step.ingredients && step.ingredients.length > 0,
+              ),
+            {
+              message: "A recipe must have at least one ingredient",
+            },
+          ),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -386,6 +494,78 @@ export const recipeRouter = createTRPCRouter({
         if (recipe.images.length > 0) {
           await utapi.deleteFiles(recipe.images);
         }
+      });
+    }),
+
+  save: protectedProcedure
+    .input(z.object({ recipeId: z.string().cuid() }))
+    .mutation(async ({ ctx, input }) => {
+      const recipe = await ctx.db.recipe.findFirst({
+        where: { id: input.recipeId },
+        include: {
+          savedUsers: {
+            where: { id: ctx.session.user.id },
+          },
+        },
+      });
+
+      if (!recipe) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Recipe not found.",
+        });
+      }
+
+      if (recipe.savedUsers.length > 0) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Recipe is already saved.",
+        });
+      }
+
+      await ctx.db.recipe.update({
+        where: { id: input.recipeId },
+        data: {
+          savedUsers: {
+            connect: { id: ctx.session.user.id },
+          },
+        },
+      });
+    }),
+
+  unsave: protectedProcedure
+    .input(z.object({ recipeId: z.string().cuid() }))
+    .mutation(async ({ ctx, input }) => {
+      const recipe = await ctx.db.recipe.findFirst({
+        where: { id: input.recipeId },
+        include: {
+          savedUsers: {
+            where: { id: ctx.session.user.id },
+          },
+        },
+      });
+
+      if (!recipe) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Recipe not found.",
+        });
+      }
+
+      if (recipe.savedUsers.length === 0) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Recipe is not saved.",
+        });
+      }
+
+      await ctx.db.recipe.update({
+        where: { id: input.recipeId },
+        data: {
+          savedUsers: {
+            disconnect: { id: ctx.session.user.id },
+          },
+        },
       });
     }),
 });

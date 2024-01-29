@@ -16,7 +16,7 @@ export default async function ReviewSection({
     : await api.review.getMyReview.query({ recipeId });
 
   return (
-    <section className="flex flex-col items-center">
+    <section className="flex flex-col sm:items-center">
       {!hideReviewForm && (
         <ReviewFormHandler recipeId={recipeId} myReviewQuery={myReview} />
       )}

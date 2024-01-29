@@ -1,7 +1,7 @@
 import type { User as UserType } from "@prisma/client";
-import { api } from "~/trpc/server";
 import RecipeCardsSection from "~/app/_components/RecipeCardsSection";
 import UserCard from "~/app/_components/UserCard";
+import { api } from "~/trpc/server";
 
 export default async function RecipeAuthorSection({
   currentRecipeId,
@@ -18,7 +18,6 @@ export default async function RecipeAuthorSection({
 
   return (
     <div className="flex flex-col items-center justify-center gap-6">
-      <h2 className="text-2xl font-semibold">Recipe created by</h2>
       <UserCard user={recipeAuthor} highlightLink />
 
       {authorsRecipe.length > 0 && (

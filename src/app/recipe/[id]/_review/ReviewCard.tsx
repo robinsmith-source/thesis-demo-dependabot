@@ -33,7 +33,7 @@ export default function ReviewCard({
   const { rating, comment, author } = review;
 
   return (
-    <Card className="w-[36rem]">
+    <Card className="w-full sm:w-[36rem]">
       <CardHeader className="flex items-center justify-between">
         <RatingDisplay rating={rating} />
         <div className="flex gap-2">

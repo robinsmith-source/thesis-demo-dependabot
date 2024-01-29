@@ -1,6 +1,6 @@
 import { api } from "~/trpc/server";
 import { auth } from "auth";
-import FormHandler from "./FormHandler";
+import EditFormHandler from "./EditFormHandler";
 import { notFound } from "next/navigation";
 import { UnauthorizedError } from "~/app/lib/exceptions";
 
@@ -18,5 +18,5 @@ export default async function Page({ params }: { params: { id: string } }) {
     throw new UnauthorizedError();
   }
 
-  return <FormHandler recipe={recipe} />;
+  return <EditFormHandler recipe={recipe} />;
 }

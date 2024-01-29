@@ -14,6 +14,7 @@ import ShoppingListHandler from "~/app/recipe/[id]/ShoppingListHandler";
 import { PortionSizeProvider } from "~/app/recipe/[id]/PortionSizeContext";
 import RatingDisplay from "~/app/_components/RatingDisplay";
 import { calculateAverage } from "~/utils/RatingCalculator";
+import RecipeSaveButton from "./RecipeSaveButton";
 
 export default async function Page({ params }: { params: { id: string } }) {
   const session = await auth();
@@ -31,18 +32,15 @@ export default async function Page({ params }: { params: { id: string } }) {
   return (
     <main className="space-y-6">
       <PortionSizeProvider>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div>
-            <div className="flex flex-col items-start justify-center gap-2">
-              <div className="flex items-center justify-center gap-3">
-                <h1 className="text-3xl font-bold">{recipe.name}</h1>
+        <div className="flex flex-col">
+          <div className="flex flex-col items-start justify-between gap-2">
+            <div className="flex w-full items-center justify-between  gap-16">
+              <span className="flex flex-col items-start gap-2 md:flex-row md:items-center">
+                <h1 className="text-wrap text-3xl font-bold">{recipe.name}</h1>
                 <DifficultyChip difficulty={recipe.difficulty} />
-              </div>
-
-              <RatingDisplay rating={averageRating} total={totalReviews} />
-
+              </span>
               {recipe.authorId === session?.user?.id && (
-                <>
+                <div className="flex gap-3">
                   <Button
                     isIconOnly
                     as={NextLink}
@@ -52,25 +50,35 @@ export default async function Page({ params }: { params: { id: string } }) {
                     <FaPenToSquare />
                   </Button>
                   <RecipeDeleteHandler recipeId={recipe.id} />
-                </>
+                </div>
               )}
             </div>
-
-            <div className="my-2 flex gap-2">
-              {recipe.labels.map((label) => (
-                <Chip key={label.id}>{label.name}</Chip>
-              ))}
-            </div>
-
-            <p>{recipe.description}</p>
+            <RatingDisplay rating={averageRating} total={totalReviews} />
           </div>
-          <ImageCarousel images={recipe.images} />
-          <ShoppingListHandler
-            isAuthorized={!!session?.user}
-            shoppingLists={shoppingLists}
-            ingredients={recipe.steps.flatMap((step) => step.ingredients)}
-          />
+          <div className="my-2 flex flex-wrap gap-2">
+            {recipe.labels.map((label) => (
+              <Chip key={label.id}>{label.name}</Chip>
+            ))}
+          </div>
+
+          <p>{recipe.description}</p>
+          <Divider className="my-4" />
+
+          <div
+            className={`flex flex-col items-center justify-center gap-6 md:flex-row md:justify-evenly md:gap-12`}
+          >
+            {recipe.images.length > 0 && (
+              <ImageCarousel images={recipe.images} className="md:order-1" />
+            )}
+            <ShoppingListHandler
+              isAuthorized={!!session?.user}
+              shoppingLists={shoppingLists}
+              ingredients={recipe.steps.flatMap((step) => step.ingredients)}
+            />
+          </div>
+          <Divider className="my-4" />
         </div>
+
         <div>
           <table>
             <thead>
@@ -86,7 +94,14 @@ export default async function Page({ params }: { params: { id: string } }) {
           </table>
         </div>
       </PortionSizeProvider>
-      <div className="mt-4 flex justify-center gap-2">
+      {session?.user && (
+        <RecipeSaveButton
+          recipeId={recipe.id}
+          isSaved={recipe.savedUsers.length > 0}
+          savedCount={recipe._count.savedUsers}
+        />
+      )}
+      <div className="mt-4 flex flex-wrap justify-center gap-2">
         {recipe.tags.map((tag) => (
           <Chip color="secondary" key={tag} variant="flat">
             #{tag}

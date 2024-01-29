@@ -6,7 +6,13 @@ import NextImage from "next/image";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import { AnimatePresence, motion } from "framer-motion";
 
-export default function ImageCarousel({ images }: { images: string[] }) {
+export default function ImageCarousel({
+  className,
+  images,
+}: {
+  className?: string;
+  images: string[];
+}) {
   const [imageIndex, setImageIndex] = useState(0);
 
   if (images.length === 0) {
@@ -14,7 +20,7 @@ export default function ImageCarousel({ images }: { images: string[] }) {
   }
 
   return (
-    <Card className="group relative row-span-2 h-96 w-96 place-self-center">
+    <Card className={`${className} group w-full sm:h-96 sm:w-96`}>
       <AnimatePresence initial={false}>
         <motion.div className="h-full w-full" key={images[imageIndex]}>
           <Image

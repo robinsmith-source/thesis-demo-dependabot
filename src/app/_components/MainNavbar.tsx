@@ -8,16 +8,21 @@ import {
   DropdownMenu,
   DropdownTrigger,
   Image,
+  Link,
   Navbar,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
+  NavbarMenu,
+  NavbarMenuItem,
+  NavbarMenuToggle,
 } from "@nextui-org/react";
-import NextLink from "next/link";
 import type { Session } from "next-auth";
-import { useSession } from "next-auth/react";
 import ThemeSwitcher from "~/app/_components/ThemeSwitcher";
 import NextImage from "next/image";
+import NextLink from "next/link";
+import { useState } from "react";
+import { usePathname } from "next/navigation";
 
 function LoginBar({ session }: { session: Session }) {
   if (!session?.user) return null;
@@ -52,11 +57,18 @@ function LoginBar({ session }: { session: Session }) {
         >
           My Profile
         </DropdownItem>
+        <DropdownItem
+          as={NextLink}
+          key="saved"
+          href={`/user/${session.user.id}/saved`}
+        >
+          Saved Recipes
+        </DropdownItem>
         <DropdownItem as={NextLink} key="create-recipe" href={`/recipe/create`}>
           Create Recipe
         </DropdownItem>
         <DropdownItem as={NextLink} key="shopping-list" href={`/shopping-list`}>
-          Shopping list
+          Shopping List
         </DropdownItem>
         <DropdownItem
           as={NextLink}
@@ -71,28 +83,67 @@ function LoginBar({ session }: { session: Session }) {
   );
 }
 
-export default function MainNavbar() {
-  const { data: session } = useSession();
+export default function MainNavbar({ session }: { session: Session | null }) {
+  
+  const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navbarLinks = [
+    { name: "Home", href: "/" },
+    { name: "Recipes", href: "/recipe/search" },
+    { name: "Users", href: "/user/search" },
+  ];
 
   return (
-    <Navbar maxWidth="xl" className="bg">
-      <NavbarBrand>
-        <NextLink href="/">
-          <Image
-            as={NextImage}
-            width={50}
-            height={50}
-            src="/images/Logo_round_V2.png"
-            alt="Logo"
-          />
-        </NextLink>
-      </NavbarBrand>
-      <NavbarContent as="div" justify="end">
-        <ThemeSwitcher />
-        {session?.user ? (
-          <LoginBar session={session} />
-        ) : (
-          <NavbarItem>
+    <Navbar
+      maxWidth="xl"
+      isMenuOpen={isMenuOpen}
+      onMenuOpenChange={setIsMenuOpen}
+    >
+      <NavbarContent className="sm:hidden" justify="start">
+        <NavbarMenuToggle
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+        />
+      </NavbarContent>
+
+      <NavbarContent justify="center">
+        <NavbarBrand>
+          <NextLink href="/">
+            <Image
+              as={NextImage}
+              width={50}
+              height={50}
+              src="/images/Logo_round_V2.png"
+              alt="Logo"
+            />
+          </NextLink>
+        </NavbarBrand>
+      </NavbarContent>
+
+      <NavbarContent justify="center" className="hidden space-x-4 pl-2 sm:flex">
+        {navbarLinks.map((item, index) => (
+          <NavbarItem key={`${index}`}>
+            <Link
+              as={NextLink}
+              href={item.href}
+              className={
+                pathname === item.href ? "text-primary-600" : "text-default-600"
+              }
+              size="lg"
+            >
+              {item.name}
+            </Link>
+          </NavbarItem>
+        ))}
+      </NavbarContent>
+
+      <NavbarContent justify="end">
+        <NavbarItem>
+          <ThemeSwitcher />
+        </NavbarItem>
+        <NavbarItem>
+          {session?.user ? (
+            <LoginBar session={session} />
+          ) : (
             <Button
               as={NextLink}
               color="secondary"
@@ -101,9 +152,27 @@ export default function MainNavbar() {
             >
               Sign in
             </Button>
-          </NavbarItem>
-        )}
+          )}
+        </NavbarItem>
       </NavbarContent>
+
+      <NavbarMenu>
+        {navbarLinks.map((item) => (
+          <NavbarMenuItem key={`${item.name}`}>
+            <Link
+              as={NextLink}
+              href={item.href}
+              size="lg"
+              className={
+                pathname === item.href ? "w-full text-primary-600" : "w-full text-default-600"
+              }
+              onClick={() => setIsMenuOpen(false)}
+            >
+              {item.name}
+            </Link>
+          </NavbarMenuItem>
+        ))}
+      </NavbarMenu>
     </Navbar>
   );
 }

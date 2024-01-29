@@ -92,7 +92,7 @@ model Recipe {
   updatedAt DateTime @updatedAt
 
   name        String
-  description String?
+  description String
   difficulty  RecipeDifficulty
   steps       RecipeStep[]
   labels      RecipeLabel[]    @relation("RecipeLabels")
