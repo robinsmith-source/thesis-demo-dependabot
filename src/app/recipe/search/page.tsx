@@ -4,6 +4,7 @@ import AdvancedRecipeSearch from "~/app/_components/search/AdvancedRecipeSearch"
 import RecipeCardsSection from "~/app/_components/RecipeCardsSection";
 import QueryPagination from "~/app/_components/search/QueryPagination";
 
+export const dynamic = "force-dynamic";
 type urlParams = {
   name?: string;
   labels?: string;

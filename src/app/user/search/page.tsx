@@ -3,6 +3,7 @@ import QueryPagination from "~/app/_components/search/QueryPagination";
 import UserCardSection from "~/app/_components/UserCardSection";
 import UserSearch from "~/app/_components/search/UserSearch";
 
+export const dynamic = "force-dynamic";
 type urlParams = {
   name?: string;
   order?: "POPULARITY" | "ALPHABETIC";
