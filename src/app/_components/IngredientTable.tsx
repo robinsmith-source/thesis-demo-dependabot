@@ -12,14 +12,12 @@ import {
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { convertUnitName } from "~/app/utils";
-import {
-  calculateIngredients,
-  type Ingredient,
-} from "~/utils/IngredientCalculator";
-import type { Unit } from "@prisma/client";
+import { calculateIngredients } from "~/utils/IngredientCalculator";
+import { type Unit } from "@prisma/client";
 import { usePortionSize } from "~/app/recipe/[id]/PortionSizeContext";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 import { motion } from "framer-motion";
+import { type Ingredient } from "~/app/lib/types";
 
 export default function IngredientTable({
   className,

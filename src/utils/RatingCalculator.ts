@@ -1,8 +1,8 @@
-export type Review = {
-  rating: number;
-};
-
-export function calculateAverage(reviews: Review[]) {
+export function calculateAverage(
+  reviews: {
+    rating: number | null;
+  }[],
+) {
   const totalRatings = reviews.reduce(
     (sum, review) => sum + (review.rating ?? 0),
     0,

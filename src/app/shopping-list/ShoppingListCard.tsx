@@ -1,6 +1,6 @@
 "use client";
 
-import type { ShoppingList, ShoppingListItem, Unit } from "@prisma/client";
+import { type Unit } from "@prisma/client";
 import ShoppingListHandler from "~/app/shopping-list/ShoppingListFormHandler";
 import IngredientTable from "~/app/_components/IngredientTable";
 import { Card, CardHeader } from "@nextui-org/card";
@@ -13,22 +13,19 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import React, { useState } from "react";
-import type { Ingredient } from "~/utils/IngredientCalculator";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { api } from "~/trpc/react";
 import { motion } from "framer-motion";
-import { Modes } from "~/app/lib/shoppingListModes";
 import { Controller, useForm } from "react-hook-form";
 import UniversalModal from "~/app/_components/UniversalModal";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-export interface ShoppingListTableProps {
-  shoppingList: ShoppingList & {
-    items: ShoppingListItem[];
-  };
-}
+import {
+  ShoppingListModes,
+  type ShoppingListTableProps,
+} from "~/app/lib/types";
+import { type Ingredient } from "~/app/lib/types";
 
 export default function ShoppingListCard({
   shoppingList,
@@ -125,12 +122,12 @@ export default function ShoppingListCard({
             <h2 className="text-xl font-semibold">{shoppingList.name}</h2>
             <div className="space-x-2">
               <ShoppingListHandler
-                mode={Modes.EDIT}
+                mode={ShoppingListModes.EDIT}
                 buttonSize="sm"
                 shoppingList={shoppingList}
               />
               <ShoppingListHandler
-                mode={Modes.DELETE}
+                mode={ShoppingListModes.DELETE}
                 buttonSize="sm"
                 shoppingList={shoppingList}
               />

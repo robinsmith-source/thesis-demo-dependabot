@@ -7,12 +7,7 @@ import {
   SelectItem,
   Textarea,
 } from "@nextui-org/react";
-import type {
-  Recipe,
-  RecipeDifficulty,
-  RecipeStep,
-  RecipeStepIngredient,
-} from "@prisma/client";
+import { type RecipeDifficulty } from "@prisma/client";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -21,12 +16,7 @@ import ImageUploader from "../_common/ImageUploader";
 import StepCreator from "../_common/StepCreator";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
-
-export type RecipeFormValues = Recipe & {
-  steps: (RecipeStep & {
-    ingredients: RecipeStepIngredient[];
-  })[];
-};
+import { type RecipeFormValues } from "~/app/lib/types";
 
 export default function RecipeForm({
   formValue,

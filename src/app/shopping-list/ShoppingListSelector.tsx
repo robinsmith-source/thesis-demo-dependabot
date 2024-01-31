@@ -3,7 +3,7 @@
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import { type Key, useState } from "react";
 import ShoppingListFormHandler from "~/app/shopping-list/ShoppingListFormHandler";
-import { Modes } from "~/app/lib/shoppingListModes";
+import { ShoppingListModes } from "~/app/lib/types";
 
 export default function ShoppingListSelector({
   shoppingLists,
@@ -35,7 +35,7 @@ export default function ShoppingListSelector({
           <AutocompleteItem key={item.id}>{item.name}</AutocompleteItem>
         )}
       </Autocomplete>
-      <ShoppingListFormHandler mode={Modes.CREATE} />
+      <ShoppingListFormHandler mode={ShoppingListModes.CREATE} />
     </div>
   );
 }

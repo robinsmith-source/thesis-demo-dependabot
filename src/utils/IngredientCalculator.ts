@@ -1,11 +1,5 @@
-import type { Unit } from "@prisma/client";
-
-export type Ingredient = {
-  id: string;
-  name: string;
-  quantity: number;
-  unit: Unit;
-};
+import { type Unit } from "@prisma/client";
+import { type Ingredient } from "~/app/lib/types";
 
 export const equivalentUnits: [Unit, Unit][] = [
   ["GRAM", "KILOGRAM"],

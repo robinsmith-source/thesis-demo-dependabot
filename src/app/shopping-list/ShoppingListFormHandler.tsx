@@ -4,31 +4,29 @@ import toast from "react-hot-toast";
 import { Button, Input, Textarea, useDisclosure } from "@nextui-org/react";
 import { FaPenToSquare, FaPlus, FaTrash } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
-import { Modes } from "~/app/lib/shoppingListModes";
 import UniversalModal from "~/app/_components/UniversalModal";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ShoppingListModes } from "~/app/lib/types";
+import { type ShoppingList } from "@prisma/client";
 
-export type ShoppingListFormType = {
-  name: string;
-  description?: string | null;
-};
+type ShoppingListFormType = Pick<ShoppingList, "name" | "description">;
 
 type ShoppingListFormHandlerProps = {
   buttonSize?: "sm" | "md" | "lg";
 } & (
   | {
-      mode: Modes.CREATE;
+      mode: ShoppingListModes.CREATE;
     }
   | {
-      mode: Modes.EDIT;
+      mode: ShoppingListModes.EDIT;
       shoppingList: {
         id: string;
       } & ShoppingListFormType;
     }
   | {
-      mode: Modes.DELETE;
+      mode: ShoppingListModes.DELETE;
       shoppingList: {
         id: string;
       };
@@ -52,7 +50,7 @@ export default function ShoppingListFormHandler(
     defaultValues: {
       name: "",
       description: "",
-      ...(mode === Modes.EDIT && props.shoppingList),
+      ...(mode === ShoppingListModes.EDIT && props.shoppingList),
     },
   });
 
@@ -76,7 +74,7 @@ export default function ShoppingListFormHandler(
   });
 
   const onEdit = (data: ShoppingListFormType) => {
-    if (mode === Modes.EDIT && props.shoppingList.id) {
+    if (mode === ShoppingListModes.EDIT && props.shoppingList.id) {
       editMutation.mutate({
         shoppingListId: props.shoppingList.id,
         name: data.name,
@@ -114,7 +112,7 @@ export default function ShoppingListFormHandler(
   });
 
   switch (mode) {
-    case Modes.CREATE:
+    case ShoppingListModes.CREATE:
       return (
         <>
           <Button isIconOnly color="success" size={buttonSize} onPress={onOpen}>
@@ -160,7 +158,7 @@ export default function ShoppingListFormHandler(
           </UniversalModal>
         </>
       );
-    case Modes.EDIT:
+    case ShoppingListModes.EDIT:
       return (
         <>
           <Button
@@ -211,7 +209,7 @@ export default function ShoppingListFormHandler(
           </UniversalModal>
         </>
       );
-    case Modes.DELETE:
+    case ShoppingListModes.DELETE:
       return (
         <>
           <Button isIconOnly color="danger" size={buttonSize} onPress={onOpen}>

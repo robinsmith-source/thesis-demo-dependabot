@@ -1,7 +1,7 @@
 import { api } from "~/trpc/server";
 import ShoppingListFormHandler from "~/app/shopping-list/ShoppingListFormHandler";
 import ShoppingListTableSection from "~/app/shopping-list/ShoppingListTableSection";
-import { Modes } from "~/app/lib/shoppingListModes";
+import { ShoppingListModes } from "~/app/lib/types";
 
 export const dynamic = "force-dynamic";
 export default async function Page() {
@@ -10,7 +10,7 @@ export default async function Page() {
     <main className="flex flex-col items-center justify-center space-y-8">
       <div className="flex w-full items-center justify-between">
         <h1 className="text-2xl font-bold">Shopping Lists</h1>
-        <ShoppingListFormHandler mode={Modes.CREATE} />
+        <ShoppingListFormHandler mode={ShoppingListModes.CREATE} />
       </div>
       <ShoppingListTableSection shoppingLists={shoppingLists} />
     </main>
