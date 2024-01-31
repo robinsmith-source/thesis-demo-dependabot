@@ -7,8 +7,6 @@ import RatingDisplay from "~/app/_components/RatingDisplay";
 import { calculateAverage } from "~/utils/RatingCalculator";
 import { type RouterOutputs } from "~/trpc/shared";
 
-
-
 export default function RecipeCard({
   className,
   recipe,
