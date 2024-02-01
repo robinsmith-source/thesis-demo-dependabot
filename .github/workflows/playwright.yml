@@ -25,6 +25,9 @@ jobs:
     env:
       DATABASE_URL: "postgresql://se3:example@localhost:5432/se3?schema=public"
       AUTH_URL: "http://localhost:3000"
+      AUTH_SECRET: "secret"
+      UPLOADTHING_SECRET: ${{ secrets.UPLOADTHING_SECRET }}
+      UPLOADTHING_APP_ID: ${{ secrets.UPLOADTHING_APP_ID }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v2

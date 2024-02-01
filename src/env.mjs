@@ -36,14 +36,8 @@ export const env = createEnv({
       process.env.NODE_ENV === "production"
         ? z.string()
         : z.string().optional(),
-    UPLOADTHING_SECRET:
-      process.env.NODE_ENV === "production"
-        ? z.string()
-        : z.string().optional(),
-    UPLOADTHING_APP_ID:
-      process.env.NODE_ENV === "production"
-        ? z.string()
-        : z.string().optional(),
+    UPLOADTHING_SECRET: z.string(),
+    UPLOADTHING_APP_ID: z.string(),
   },
 
   /**
