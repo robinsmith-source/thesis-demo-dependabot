@@ -124,7 +124,11 @@ export default function RecipeForm({
         </div>
 
         <Divider className="my-4" />
-        <Button color="success" onPress={() => methods.handleSubmit(submit)()}>
+        <Button
+          color="success"
+          onPress={() => methods.handleSubmit(submit)()}
+          isDisabled={!methods.formState.isValid}
+        >
           Submit
         </Button>
       </form>
