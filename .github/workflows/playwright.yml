@@ -23,7 +23,7 @@ jobs:
         ports:
           - 5432:5432
     env:
-      DATABASE_URL: "postgresql://se3:example@postgres:5432/se3?schema=public"
+      DATABASE_URL: "postgresql://se3:example@localhost:5432/se3?schema=public"
     steps:
       - uses: actions/checkout@v3
       - uses: pnpm/action-setup@v2
