@@ -1,6 +1,6 @@
 {
   "name": "goosechef",
-  "version": "0.4.0",
+  "version": "1.0.0",
   "private": true,
   "prisma": {
     "seed": "jiti prisma/seed.ts"
@@ -12,6 +12,9 @@
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "db:deploy": "prisma migrate deploy",
+    "test:prepare-playwright": "playwright install --with-deps",
+    "test:prepare-db": "prisma migrate reset --force",
+    "test:e2e": "playwright test",
     "build": "next build",
     "vercel-deploy": "pnpm run build && pnpm run db:deploy && pnpm run db:seed",
     "postinstall": "prisma generate",
@@ -60,6 +63,7 @@
     "eslint": "^8.47.0",
     "eslint-config-next": "^14.1.0",
     "jiti": "^1.21.0",
+    "playwright": "^1.41.1",
     "postcss": "^8.4.27",
     "prettier": "^3.0.0",
     "prettier-plugin-tailwindcss": "^0.5.1",
