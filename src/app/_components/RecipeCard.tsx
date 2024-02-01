@@ -1,13 +1,10 @@
-import { Card, CardHeader } from "@nextui-org/card";
-import { CardFooter, Chip, Image } from "@nextui-org/react";
+import { Card, CardFooter, CardHeader, Chip, Image } from "@nextui-org/react";
 import NextImage from "next/image";
 import NextLink from "next/link";
 import DifficultyChip from "~/app/_components/DifficultyChip";
 import RatingDisplay from "~/app/_components/RatingDisplay";
 import { calculateAverage } from "~/utils/RatingCalculator";
 import { type RouterOutputs } from "~/trpc/shared";
-
-
 
 export default function RecipeCard({
   className,

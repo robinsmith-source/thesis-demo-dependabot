@@ -1,5 +1,10 @@
 import { Chip, Input } from "@nextui-org/react";
-import React, { useEffect, useState } from "react";
+import {
+  type ChangeEvent,
+  type KeyboardEvent,
+  useEffect,
+  useState,
+} from "react";
 import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 
 export default function TagInput() {
@@ -13,10 +18,10 @@ export default function TagInput() {
   const fieldState = getFieldState("tags");
 
   const [inputValue, setInputValue] = useState<string>("");
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
   };
-  const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" || event.key === " " || event.key === ",") {
       event.preventDefault();
       addTag();

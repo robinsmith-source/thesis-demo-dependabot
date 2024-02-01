@@ -84,7 +84,6 @@ function LoginBar({ session }: { session: Session }) {
 }
 
 export default function MainNavbar({ session }: { session: Session | null }) {
-  
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navbarLinks = [
@@ -164,7 +163,9 @@ export default function MainNavbar({ session }: { session: Session | null }) {
               href={item.href}
               size="lg"
               className={
-                pathname === item.href ? "w-full text-primary-600" : "w-full text-default-600"
+                pathname === item.href
+                  ? "w-full text-primary-600"
+                  : "w-full text-default-600"
               }
               onClick={() => setIsMenuOpen(false)}
             >

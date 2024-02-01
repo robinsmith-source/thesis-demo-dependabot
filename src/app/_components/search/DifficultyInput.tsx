@@ -28,7 +28,7 @@ export default function DifficultyInput() {
     if (params.get("page") !== "1") {
       params.set("page", "1");
     }
-    
+
     if (difficulty !== null) {
       params.set("difficulty", difficulty.toString());
     } else {
@@ -47,7 +47,6 @@ export default function DifficultyInput() {
       updateURLParams(index);
     }
   }, 333);
-  
 
   return (
     <>

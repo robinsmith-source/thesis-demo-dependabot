@@ -80,7 +80,7 @@ export default function AdvancedRecipeSearch({
           }}
           transition={{ duration: 0.2 }}
         >
-          <div className="flex flex-wrap justify-between gap-y-2 gap-x-4 px-4 py-3 sm:items-center">
+          <div className="flex flex-wrap justify-between gap-x-4 gap-y-2 px-4 py-3 sm:items-center">
             <label className="flex items-center gap-2">
               <span className="font-bold text-default-600">Difficulty</span>
               <DifficultyInput />

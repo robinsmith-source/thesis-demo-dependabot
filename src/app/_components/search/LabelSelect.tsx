@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
 type LabelSelectProps = {
-  categories: { name: string; RecipeLabel: { name: string; }[]; }[];
+  categories: { name: string; RecipeLabel: { name: string }[] }[];
   disabled?: boolean;
   className?: string;
 };
@@ -82,8 +82,7 @@ export default function LabelSelect({
             </SelectItem>
           ))}
         </SelectSection>
-      )
-      )}
+      ))}
     </Select>
   );
 }

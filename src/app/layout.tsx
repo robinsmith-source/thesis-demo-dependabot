@@ -1,4 +1,3 @@
-import React from "react";
 import "~/styles/globals.css";
 
 import { Inter } from "next/font/google";
@@ -16,6 +15,7 @@ import { TRPCReactProvider } from "~/trpc/react";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { Toaster } from "react-hot-toast";
 import { auth } from "../../auth";
+import { type ReactNode } from "react";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -31,7 +31,7 @@ export const metadata = {
 export default async function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   const session = await auth();
 

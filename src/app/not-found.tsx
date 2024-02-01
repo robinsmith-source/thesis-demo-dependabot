@@ -1,6 +1,4 @@
-import { Image } from "@nextui-org/react";
-import { Card, CardHeader } from "@nextui-org/card";
-import React from "react";
+import { Card, CardHeader, Image } from "@nextui-org/react";
 
 export default function NotFound() {
   return (

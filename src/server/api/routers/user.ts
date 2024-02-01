@@ -107,8 +107,7 @@ export const userRouter = createTRPCRouter({
               return { name: "asc" };
           }
         })(),
-        where: { name: { contains: input.name, mode: "insensitive" },
-        },
+        where: { name: { contains: input.name, mode: "insensitive" } },
         take: input.take,
         skip: input.skip ?? 0,
       });

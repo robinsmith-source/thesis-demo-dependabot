@@ -3,16 +3,17 @@
 import type { ShoppingList, ShoppingListItem, Unit } from "@prisma/client";
 import ShoppingListHandler from "~/app/shopping-list/ShoppingListFormHandler";
 import IngredientTable from "~/app/_components/IngredientTable";
-import { Card, CardHeader } from "@nextui-org/card";
 import {
   Button,
+  Card,
   CardBody,
+  CardHeader,
   Input,
   Select,
   SelectItem,
   useDisclosure,
 } from "@nextui-org/react";
-import React, { useState } from "react";
+import { useState } from "react";
 import type { Ingredient } from "~/utils/IngredientCalculator";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";

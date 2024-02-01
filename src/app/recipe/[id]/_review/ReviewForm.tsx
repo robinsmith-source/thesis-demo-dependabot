@@ -4,13 +4,13 @@ import {
   Card,
   CardBody,
   CardFooter,
+  CardHeader,
   Textarea,
 } from "@nextui-org/react";
 import { Controller, useForm } from "react-hook-form";
 import { ReviewSchema } from "~/app/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import RatingInput from "./RatingInput";
-import { CardHeader } from "@nextui-org/card";
 import type { RecipeReview } from "@prisma/client";
 
 export default function ReviewForm({

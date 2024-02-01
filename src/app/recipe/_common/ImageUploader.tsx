@@ -3,6 +3,7 @@ import {
   Card,
   CardBody,
   CardFooter,
+  CardHeader,
   Image,
   Progress,
 } from "@nextui-org/react";
@@ -10,11 +11,9 @@ import { useFieldArray, useFormContext } from "react-hook-form";
 import { generateClientDropzoneAccept } from "uploadthing/client";
 import { useDropzone } from "@uploadthing/react/hooks";
 import { useUploadThing } from "~/app/lib/uploadthing";
-import type { SetStateAction } from "react";
-import { useCallback, useState } from "react";
+import { type SetStateAction, useCallback, useState } from "react";
 import { FaCircleXmark, FaCloudArrowUp } from "react-icons/fa6";
 import { api } from "~/trpc/react";
-import { CardHeader } from "@nextui-org/card";
 import toast from "react-hot-toast";
 
 export default function ImageUploader() {
@@ -94,8 +93,8 @@ export default function ImageUploader() {
             {files.length === 0
               ? "Select Files"
               : files.length === 1
-              ? `Upload ${files.length} selected file`
-              : `Upload ${files.length} selected files`}
+                ? `Upload ${files.length} selected file`
+                : `Upload ${files.length} selected files`}
           </Button>
         </div>
       </CardBody>

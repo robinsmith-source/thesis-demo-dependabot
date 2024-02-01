@@ -6,9 +6,8 @@ import { type Key, useCallback, useState } from "react";
 import { api } from "~/trpc/react";
 import toast from "react-hot-toast";
 import type { Ingredient } from "~/utils/IngredientCalculator";
-import { Button, CardBody } from "@nextui-org/react";
+import { Button, Card, CardBody, CardHeader } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { Card, CardHeader } from "@nextui-org/card";
 
 interface ShoppingListHandlerProps {
   isAuthorized?: boolean;

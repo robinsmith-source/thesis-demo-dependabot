@@ -1,4 +1,4 @@
-import { FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
+import { FaStar, FaRegStar, FaRegStarHalfStroke } from "react-icons/fa6";
 
 export default function RatingDisplay({
   size = 20,
@@ -36,7 +36,10 @@ export default function RatingDisplay({
                 {index <= intRating ? (
                   <FaStar className="fill-orange-400" size={size} />
                 ) : index - 1 === intRating && fracRating >= 0.5 ? (
-                  <FaStarHalfAlt className="fill-orange-400" size={size} />
+                  <FaRegStarHalfStroke
+                    className="fill-orange-400"
+                    size={size}
+                  />
                 ) : (
                   <FaRegStar size={size} className="fill-gray-400" />
                 )}
