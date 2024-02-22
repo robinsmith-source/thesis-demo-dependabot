@@ -6,40 +6,40 @@ settings:
 
 dependencies:
   '@auth/prisma-adapter':
-    specifier: ^1.4.0
+    specifier: ^1.0.12
     version: 1.4.0(@prisma/client@5.10.2)
   '@hookform/resolvers':
-    specifier: ^3.3.4
+    specifier: ^3.3.2
     version: 3.3.4(react-hook-form@7.50.1)
   '@nextui-org/react':
-    specifier: ^2.2.9
+    specifier: ^2.2.4
     version: 2.2.9(@types/react@18.2.57)(framer-motion@10.18.0)(react-dom@18.2.0)(react@18.2.0)(tailwind-variants@0.2.0)(tailwindcss@3.4.1)
   '@prisma/client':
-    specifier: ^5.10.2
+    specifier: ^5.6.0
     version: 5.10.2(prisma@5.10.2)
   '@t3-oss/env-nextjs':
-    specifier: ^0.7.3
+    specifier: ^0.7.0
     version: 0.7.3(typescript@5.3.3)(zod@3.22.4)
   '@tanstack/react-query':
-    specifier: ^4.36.1
+    specifier: ^4.32.6
     version: 4.36.1(react-dom@18.2.0)(react@18.2.0)
   '@trpc/client':
-    specifier: ^10.45.1
+    specifier: ^10.37.1
     version: 10.45.1(@trpc/server@10.45.1)
   '@trpc/next':
-    specifier: ^10.45.1
+    specifier: ^10.37.1
     version: 10.45.1(@tanstack/react-query@4.36.1)(@trpc/client@10.45.1)(@trpc/react-query@10.45.1)(@trpc/server@10.45.1)(next@14.1.0)(react-dom@18.2.0)(react@18.2.0)
   '@trpc/react-query':
-    specifier: ^10.45.1
+    specifier: ^10.37.1
     version: 10.45.1(@tanstack/react-query@4.36.1)(@trpc/client@10.45.1)(@trpc/server@10.45.1)(react-dom@18.2.0)(react@18.2.0)
   '@trpc/server':
-    specifier: ^10.45.1
+    specifier: ^10.37.1
     version: 10.45.1
   '@uploadthing/react':
-    specifier: ^6.2.4
+    specifier: ^6.0.2
     version: 6.2.4(next@14.1.0)(react@18.2.0)(uploadthing@6.4.1)
   framer-motion:
-    specifier: ^10.18.0
+    specifier: ^10.16.4
     version: 10.18.0(react-dom@18.2.0)(react@18.2.0)
   next:
     specifier: ^14.1.0
@@ -57,7 +57,7 @@ dependencies:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
   react-hook-form:
-    specifier: ^7.50.1
+    specifier: ^7.48.2
     version: 7.50.1(react@18.2.0)
   react-hot-toast:
     specifier: ^2.4.1
@@ -66,10 +66,10 @@ dependencies:
     specifier: ^4.12.0
     version: 4.12.0(react@18.2.0)
   superjson:
-    specifier: ^1.13.3
+    specifier: ^1.13.1
     version: 1.13.3
   uploadthing:
-    specifier: ^6.4.1
+    specifier: ^6.0.3
     version: 6.4.1(next@14.1.0)(tailwindcss@3.4.1)
   use-debounce:
     specifier: ^10.0.0
@@ -83,34 +83,34 @@ devDependencies:
     specifier: ^0.21.0
     version: 0.21.0
   '@playwright/test':
-    specifier: ^1.41.2
+    specifier: ^1.40.1
     version: 1.41.2
   '@types/eslint':
-    specifier: ^8.56.2
+    specifier: ^8.44.2
     version: 8.56.2
   '@types/luxon':
-    specifier: ^3.4.2
+    specifier: ^3.3.3
     version: 3.4.2
   '@types/node':
-    specifier: ^18.19.17
+    specifier: ^18.18.8
     version: 18.19.17
   '@types/react':
-    specifier: ^18.2.57
+    specifier: ^18.2.20
     version: 18.2.57
   '@types/react-dom':
-    specifier: ^18.2.19
+    specifier: ^18.2.7
     version: 18.2.19
   '@typescript-eslint/eslint-plugin':
-    specifier: ^6.21.0
+    specifier: ^6.3.0
     version: 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.56.0)(typescript@5.3.3)
   '@typescript-eslint/parser':
-    specifier: ^6.21.0
+    specifier: ^6.3.0
     version: 6.21.0(eslint@8.56.0)(typescript@5.3.3)
   autoprefixer:
-    specifier: ^10.4.17
+    specifier: ^10.4.14
     version: 10.4.17(postcss@8.4.35)
   eslint:
-    specifier: ^8.56.0
+    specifier: ^8.47.0
     version: 8.56.0
   eslint-config-next:
     specifier: ^14.1.0
@@ -119,22 +119,22 @@ devDependencies:
     specifier: ^1.21.0
     version: 1.21.0
   postcss:
-    specifier: ^8.4.35
+    specifier: ^8.4.27
     version: 8.4.35
   prettier:
-    specifier: ^3.2.5
+    specifier: ^3.0.0
     version: 3.2.5
   prettier-plugin-tailwindcss:
-    specifier: ^0.5.11
+    specifier: ^0.5.1
     version: 0.5.11(prettier@3.2.5)
   prisma:
-    specifier: ^5.10.2
+    specifier: ^5.7.1
     version: 5.10.2
   tailwindcss:
-    specifier: ^3.4.1
+    specifier: ^3.3.3
     version: 3.4.1
   typescript:
-    specifier: ^5.3.3
+    specifier: ^5.2.2
     version: 5.3.3
 
 packages:
