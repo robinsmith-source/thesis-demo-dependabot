@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
+      - uses: pnpm/action-setup@v4
         with:
           version: 8
       - name: Use Node.js 20
@@ -74,7 +74,7 @@ jobs:
       UPLOADTHING_APP_ID: ${{ secrets.UPLOADTHING_APP_ID }}
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
+      - uses: pnpm/action-setup@v4
         with:
           version: 8
       - name: Use Node.js 20
