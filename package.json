@@ -52,7 +52,7 @@
     "@auth/core": "^0.21.0",
     "@playwright/test": "^1.41.1",
     "@types/eslint": "^8.44.2",
-    "@types/luxon": "^3.3.3",
+    "@types/luxon": "^3.7.1",
     "@types/node": "^18.18.8",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
