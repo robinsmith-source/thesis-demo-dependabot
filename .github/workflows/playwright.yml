@@ -10,7 +10,7 @@ jobs:
     name: 🔍 Playwright - Install
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: pnpm/action-setup@v3
         with:
           version: 8
@@ -73,7 +73,7 @@ jobs:
       UPLOADTHING_SECRET: ${{ secrets.UPLOADTHING_SECRET }}
       UPLOADTHING_APP_ID: ${{ secrets.UPLOADTHING_APP_ID }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: pnpm/action-setup@v3
         with:
           version: 8
